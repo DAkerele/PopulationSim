@@ -1,0 +1,43 @@
+<!doctype html>
+<header>
+	<title>Population Simulation</title>
+	<link rel="stylesheet" type="text/css" href="./styling.css">
+	
+</header>
+
+<html>
+	<body>
+
+		<div style = "height:700px; width:700px; background-color:#566573">
+			<canvas style="border:1px solid #000000;" id = "canvas" height= "400" width = "500"></canvas>
+			<button onclick = "beginRun()">Begin Run</button>
+			<button  id = "enterVals">Confirm Values</button>
+			<h4 id = "NodeSelected">DATA FOR NODE #</h4>
+
+			<form>
+					Number of Runs:<br>
+					<input value  = "1"  id = "NumRuns" type = "number"> </input>
+					<br>Starting Percent:<br>
+					<input value  = "50.0"  id = "Starting%" type = "number"></input>
+					<br>Number of Generation:<br>
+					<input value  = "1"  id = "NumGenerations" type = "number"></input>
+					<br>Starting Population:<br>
+					<input value  = "100"  id = "StartingPop" type = "number"></input>
+					<br>++Survival Percent:<br>
+					<input value  = "100.0" id = "++Survival%" type = "number"></input>
+					<br>+-Survival Percent:<br>
+					<input value  = "100.0" id = "+-Survival%" type = "number"></input>
+					<br>--Survival Percent:<br>
+					<input value  = "100.0" id = "--Survival%" type = "number"></input>
+			</form>
+			
+			
+			
+
+		</div>
+
+	</body>
+	<script src = "./jquery2.js"></script>
+	<script src= "./main.js"></script>
+	<script src= "./Node.js"></script>
+</html>
