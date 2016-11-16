@@ -68,7 +68,10 @@ $(document).ready(function() {
 
                 allNodes.push(node);
                 NodeCount++;
+                
             }
+
+        }
                 var isInCircle = pointInCircle(posX, posY);
                 document.getElementById("NodeSelected").innerHTML = "Data for Node: " + isInCircle.NodeNum;
 
@@ -99,7 +102,7 @@ $(document).ready(function() {
            
 
 
-        }
+        
 
        
 
