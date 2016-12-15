@@ -8,9 +8,38 @@
 <html>
 	<body>
 
-		<div style = "height:700px; width:700px; background-color:#566573">
+		<div style = "height:700px; width:1500px; background-color:#566573">
+			<!-- numbering for y-axis -->
+			<p id = "yAxis"style = "position:absolute; top:192.5px; left:680px; ">%"+"Allele</p>
+			<p id = "xAxis"style = "position:absolute; top:35px; left:770px; ">1.0</p>
+			<p style = "position:absolute; top:35px; left:770px; ">1.0</p>
+			<p style = "position:absolute; top:70px; left:770px; ">0.9</p>
+			<p style = "position:absolute; top:105px; left:770px; ">0.8</p>
+			<p style = "position:absolute; top:140px; left:770px; ">0.7</p>
+			<p style = "position:absolute; top:175px; left:770px; ">0.6</p>
+			<p style = "position:absolute; top:210px; left:770px; ">0.5</p>
+			<p style = "position:absolute; top:245px; left:770px; ">0.4</p>
+			<p style = "position:absolute; top:280px; left:770px; ">0.3</p>
+			<p style = "position:absolute; top:315px; left:770px; ">0.2</p>
+			<p style = "position:absolute; top:350px; left:770px; ">0.1</p>
+
+			<!-- numbering for x-axis -->
+			<p style = "position:absolute; top:420px; left:835px; ">10</p>
+			<p style = "position:absolute; top:420px; left:885px; ">20</p>
+			<p style = "position:absolute; top:420px; left:930px; ">30</p>
+			<p style = "position:absolute; top:420px; left:975px; ">40</p>
+			<p style = "position:absolute; top:420px; left:1020px; ">50</p>
+			<p style = "position:absolute; top:420px; left:1065px; ">60</p>
+			<p style = "position:absolute; top:420px; left:1110px; ">70</p>
+			<p style = "position:absolute; top:420px; left:1150px; ">80</p>
+			<p style = "position:absolute; top:420px; left:1200px; ">90</p>
+			<p style = "position:absolute; top:420px; left:1245px; ">100</p>
+
+
 			<canvas style="border:1px solid #000000;" id = "canvas" height= "400" width = "500"></canvas>
-			<button onclick = "beginRun()">Begin Run</button>
+			<canvas style="border:1px solid #000000; position:absolute; top:20px; left:800px;" id = "graph" height= "400" width = "500"></canvas>
+			
+			<button id ="Run">Begin Run</button>
 			<button  id = "enterVals">Confirm Values</button>
 			<h4 id = "NodeSelected">DATA FOR NODE #</h4>
 
