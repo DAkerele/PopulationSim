@@ -1,50 +1,29 @@
 $(document).ready(function() {
+    
+        
     var allNodes = [];
     var selectedNodes = [];
-    var currentSelectedNode = null;
+    var currentSelectedNode;
     var nodeColors = ["#c82124", "#82FA58", "#FE2E2E", "#61210B", "#FE2EF7", "#9A2EFE", "#58FAF4", "#F4FA58", "#FF8000", "#585858"]
     var NodeCount = 0; // number of nodes allowed on canvas
     var canvas = document.getElementById("canvas");
+    var graph = document.getElementById("graph");
     var context = canvas.getContext("2d");
-    var nd = [10];
-    var ni = [10];
-    var value = [10];
-    intializeArrays();
-    var tempz;
+    var graphCtx = graph.getContext("2d");
+    var unselectedColor = "#FFFFFF";
+    var genArray = [];
 
 
     context.fillStyle = "#FDFEFE";
+    graphCtx.fillStyle = "#FDFEFE";
+    graphCtx.fillRect(0,0,graph.width, graph.height);
     context.fillRect(10, 10, canvas.width, canvas.height);
+    intializeGraph();
 
-    function intializeArrays() {
-
-        for (var r = 0; r < 10; r++) {
-            nd[r] = new Array(5);
-            for (var c = 0; c < 5; c++) {
-                nd[r][c] = 0;
-            }
-        }
+    
 
 
-        for (var i = 0; i < 10; i++) {
-            ni[i] = new Array(5);
-            for (var j = 0; j < 5; j++) {
-                ni[i][j] = 0;
-            }
-        }
-
-        for (var a = 0; a < 10; a++) {
-            value[a] = new Array(500);
-            for (var b = 0; b < 500; b++) {
-                value[a][b] = new Array(250);
-                for (var c = 0; c < 250; c++) {
-                    value[a][b][c] = 0.0;
-
-                }
-            }
-        }
-    }
-
+    
 
 
 
@@ -55,47 +34,91 @@ $(document).ready(function() {
 
 
         if (NodeCount < 10) {
-            if (Overlap(posX, posY) == false) { 
+            
+            if (overlap(posX, posY) == false) { 
                 context.fillStyle = nodeColors[NodeCount];
                 context.beginPath();
                 context.arc(posX, posY, 25, 0, 2 * Math.PI, false);
                 context.closePath();
                 context.fill();
+
+                context.strokeStyle = "#f44242";
+                context.beginPath();
+                context.arc(posX,posY,30,0,2*Math.PI);
+                context.stroke();
+                
+
                 context.fillStyle = "black";
                 context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), 50, 1, 100, 100, 100, 100);
+                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0);
 
                 allNodes.push(node);
                 NodeCount++;
                 
+                  
+                
+                
+                
             }
 
         }
-                var isInCircle = pointInCircle(posX, posY);
+                 var isInCircle = pointInCircle(posX,posY);
                 document.getElementById("NodeSelected").innerHTML = "Data for Node: " + isInCircle.NodeNum;
 
                 var nodeX = isInCircle.CoordX;
                 var nodeY = isInCircle.CoordY;
                 var nodeColor = isInCircle.nodeColor;
 
+                  for (var i = 0; i < allNodes.length; i++) {
 
+                        if (allNodes[i].NodeNum == isInCircle.NodeNum) 
+                        {
+                            allNodes[i].isSelected = true;
+                            currentSelectedNode = allNodes[i].NodeNum;
+                            context.strokeStyle = "#f44242";
+                            context.beginPath();
+                            context.arc(allNodes[i].CoordX,allNodes[i].CoordY,30,0,2*Math.PI);
+                            context.stroke();
+                                    
 
-                for (var i = 0; i < allNodes.length; i++) {
-                    if (allNodes[i].NodeNum != currentSelectedNode) {
-                        allNodes[i].isSelected = false;
+                        }
+                       else  if (allNodes[i].NodeNum != currentSelectedNode) 
+                       {
+                            allNodes[i].isSelected = false;
+                            for(var j = 0; j < 10; j++)
+                            {
+                                context.strokeStyle = "#FFFFFF";
+                                context.beginPath();
+                                context.arc(allNodes[i].CoordX,allNodes[i].CoordY,30,0,2*Math.PI);
+                                context.stroke();
+                            }
+
+                        }
+
+                    
+
+                    
                     }
 
-                    if (allNodes[i].NodeNum == isInCircle.NodeNum) {
-                        allNodes[i].isSelected = true;
-                    }
 
-                    //currentSelectedNode = allNodes[i].NodeNum;
-                }
+
 
 
                 document.getElementById("enterVals").onclick = function enterValues() {
                     setSelectedNodeInfo(currentSelectedNode);
+                    
+
+                }
+
+                document.getElementById("Run").onclick = function beginRun() {
+                    
+                    calcPoints(allNodes[0]);
+                    for(var i = 0; i< genArray.length; i++){
+                        console.log(genArray[i]);
+                        }
+
+                     plotPoints(genArray);   
                 }
 
              
@@ -147,91 +170,123 @@ $(document).ready(function() {
 
     }
 
-    function findValueofNode(paramInt, paramFloat) {
-        var m = 0;
-        var n = 0;
-        var i1 = 0;
-        var f5 = 0.0;
-        var str3 = "";
-        var str1 = "";
-        var str2 = "";
-        var f6 = nd[paramInt][1] / 100.0;
-        var f7 = nd[paramInt][2] / 100.0;
-        var f8 = nd[paramInt][3] / 100.0;
-        var f1 = paramFloat * paramFloat;
-        var f2 = 2.0 * paramFloat * (1.0 - paramFloat);
-        var f3 = (1.0 - paramFloat) * (1.0 - paramFloat);
-        var i = f1 * ni[paramInt][1];
-        var j = f2 * ni[paramInt][1];
-        var k = ni[paramInt][1] - (i + i);
-        while (m + n + i1 < ni[paramInt][1]) {
-            str1 = choosePerson(f1, f2);
-            str2 = choosePerson(f1, f2);
-            str3 = determineChild(str1, str2);
-            var f4 = Math.random();
-            if ((str3 == "PP") && (f4 < f6)) {
-                m++;
+    function calcPoints(node){
+
+
+
+        var nextPopArray = [];
+       
+            genArray.splice(0,genArray.length);
+            for(var j = 0; j <= 1 ; j++) {
+                nextPopArray.push(node.startPer);
             }
-            if ((str3 == "PM") && (f4 < f7)) {
-                n++;
+            genArray.push(nextPopArray);
+            beginGen = 0;
+            endGen = node.genNum;
+        
+
+        var currentPopSize = node.startPop * 2;
+        
+        var pbar;
+        var p = 0.0;
+        var q;
+        var w; 
+        var pp1; 
+        var pp2;
+        
+        var nx; 
+        var ny;
+
+        for(var i = 0; i < node.genNum; i++) {
+           
+            numFixedPops = 0;
+            numLostPops = 0;
+            pbar = 0.0;
+            nextPopArray = [];
+            
+           
+            var popArray = genArray[i];
+            for(var j = 1; j <= 1; j++) {
+                var end = popArray[j];
+                pbar += end;
+                if(end <= 0.0) {
+                    numLostPops += 1;
+                }
+                if(end >= 1.0) {
+                    numFixedPops += 1;
+                }
             }
-            if ((str3 == "MM") && (f4 < f8)) {
-                i1++;
+            
+            
+            pbar /= 1; 
+            for(var j = 0; j <= 1; j++) { 
+                p =  popArray[j]; 
+                if(j > 0) {
+                    p = p * (1.0 - 0.0) + 0.0 * pbar; 
+                }
+                p = (1 - 0) * p + 0 * (1 - p);  
+                
+                if((p > 0.0) && (p < 1.0)) {
+                    q = 1 - p;
+                    w = (p * p * node.plusplusS) + (2.0 * p * q * node.plusminusS) + (q * q * node.minusminusS); 
+                    pp1 = (p * p * node.plusplusS) / w; 
+                    pp2 = (2.0 * p * q * node.plusminusS) / w; 
+                    if(j > 0) { 
+                        nx = binomial(node.startPop, pp1);
+                        
+                        if(pp1 < 1.0 && nx < node.startPop) {
+                            ny = binomial((node.startPop - nx), (pp2 / (1.0 - pp1))); 
+                        }
+                        else {
+                            ny = 0;
+                        }
+                        
+                        nextPopArray.push(((nx *2.0) + ny) / currentPopSize); 
+                    }
+                    else { 
+                        nextPopArray.push(pp1 + (pp2 / 2.0));
+                    }
+                }
+                else{
+                    if (p<=0.0){
+                        p = 0.0;
+                    }
+                    else
+                    {
+                        p = 1.0;
+                    }
+                    nextPopArray.push(p); 
+                }
+                
+            }
+            genArray.push(nextPopArray);
+        }
+        
+         for(var i = 0; i< genArray.length; i++){
+             console.log(genArray[i]);
+         }
+
+            console.log(node);
+               
+    }
+      
+
+    function binomial(n,pp){
+        var j; 
+        var bnl;
+        bnl = 0;
+        for(j = 1; j<= n; j++){
+            if(Math.random() < pp ){
+                bnl++;
             }
         }
-        f5 = (2 * m + n) / (2 * (m + n + i1));
-        return f5;
+
+        return bnl;
     }
 
-    function determineChild(paramFloat1, paramFloat2) {
-        var f1 = Math.random();
-        if ((paramString1 == "PP") && (paramString2 == "PP")) {
-            return "PP";
-        }
-        if (((paramString1 == "PP") && (paramString2 == "MM")) || ((paramString1 == "MM") && (paramString2 == "PP"))) {
-            return "PM";
-        }
-        if (((paramString1 == "PP") && (paramString2 == "PM")) || ((paramString1 == "PM") && (paramString2 == "PP"))) {
-            if (f1 < 0.5) {
-                return "PP";
-            }
-            return "PM";
-        }
-        if (((paramString1 == "PM") && (paramString2 == "MM")) || ((paramString1 == "MM") && (paramString2 == "PM"))) {
-            if (f1 < 0.5) {
-                return "PM";
-            }
-            return "MM";
-        }
-        if ((paramString1 == "MM") && (paramString2 == "MM")) {
-            return "MM";
-        }
-        if ((paramString1 == "PM") && (paramString2 == "PM")) {
-            if (f1 < 0.5) {
-                return "PM";
-            }
-            if ((f1 >= 0.5) && (f1 < 0.75)) {
-                return "PP";
-            }
-            if (f1 >= 0.75) {
-                return "MM";
-            }
-        }
-        return "";
-    }
+    
 
-    function choosePerson(paramString1, paramString2) {
-        var f1 = myRandom.nextFloat();
-        if ((f1 >= 0.0) && (f1 < paramFloat1)) {
-            return "PP";
-        }
-        if ((f1 >= paramFloat1) && (f1 < paramFloat1 + paramFloat2)) {
-            return "PM";
-        }
-        return "MM";
-    }
-
-    function Overlap(x, y) {
+    function overlap(x, y) {
       
             if (allNodes.length == 0) 
             {
@@ -241,27 +296,102 @@ $(document).ready(function() {
             {
                     return true;
             }
-            else if(pointInCircle(x, y) == undefined && allNodes.length >= 1 && intersects(x,y) == false)
+            else if(pointInCircle(x, y) == undefined && allNodes.length >= 1 )
             {
                 return false;
             }
         
     }
 
-    function intersects(x,y){
+    function intializeGraph(){
+        var lineSpaceHor = graph.height/11;
+        var lineSpaceVer = graph.width/11;
+        graphCtx.beginPath();
+        for (var i = 0; i < graph.height; i+=lineSpaceHor) {
+            graphCtx.moveTo(0,i);
+            graphCtx.lineTo(graph.width, i);
+            graphCtx.stroke();
+
+        }
+        graphCtx.closePath();
+        graphCtx.beginPath();
+        for (var j = 0; j< graph.width; j+=lineSpaceVer) {
+            graphCtx.moveTo(j,graph.height);
+            graphCtx.lineTo(j,390);
+            graphCtx.stroke();
+
+        }
+        graphCtx.closePath();
+        
+               
+
+    }
+
+
+
+    function plotPoints(genData){
+        var lineSpaceHor = graph.height/11
+        var lineSpaceVer = graph.width/100;
+        var lastPointY = 210.5;
+        graphCtx.beginPath();
+        graphCtx.strokeStyle = 'red';
+        graphCtx.moveTo(0,210)
+        graphCtx.lineTo(lineSpaceVer,210.5);
+        graphCtx.stroke();
+        for(var r = 0; r < genData.length; r++){
+            
+                
+                if(genData[r][1]>.500)
+                {
+                    graphCtx.moveTo(lineSpaceVer*(r+1),lastPointY);
+                    graphCtx.lineTo(lineSpaceVer*(r+2) ,lastPointY+genData[r][1]);
+                    graphCtx.stroke();
+                    lastPointY = lastPointY+genData[r][1];
+                }
+                else if (genData[r][1] < .500)
+                {
+                    graphCtx.moveTo(lineSpaceVer*(r+1),lastPointY);
+                    graphCtx.lineTo(lineSpaceVer*(r+2) ,lastPointY-genData[r][1]);
+                    graphCtx.stroke();
+                    lastPointY = lastPointY-genData[r][1];
+                }
+               
+            
+                
+                
+                
+                 
+            
+          
+        }
+        graphCtx.closePath();
+    }
+
+    /*function intersects(x,y){
+            
           for (var i = 0; i < allNodes.length; i++) {
-            var distance = (x - allNodes[i].CoordX) * (x - allNodes[i].CoordX) + (y - allNodes[i].CoordY) * (y - allNodes[i].CoordY);
-                if(50 > distance){
+
+            if(NodeCount == 1){
+                var distance = (x - allNodes[0].CoordX) * (x - allNodes[0].CoordX) + (y - allNodes[0].CoordY) * (y - allNodes[0].CoordY);
+            }
+            else if(NodeCount > 1){
+                var distance = (x - allNodes[NodeCount-1].CoordX) * (x - allNodes[NodeCount-1].CoordX) + (y - allNodes[NodeCount-1].CoordY) * (y - allNodes[NodeCount-1].CoordY);
+            }
+            
+                if(distance < 3000){
                   return true;
                 }
-                else if(50 < distance){
+                else if(distance > 3000){
                   return false;
+                  
                 }
+                
             }
-    }
+    }*/
+
+    
        
         
     
-
 
 });
