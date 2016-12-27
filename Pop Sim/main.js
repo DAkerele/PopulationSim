@@ -107,6 +107,7 @@ $(document).ready(function() {
 
                 document.getElementById("enterVals").onclick = function enterValues() {
                     setSelectedNodeInfo(currentSelectedNode);
+                    alert(node.plusplusS);
                     
 
                 }
@@ -119,7 +120,7 @@ $(document).ready(function() {
                         }
 
                      plotPoints(genArray);   
-                }
+                                     }
 
              
            
@@ -146,12 +147,12 @@ $(document).ready(function() {
 
     function setSelectedNodeInfo(node) { //sets Text fields to set value for corresponding node
 
-        node.startPer = document.getElementById("Starting%").value;
-        node.genNum = document.getElementById("NumGenerations").value;
-        node.startPop = document.getElementById("StartingPop").value;
-        node.plusplusS = document.getElementById("++Survival%").value;
-        node.plusminusS = document.getElementById("+-Survival%").value;
-        node.minusminusS = document.getElementById("--Survival%").value;
+        node.startPer = document.getElementById("Starting%").val;
+        node.genNum = document.getElementById("NumGenerations").val;
+        node.startPop = document.getElementById("StartingPop").val;
+        node.plusplusS = document.getElementById("++Survival%").val;
+        node.plusminusS = document.getElementById("+-Survival%").val;
+        node.minusminusS = document.getElementById("--Survival%").val;
 
     }
 
@@ -330,28 +331,41 @@ $(document).ready(function() {
 
 
     function plotPoints(genData){
-        var lineSpaceHor = graph.height/11
-        var lineSpaceVer = graph.width/100;
-        var lastPointY = 210.5;
+       /* var pointSpace = graph.width/100;
+
+        alert(pointSpace);
         graphCtx.beginPath();
         graphCtx.strokeStyle = 'red';
-        graphCtx.moveTo(0,210)
-        graphCtx.lineTo(lineSpaceVer,210.5);
+        graphCtx.moveTo(0,220)
+        graphCtx.lineTo(pointSpace,225);
         graphCtx.stroke();
+        graphCtx.moveTo(pointSpace,225);
+        graphCtx.lineTo(pointSpace*2,215);
+        graphCtx.stroke();
+        graphCtx.closePath();*/
+
+       var lineSpaceHor = graph.height/11
+        var pointSpace = graph.width/100;
+        var lastPointY = 220;
+        graphCtx.beginPath();
+        graphCtx.strokeStyle = 'red';
+        graphCtx.moveTo(0,220);
         for(var r = 0; r < genData.length; r++){
             
                 
                 if(genData[r][1]>.500)
                 {
-                    graphCtx.moveTo(lineSpaceVer*(r+1),lastPointY);
-                    graphCtx.lineTo(lineSpaceVer*(r+2) ,lastPointY+genData[r][1]);
+                    graphCtx.lineTo(pointSpace*(r+1) ,220+(genData[r][1] * 50));
+                    graphCtx.moveTo(pointSpace*(r+1) ,220+(genData[r][1] * 50));
+                   
                     graphCtx.stroke();
                     lastPointY = lastPointY+genData[r][1];
                 }
                 else if (genData[r][1] < .500)
                 {
-                    graphCtx.moveTo(lineSpaceVer*(r+1),lastPointY);
-                    graphCtx.lineTo(lineSpaceVer*(r+2) ,lastPointY-genData[r][1]);
+                    graphCtx.lineTo(pointSpace*(r+1) ,220-(genData[r][1] * 50));
+                    graphCtx.moveTo(pointSpace*(r+1) ,220-(genData[r][1] * 50));
+                    
                     graphCtx.stroke();
                     lastPointY = lastPointY-genData[r][1];
                 }
@@ -370,7 +384,6 @@ $(document).ready(function() {
     /*function intersects(x,y){
             
           for (var i = 0; i < allNodes.length; i++) {
-
             if(NodeCount == 1){
                 var distance = (x - allNodes[0].CoordX) * (x - allNodes[0].CoordX) + (y - allNodes[0].CoordY) * (y - allNodes[0].CoordY);
             }
