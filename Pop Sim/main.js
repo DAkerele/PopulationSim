@@ -2,7 +2,7 @@ $(document).ready(function() {
     
         
     var allNodes = [];
-    var selectedNodes = [];
+    var selectedNode;
     var currentSelectedNode;
     var nodeColors = ["#c82124", "#82FA58", "#FE2E2E", "#61210B", "#FE2EF7", "#9A2EFE", "#58FAF4", "#F4FA58", "#FF8000", "#585858"]
     var NodeCount = 0; // number of nodes allowed on canvas
@@ -51,7 +51,7 @@ $(document).ready(function() {
                 context.fillStyle = "black";
                 context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0);
+                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1);
 
                 allNodes.push(node);
                 NodeCount++;
@@ -74,8 +74,10 @@ $(document).ready(function() {
 
                         if (allNodes[i].NodeNum == isInCircle.NodeNum) 
                         {
+
                             allNodes[i].isSelected = true;
-                            currentSelectedNode = allNodes[i].NodeNum;
+                            currentSelectedNode = allNodes[i];
+                            selectedNode = allNodes[i];
                             context.strokeStyle = "#f44242";
                             context.beginPath();
                             context.arc(allNodes[i].CoordX,allNodes[i].CoordY,30,0,2*Math.PI);
@@ -107,22 +109,26 @@ $(document).ready(function() {
 
                 document.getElementById("enterVals").onclick = function enterValues() {
                     setSelectedNodeInfo(currentSelectedNode);
-                    alert(node.plusplusS);
+                    
+                    
                     
 
                 }
 
                 document.getElementById("Run").onclick = function beginRun() {
-                    
-                    calcPoints(allNodes[0]);
-                    for(var i = 0; i< genArray.length; i++){
-                        console.log(genArray[i]);
+
+                   for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                        
+                        calcPoints(currentSelectedNode);  
+
+                        for(var i = 0; i< genArray.length; i++){
+                            console.log(genArray[i]);
                         }
+                   
+                        plotPoints(genArray);   
+                    }
 
-                     plotPoints(genArray);   
-                                     }
-
-             
+                }
            
 
 
@@ -146,13 +152,14 @@ $(document).ready(function() {
     }
 
     function setSelectedNodeInfo(node) { //sets Text fields to set value for corresponding node
+        node.numRuns = parseInt($("#NumRuns").val());
+        node.startPer = parseFloat($("#Starting").val());
+        node.genNum = parseInt($("#NumGenerations").val());
+        node.startPop = parseInt($("#StartingPop").val());
+        node.plusplusS = parseFloat($("#PPSurvival").val());
+        node.plusminusS = parseFloat($("#PMSurvival").val());
+        node.minusminusS = parseFloat($("#MMSurvival").val());
 
-        node.startPer = document.getElementById("Starting%").val;
-        node.genNum = document.getElementById("NumGenerations").val;
-        node.startPop = document.getElementById("StartingPop").val;
-        node.plusplusS = document.getElementById("++Survival%").val;
-        node.plusminusS = document.getElementById("+-Survival%").val;
-        node.minusminusS = document.getElementById("--Survival%").val;
 
     }
 
@@ -173,7 +180,7 @@ $(document).ready(function() {
 
     function calcPoints(node){
 
-
+        alert(node.startPer);
 
         var nextPopArray = [];
        
@@ -267,7 +274,7 @@ $(document).ready(function() {
              console.log(genArray[i]);
          }
 
-            console.log(node);
+            
                
     }
       
@@ -331,43 +338,31 @@ $(document).ready(function() {
 
 
     function plotPoints(genData){
-       /* var pointSpace = graph.width/100;
 
-        alert(pointSpace);
-        graphCtx.beginPath();
-        graphCtx.strokeStyle = 'red';
-        graphCtx.moveTo(0,220)
-        graphCtx.lineTo(pointSpace,225);
-        graphCtx.stroke();
-        graphCtx.moveTo(pointSpace,225);
-        graphCtx.lineTo(pointSpace*2,215);
-        graphCtx.stroke();
-        graphCtx.closePath();*/
-
-       var lineSpaceHor = graph.height/11
+       
         var pointSpace = graph.width/100;
         var lastPointY = 220;
         graphCtx.beginPath();
-        graphCtx.strokeStyle = 'red';
-        graphCtx.moveTo(0,220);
+        graphCtx.strokeStyle = currentSelectedNode.Color;
+        graphCtx.moveTo(0,220);//zeroY
         for(var r = 0; r < genData.length; r++){
             
                 
                 if(genData[r][1]>.500)
                 {
-                    graphCtx.lineTo(pointSpace*(r+1) ,220+(genData[r][1] * 50));
-                    graphCtx.moveTo(pointSpace*(r+1) ,220+(genData[r][1] * 50));
+                    graphCtx.lineTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
+                    graphCtx.moveTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
                    
                     graphCtx.stroke();
-                    lastPointY = lastPointY+genData[r][1];
+                   
                 }
                 else if (genData[r][1] < .500)
                 {
-                    graphCtx.lineTo(pointSpace*(r+1) ,220-(genData[r][1] * 50));
-                    graphCtx.moveTo(pointSpace*(r+1) ,220-(genData[r][1] * 50));
+                    graphCtx.lineTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
+                    graphCtx.moveTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
                     
                     graphCtx.stroke();
-                    lastPointY = lastPointY-genData[r][1];
+                    
                 }
                
             
