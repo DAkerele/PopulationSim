@@ -48,19 +48,18 @@
 					Number of Runs:<br>
 					<input value  = "1"  id = "NumRuns" type = "number"> </input>
 					<br>Starting Percent:<br>
-					<input value  = ".5"  id = "Starting%" type = "number"></input>
+					<input min = "0.0" max = "1.0"step = "0.1" value  = ".5"  id = "Starting" type = "number"></input>
 					<br>Number of Generation:<br>
 					<input value  = "100"  id = "NumGenerations" type = "number"></input>
 					<br>Starting Population:<br>
 					<input value  = "100"  id = "StartingPop" type = "number"></input>
 					<br>++Survival Percent:<br>
-					<input value  = "1.0"  step=".1" id = "++Survival%" type = "number"></input>
+					<input  min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "PPSurvival" type = "number"></input>
 					<br>+-Survival Percent:<br>
-					<input value  = "1.0" id = "+-Survival%" type = "number"></input>
+					<input min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "PMSurvival" type = "number"></input>
 					<br>--Survival Percent:<br>
-					<input value  = "1.0" id = "--Survival%" type = "number"></input>
+					<input  min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "MMSurvival" type = "number"></input>
 			</form>
-			
 			
 			
 
