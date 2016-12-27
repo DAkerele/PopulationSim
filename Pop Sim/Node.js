@@ -1,7 +1,7 @@
 "use strict";
 class Node{
 
-	 constructor(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS){
+	 constructor(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns){
 		this.isSelected = selected;
 		this.CoordX = posX;
 		this.CoordY = posY;
@@ -13,36 +13,12 @@ class Node{
 		this.plusplusS = plusplusS;
 		this.plusminusS = plusminusS;
 		this.minusminusS = minusminusS;
+		this.numRuns = numRuns;
 
 
 
 	
 	}
-
-
-	setPosX(pos){
-
-		 centerX = pos;
-
-		}
-
-	setPosY(pos){
-
-		 	enterY = pos;
-
-		}
-
-	getPosX() {
-			
-			return this;
-
-		}
-
-	getPosY() {
-
-			return centerY;
-
-		}
 
 
 }
