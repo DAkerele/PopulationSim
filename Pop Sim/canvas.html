@@ -6,12 +6,13 @@
 	
 </header>
 
-<html>
-	<body>
+<html style = "height:100%; width:100%;">
+	<body style = "height:100%; width:100%;">
 
-		<div style = "height:700px; width:1500px; background-color:#566573">
+		<div id = "app" style = "height:100%; width:100%; top:0px; background-color:#566573;">
 			<!-- numbering for y-axis -->
 			<p id = "yAxis"style = "position:absolute; top:192.5px; left:680px; ">%"+"Allele</p>
+			<p><p>
 			<p id = "xAxis"style = "position:absolute; top:35px; left:770px; ">1.0</p>
 			<p style = "position:absolute; top:35px; left:770px; ">1.0</p>
 			<p style = "position:absolute; top:70px; left:770px; ">0.9</p>
@@ -36,15 +37,37 @@
 			<p style = "position:absolute; top:420px; left:1200px; ">90</p>
 			<p style = "position:absolute; top:420px; left:1245px; ">100</p>
 
+			<!--numbering for bargraph x axis-->
+			<p style = "position:absolute; top:900px; left:800px; ">0.0</p>
+			<p style = "position:absolute; top:900px; left:850px; ">0.1</p>
+			<p style = "position:absolute; top:900px; left:900px; ">0.2</p>
+			<p style = "position:absolute; top:900px; left:950px; ">0.3</p>
+			<p style = "position:absolute; top:900px; left:1000px; ">0.4</p>
+			<p style = "position:absolute; top:900px; left:1050px; ">0.5</p>
+			<p style = "position:absolute; top:900px; left:1100px; ">0.6</p>
+			<p style = "position:absolute; top:900px; left:1150px; ">0.7</p>
+			<p style = "position:absolute; top:900px; left:1200px; ">0.8</p>
+			<p style = "position:absolute; top:900px; left:1250px; ">0.9</p>
+			<p style = "position:absolute; top:900px; left:1290px; ">1.0</p>
 
-			<canvas style="border:1px solid #000000;" id = "canvas" height= "400" width = "500"></canvas>
-			<canvas style="border:1px solid #000000; position:absolute; top:20px; left:800px;" id = "graph" height= "400" width = "500"></canvas>
-			
-			<button id ="Run">Begin Run</button>
-			<button  id = "enterVals">Confirm Values</button>
-			<h4 id = "NodeSelected">DATA FOR NODE #</h4>
+			<!-- number of runs-->
+			<p id = "RunTotal" style = "position:absolute; top:481px; left:765px; ">1</p>
 
-			<form>
+
+
+
+			<canvas style="border:1px solid #000000; position:absolute; left:20px; top:20px" id = "canvas" height= "400" width = "500" ></canvas>
+			<canvas style="border:1px solid #000000; position:absolute; top:20px; left:800px;" id = "lineGraph" height= "400" width = "500"></canvas>
+			<canvas style="border:1px solid #000000; position:absolute; left:800px; top:500px" id = "barGraph" height= "400" width = "500" ></canvas>
+		
+
+			<h4 style = "position:absolute; top:410px; left:20px"id = "NodeSelected">DATA FOR NODE #</h4>
+
+			<form style= "position:absolute; top:450px; left:20px">
+
+			<button style = "position:absolute; top:20px; left:225px;"id ="Run">Begin Run</button>
+			<button style = "position:absolute; top:20px; left:125px;" id = "enterVals">Confirm Values</button>
+
 					Number of Runs:<br>
 					<input value  = "1"  id = "NumRuns" type = "number"> </input>
 					<br>Starting Percent:<br>
