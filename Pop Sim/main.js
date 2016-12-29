@@ -7,18 +7,23 @@ $(document).ready(function() {
     var nodeColors = ["#c82124", "#82FA58", "#FE2E2E", "#61210B", "#FE2EF7", "#9A2EFE", "#58FAF4", "#F4FA58", "#FF8000", "#585858"]
     var NodeCount = 0; // number of nodes allowed on canvas
     var canvas = document.getElementById("canvas");
-    var graph = document.getElementById("graph");
+    var lineGraph = document.getElementById("lineGraph");
+    var barGraph = document.getElementById("barGraph");
     var context = canvas.getContext("2d");
-    var graphCtx = graph.getContext("2d");
+    var lineGraphCtx = lineGraph.getContext("2d");
+    var barGraphCtx = barGraph.getContext("2d");
     var unselectedColor = "#FFFFFF";
     var genArray = [];
 
 
     context.fillStyle = "#FDFEFE";
-    graphCtx.fillStyle = "#FDFEFE";
-    graphCtx.fillRect(0,0,graph.width, graph.height);
-    context.fillRect(10, 10, canvas.width, canvas.height);
-    intializeGraph();
+    lineGraphCtx.fillStyle = "#FDFEFE";
+    barGraphCtx.fillStyle = "#FDFEFE";
+    barGraphCtx.fillRect(0,0,barGraph.width,barGraph.height);
+    lineGraphCtx.fillRect(0,0,lineGraph.width, lineGraph.height);
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    intializeLineGraph();
+    intializeBarGraph();
 
     
 
@@ -110,7 +115,7 @@ $(document).ready(function() {
                 document.getElementById("enterVals").onclick = function enterValues() {
                     setSelectedNodeInfo(currentSelectedNode);
                     
-                    
+                    return false;
                     
 
                 }
@@ -127,6 +132,10 @@ $(document).ready(function() {
                    
                         plotPoints(genArray);   
                     }
+
+                      document.getElementById("RunTotal").innerHTML = " "+currentSelectedNode.numRuns;
+
+                    return false;
 
                 }
            
@@ -180,7 +189,7 @@ $(document).ready(function() {
 
     function calcPoints(node){
 
-        alert(node.startPer);
+        
 
         var nextPopArray = [];
        
@@ -311,27 +320,41 @@ $(document).ready(function() {
         
     }
 
-    function intializeGraph(){
-        var lineSpaceHor = graph.height/11;
-        var lineSpaceVer = graph.width/11;
-        graphCtx.beginPath();
-        for (var i = 0; i < graph.height; i+=lineSpaceHor) {
-            graphCtx.moveTo(0,i);
-            graphCtx.lineTo(graph.width, i);
-            graphCtx.stroke();
+    function intializeLineGraph(){
+        var lineSpaceHor = lineGraph.height/11;
+        var lineSpaceVer = lineGraph.width/11;
+        lineGraphCtx.beginPath();
+        for (var i = 0; i < lineGraph.height; i+=lineSpaceHor) {
+            lineGraphCtx.moveTo(0,i);
+            lineGraphCtx.lineTo(lineGraph.width, i);
+            lineGraphCtx.stroke();
 
         }
-        graphCtx.closePath();
-        graphCtx.beginPath();
-        for (var j = 0; j< graph.width; j+=lineSpaceVer) {
-            graphCtx.moveTo(j,graph.height);
-            graphCtx.lineTo(j,390);
-            graphCtx.stroke();
+        lineGraphCtx.closePath();
+        lineGraphCtx.beginPath();
+        for (var j = 0; j< lineGraph.width; j+=lineSpaceVer) {
+            lineGraphCtx.moveTo(j,lineGraph.height);
+            lineGraphCtx.lineTo(j,390);
+            lineGraphCtx.stroke();
 
         }
-        graphCtx.closePath();
+        lineGraphCtx.closePath();
         
                
+
+    }
+
+    function intializeBarGraph(){
+
+        var ylineSpace = barGraph.height/4;
+        var xValueSpace = barGraph.width/10;
+       
+        barGraphCtx.beginPath();
+        for(var i = 0; i < barGraph.height; i+=ylineSpace){
+            barGraphCtx.moveTo(0,i);
+            barGraphCtx.lineTo(barGraph.width, i);
+            barGraphCtx.stroke();
+        }
 
     }
 
@@ -340,28 +363,28 @@ $(document).ready(function() {
     function plotPoints(genData){
 
        
-        var pointSpace = graph.width/100;
+        var pointSpace = lineGraph.width/100;
         var lastPointY = 220;
-        graphCtx.beginPath();
-        graphCtx.strokeStyle = currentSelectedNode.Color;
-        graphCtx.moveTo(0,220);//zeroY
+        lineGraphCtx.beginPath();
+        lineGraphCtx.strokeStyle = currentSelectedNode.Color;
+        lineGraphCtx.moveTo(0,220);//zeroY
         for(var r = 0; r < genData.length; r++){
             
                 
                 if(genData[r][1]>.500)
                 {
-                    graphCtx.lineTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
-                    graphCtx.moveTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
+                    lineGraphCtx.lineTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
+                    lineGraphCtx.moveTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
                    
-                    graphCtx.stroke();
+                    lineGraphCtx.stroke();
                    
                 }
                 else if (genData[r][1] < .500)
                 {
-                    graphCtx.lineTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
-                    graphCtx.moveTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
+                    lineGraphCtx.lineTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
+                    lineGraphCtx.moveTo(pointSpace*(r+1) ,402-(genData[r][1] * 402));
                     
-                    graphCtx.stroke();
+                    lineGraphCtx.stroke();
                     
                 }
                
@@ -373,8 +396,10 @@ $(document).ready(function() {
             
           
         }
-        graphCtx.closePath();
+        lineGraphCtx.closePath();
     }
+
+
 
     /*function intersects(x,y){
             
