@@ -112,6 +112,8 @@ $(document).ready(function() {
 
         document.getElementById("Run").onclick = function beginRun() {
 
+            $("#nodeSelect").append("<option value="+currentSelectedNode.NodeNum+">Node"+currentSelectedNode.NodeNum+"</option>")
+
             for (var j = 0; j < currentSelectedNode.numRuns; j++) {
 
                 calcPoints(currentSelectedNode);
@@ -122,7 +124,7 @@ $(document).ready(function() {
                 }
 
                 plotPoints(genArray);
-                plotBars(genArray);
+                
             }
 
             document.getElementById("RunTotal").innerHTML = " " + currentSelectedNode.numRuns;
@@ -130,6 +132,22 @@ $(document).ready(function() {
             return false;
 
         }
+
+         document.getElementById("nodeSelect").onchange = function changeBarGraph(){
+
+            barGraphCtx.clearRect(0, 0, barGraphCtx.width, barGraphCtx.height);
+            intializeBarGraph();
+            var sel = document.getElementById("nodeSelect");
+              switch(sel.options[sel.selectedIndex].value) {
+                case "1":
+                    plotBars(genArray);
+                     break;
+                case "2":
+                    plotBars(genArray);
+                    break;
+              }
+          
+         }
 
 
 
@@ -372,18 +390,17 @@ $(document).ready(function() {
     function plotBars(genData){
 
         finalFreq = genData[genData.length-1][1];
-        alert(finalFreq);
+        barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
         
         if(finalFreq <= 0.1){
+
             barGraphCtx.strokeRect(0,300,50,100);
-            barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
             barGraphCtx.fillRect(0,300,50,100);
             
             
 
         }else if(finalFreq > 0.1 && finalFreq <= 0.2){
             barGraphCtx.strokeRect(50,300,50,100);
-            barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
             barGraphCtx.fillRect(50,300,50,100);
             
             
@@ -392,13 +409,11 @@ $(document).ready(function() {
         
         else if(finalFreq > 0.2 && finalFreq <= 0.3){
             barGraphCtx.strokeRect(100,300,50,100);
-            barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
             barGraphCtx.fillRect(100,300,50,100);
                         
         }
         else if(finalFreq > 0.3 && finalFreq <= 0.4){
             barGraphCtx.strokeRect(150,300,50,100);
-            barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
             barGraphCtx.fillRect(150,300,50,100);
             
 
@@ -406,21 +421,18 @@ $(document).ready(function() {
         }
         else if(finalFreq > 0.4 && finalFreq <= 0.5){
             barGraphCtx.strokeRect(200,300,50,100);
-            barGraphCtx.fillStyle = String(currentSelectedNode.Color);
             barGraphCtx.fillRect(200,300,50,100);
             
             
         }
         else if(finalFreq > 0.5 && finalFreq <= 0.6){
             barGraphCtx.strokeRect(250,300,50,100);
-            barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
             barGraphCtx.fillRect(250,300,50,100);
             
             
         }
         else if(finalFreq > 0.6 && finalFreq <= 0.7){
             barGraphCtx.strokeRect(300,300,50,100);
-            barGraphCtx.fillStyle = String(currentSelectedNode.Color);
             barGraphCtx.fillRect(300,300,50,100);
 
             
@@ -428,7 +440,6 @@ $(document).ready(function() {
         }
         else if(finalFreq > 0.7 && finalFreq <= 0.8){
             barGraphCtx.strokeRect(350,300,50,100);
-            barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
             barGraphCtx.fillRect(350,300,50,100);
 
             
@@ -436,14 +447,12 @@ $(document).ready(function() {
         }
         else if(finalFreq > 0.8 && finalFreq <= 0.9){
             barGraphCtx.strokeRect(400,300,50,100);
-            barGraphCtx.fillStyle = String(currentSelectedNode.Color);
             barGraphCtx.fillRect(400,300,50,100);
             
            
         }
         else if(finalFreq > 0.9 && finalFreq <= 1.0){
             barGraphCtx.strokeRect(450,300,50,100);
-            barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
             barGraphCtx.fillRect(450,300,50,100);
             
            
