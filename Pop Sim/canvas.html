@@ -10,7 +10,7 @@
 	<body style = "height:100%; width:100%;">
 
 		<div id = "app" style = "height:100%; width:100%; top:0px; background-color:#566573;">
-			<!-- numbering for y-axis -->
+			<!-- numbering for y-axis linegraph -->
 			<p id = "yAxis"style = "position:absolute; top:192.5px; left:680px; ">%"+"Allele</p>
 			<p><p>
 			<p id = "xAxis"style = "position:absolute; top:35px; left:770px; ">1.0</p>
@@ -25,7 +25,7 @@
 			<p style = "position:absolute; top:315px; left:770px; ">0.2</p>
 			<p style = "position:absolute; top:350px; left:770px; ">0.1</p>
 
-			<!-- numbering for x-axis -->
+			<!-- numbering for x-axis linegraph-->
 			<p style = "position:absolute; top:420px; left:835px; ">10</p>
 			<p style = "position:absolute; top:420px; left:885px; ">20</p>
 			<p style = "position:absolute; top:420px; left:930px; ">30</p>
@@ -84,7 +84,12 @@
 					<input  min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "MMSurvival" type = "number"></input>
 			</form>
 			
-			
+			<select id = "nodeSelect" style= "position:absolute; left:675px; top:495px">
+
+  				"<option value="None">None</option>"
+  				
+
+			</select>
 
 		</div>
 
