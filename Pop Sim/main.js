@@ -145,6 +145,31 @@ $(document).ready(function() {
                 case "2":
                     plotBars(genArray);
                     break;
+                case "3":
+                   plotBars(genArray);
+                   break;
+                case "4":
+                  plotBars(genArray);
+                  break;
+                case "5":
+                   plotBars(genArray);
+                   break;
+                case "6":
+                   plotBars(genArray);
+                   break;
+                case "7":
+                   plotBars(genArray);
+                   break;
+                case "8":
+                   plotBars(genArray);
+                   break;
+                case "9":
+                   plotBars(genArray);
+                   break;
+                case "10":
+                   plotBars(genArray);
+                   break;
+                 
               }
           
          }
