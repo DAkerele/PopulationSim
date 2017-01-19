@@ -1,4 +1,6 @@
+
 $(document).ready(function() {
+
 
 
     var allNodes = [];
@@ -14,6 +16,7 @@ $(document).ready(function() {
     var barGraphCtx = barGraph.getContext("2d");
     var unselectedColor = "#FFFFFF";
     var genArray = [];
+    
 
 
     context.fillStyle = "#FDFEFE";
@@ -52,7 +55,8 @@ $(document).ready(function() {
                 context.fillStyle = "black";
                 context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1);
+                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, 0);
+
 
                 allNodes.push(node);
                 NodeCount++;
@@ -114,18 +118,16 @@ $(document).ready(function() {
 
             $("#nodeSelect").append("<option value="+currentSelectedNode.NodeNum+">Node"+currentSelectedNode.NodeNum+"</option>")
 
-            for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-
+            /*for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                 
                 calcPoints(currentSelectedNode);
-                
 
-                for (var i = 0; i < genArray.length; i++) {
-                    console.log(genArray[i]);
-                }
-
-                plotPoints(genArray);
                 
-            }
+                plotPoints(currentSelectedNode.alleleData);
+                
+            }*/
+
+            currentSelectedNode.runSimulation();
 
             document.getElementById("RunTotal").innerHTML = " " + currentSelectedNode.numRuns;
 
@@ -140,34 +142,34 @@ $(document).ready(function() {
             var sel = document.getElementById("nodeSelect");
               switch(sel.options[sel.selectedIndex].value) {
                 case "1":
-                    plotBars(genArray);
-                     break;
+                    plotBars(allNodes[0].alleleData);
+                    break;
                 case "2":
-                    plotBars(genArray);
+                    plotBars(allNodes[1].alleleData);
                     break;
                 case "3":
-                   plotBars(genArray);
+                   plotBars(allNodes[2].alleleData);
                    break;
                 case "4":
-                  plotBars(genArray);
+                  plotBars(allNodes[3].alleleData);
                   break;
                 case "5":
-                   plotBars(genArray);
+                   plotBars(allNodes[4].alleleData);
                    break;
                 case "6":
-                   plotBars(genArray);
+                   plotBars(allNodes[5].alleleData);
                    break;
                 case "7":
-                   plotBars(genArray);
+                   plotBars(allNodes[6].alleleData);
                    break;
                 case "8":
-                   plotBars(genArray);
+                   plotBars(allNodes[7].alleleData);
                    break;
                 case "9":
-                   plotBars(genArray);
+                   plotBars(allNodes[8].alleleData);
                    break;
                 case "10":
-                   plotBars(genArray);
+                   plotBars(allNodes[9].alleleData);
                    break;
                  
               }
@@ -216,114 +218,8 @@ $(document).ready(function() {
 
     }
 
-    function calcPoints(node) {
+    
 
-
-
-        var nextPopArray = [];
-
-        genArray.splice(0, genArray.length);
-        for (var j = 0; j <= 1; j++) {
-            nextPopArray.push(node.startPer);
-        }
-        genArray.push(nextPopArray);
-        beginGen = 0;
-        endGen = node.genNum;
-
-
-        var currentPopSize = node.startPop * 2;
-
-        var pbar;
-        var p = 0.0;
-        var q;
-        var w;
-        var pp1;
-        var pp2;
-
-        var nx;
-        var ny;
-
-        for (var i = 0; i < node.genNum; i++) {
-
-            numFixedPops = 0;
-            numLostPops = 0;
-            pbar = 0.0;
-            nextPopArray = [];
-
-
-            var popArray = genArray[i];
-            for (var j = 1; j <= 1; j++) {
-                var end = popArray[j];
-                pbar += end;
-                if (end <= 0.0) {
-                    numLostPops += 1;
-                }
-                if (end >= 1.0) {
-                    numFixedPops += 1;
-                }
-            }
-
-
-            pbar /= 1;
-            for (var j = 0; j <= 1; j++) {
-                p = popArray[j];
-                if (j > 0) {
-                    p = p * (1.0 - 0.0) + 0.0 * pbar;
-                }
-                p = (1 - 0) * p + 0 * (1 - p);
-
-                if ((p > 0.0) && (p < 1.0)) {
-                    q = 1 - p;
-                    w = (p * p * node.plusplusS) + (2.0 * p * q * node.plusminusS) + (q * q * node.minusminusS);
-                    pp1 = (p * p * node.plusplusS) / w;
-                    pp2 = (2.0 * p * q * node.plusminusS) / w;
-                    if (j > 0) {
-                        nx = binomial(node.startPop, pp1);
-
-                        if (pp1 < 1.0 && nx < node.startPop) {
-                            ny = binomial((node.startPop - nx), (pp2 / (1.0 - pp1)));
-                        } else {
-                            ny = 0;
-                        }
-
-                        nextPopArray.push(((nx * 2.0) + ny) / currentPopSize);
-                    } else {
-                        nextPopArray.push(pp1 + (pp2 / 2.0));
-                    }
-                } else {
-                    if (p <= 0.0) {
-                        p = 0.0;
-                    } else {
-                        p = 1.0;
-                    }
-                    nextPopArray.push(p);
-                }
-
-            }
-            genArray.push(nextPopArray);
-        }
-
-        for (var i = 0; i < genArray.length; i++) {
-            console.log(genArray[i]);
-        }
-
-
-
-    }
-
-
-    function binomial(n, pp) {
-        var j;
-        var bnl;
-        bnl = 0;
-        for (j = 1; j <= n; j++) {
-            if (Math.random() < pp) {
-                bnl++;
-            }
-        }
-
-        return bnl;
-    }
 
 
 
@@ -511,4 +407,5 @@ $(document).ready(function() {
 
 
 
-});
+    });
+
