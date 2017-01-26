@@ -1,11 +1,10 @@
-
 $(document).ready(function() {
 
 
 
     var allNodes = [];
     var selectedNode;
-    var currentSelectedNode;
+    var currentSelectedNode = {};
     var nodeColors = ["#c82124", "#82FA58", "#FE2E2E", "#61210B", "#FE2EF7", "#9A2EFE", "#58FAF4", "#F4FA58", "#FF8000", "#585858"]
     var NodeCount = 0; // number of nodes allowed on canvas
     var canvas = document.getElementById("canvas");
@@ -121,13 +120,16 @@ $(document).ready(function() {
             /*for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                  
                 calcPoints(currentSelectedNode);
-
                 
                 plotPoints(currentSelectedNode.alleleData);
                 
             }*/
+                currentSelectedNode.runSim();
+                plotPoints(currentSelectedNode.alleleData);
 
-            currentSelectedNode.runSimulation();
+
+            
+            
 
             document.getElementById("RunTotal").innerHTML = " " + currentSelectedNode.numRuns;
 
@@ -274,9 +276,7 @@ $(document).ready(function() {
     }
 
 
-
-    function plotPoints(genData) {
-
+    function plotPoints(genArray){
 
         var pointSpace = lineGraph.width / 100;
         var lastPointY = 220;
@@ -284,18 +284,18 @@ $(document).ready(function() {
         lineGraphCtx.lineWidth = 0.5;
         lineGraphCtx.strokeStyle = currentSelectedNode.Color;
         lineGraphCtx.moveTo(0, 220); //zeroY
-        for (var r = 0; r < genData.length; r++) {
+        for (var r = 0; r < currentSelectedNode.alleleData.length; r++) {
 
 
-            if (genData[r][1] > .500) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genData[r][1] * 402));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genData[r][1] * 402));
+            if (currentSelectedNode.alleleData[r][1] > .500) {
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (currentSelectedNode.alleleData[r][1] * 402));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (currentSelectedNode.alleleData[r][1] * 402));
 
                 lineGraphCtx.stroke();
 
-            } else if (genData[r][1] < .500) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genData[r][1] * 402));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genData[r][1] * 402));
+            } else if (currentSelectedNode.alleleData[r][1] < .500) {
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (currentSelectedNode.alleleData[r][1] * 402));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (currentSelectedNode.alleleData[r][1] * 402));
 
                 lineGraphCtx.stroke();
 
@@ -306,8 +306,14 @@ $(document).ready(function() {
 
         }
         lineGraphCtx.closePath();
+    
     }
 
+
+    
+
+
+   
     function plotBars(genData){
 
         finalFreq = genData[genData.length-1][1];
@@ -408,4 +414,3 @@ $(document).ready(function() {
 
 
     });
-
