@@ -1,7 +1,5 @@
 
-
-
-	 function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData){
+ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData){
 		this.isSelected = selected;
 		this.CoordX = posX;
 		this.CoordY = posY;
@@ -18,25 +16,24 @@
 
 
 	}
-	
-	
 
-	  function calcPoints(node) {
 
-	  	var genArray = [];
+  Node.prototype.runSim = function () {
+
+        var genArray = [];
 
         var nextPopArray = [];
 
         genArray.splice(0, genArray.length);
         for (var j = 0; j <= 1; j++) {
-            nextPopArray.push(node.startPer);
+            nextPopArray.push(this.startPer);
         }
         genArray.push(nextPopArray);
         beginGen = 0;
-        endGen = node.genNum;
+        endGen = this.genNum;
 
 
-        var currentPopSize = node.startPop * 2;
+        var currentPopSize = this.startPop * 2;
 
         var pbar;
         var p = 0.0;
@@ -48,7 +45,7 @@
         var nx;
         var ny;
 
-        for (var i = 0; i < node.genNum; i++) {
+        for (var i = 0; i < this.genNum; i++) {
 
             numFixedPops = 0;
             numLostPops = 0;
@@ -79,14 +76,14 @@
 
                 if ((p > 0.0) && (p < 1.0)) {
                     q = 1 - p;
-                    w = (p * p * node.plusplusS) + (2.0 * p * q * node.plusminusS) + (q * q * node.minusminusS);
-                    pp1 = (p * p * node.plusplusS) / w;
-                    pp2 = (2.0 * p * q * node.plusminusS) / w;
+                    w = (p * p * this.plusplusS) + (2.0 * p * q * this.plusminusS) + (q * q * this.minusminusS);
+                    pp1 = (p * p * this.plusplusS) / w;
+                    pp2 = (2.0 * p * q * this.plusminusS) / w;
                     if (j > 0) {
-                        nx = binomial(node.startPop, pp1);
+                        nx = binomial(this.startPop, pp1);
 
-                        if (pp1 < 1.0 && nx < node.startPop) {
-                            ny = binomial((node.startPop - nx), (pp2 / (1.0 - pp1)));
+                        if (pp1 < 1.0 && nx < this.startPop) {
+                            ny = binomial((this.startPop - nx), (pp2 / (1.0 - pp1)));
                         } else {
                             ny = 0;
                         }
@@ -108,12 +105,20 @@
             genArray.push(nextPopArray);
         }
 
-       	node.alleleData = genArray;
+        this.alleleData = genArray;
+        alert("yes")
+
        
-
-
+        
 
     }
+
+    
+
+	
+	
+
+	  
 
 
     function binomial(n, pp) {
