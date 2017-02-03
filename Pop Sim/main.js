@@ -317,7 +317,7 @@ $(document).ready(function() {
     function plotBars(genData){
 
         finalFreq = genData[genData.length-1][1];
-        barGraphCtx.fillStyle =  String(currentSelectedNode.Color);
+        barGraphCtx.fillStyle =  String(allNodes[(sel.options[sel.selectedIndex].value)-1].Color);
         
         if(finalFreq <= 0.1){
 
