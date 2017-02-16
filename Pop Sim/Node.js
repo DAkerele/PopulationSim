@@ -1,25 +1,24 @@
+function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData){
+        this.isSelected = selected;
+        this.CoordX = posX;
+        this.CoordY = posY;
+        this.NodeNum = NodeNum;
+        this.Color = Color;
+        this.startPer = startPer;
+        this.genNum = genNum;
+        this.startPop = startPop;
+        this.plusplusS = plusplusS;
+        this.plusminusS = plusminusS;
+        this.minusminusS = minusminusS;
+        this.numRuns = numRuns;
+        this.alleleData = alleleData;
 
- function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData){
-		this.isSelected = selected;
-		this.CoordX = posX;
-		this.CoordY = posY;
-		this.NodeNum = NodeNum;
-		this.Color = Color;
-		this.startPer = startPer;
-		this.genNum = genNum;
-		this.startPop = startPop;
-		this.plusplusS = plusplusS;
-		this.plusminusS = plusminusS;
-		this.minusminusS = minusminusS;
-		this.numRuns = numRuns;
-		this.alleleData = alleleData;
 
-
-	}
+    }
 
 
   Node.prototype.runSim = function () {
-
+        var index = 0;
         var genArray = [];
 
         var nextPopArray = [];
@@ -105,8 +104,10 @@
             genArray.push(nextPopArray);
         }
 
-        this.alleleData = genArray;
-        alert("yes")
+        this.alleleData[index] = genArray;
+        index+=1;
+
+        
 
        
         
@@ -115,10 +116,10 @@
 
     
 
-	
-	
+    
+    
 
-	  
+      
 
 
     function binomial(n, pp) {
