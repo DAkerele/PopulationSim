@@ -15,6 +15,8 @@ $(document).ready(function() {
     var barGraphCtx = barGraph.getContext("2d");
     var unselectedColor = "#FFFFFF";
     var genArray = [];
+    var sel = document.getElementById("nodeSelect");
+    var rectX,rectY;
     
 
 
@@ -54,7 +56,7 @@ $(document).ready(function() {
                 context.fillStyle = "black";
                 context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, 0);
+                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1,[]);
 
 
                 allNodes.push(node);
@@ -115,17 +117,15 @@ $(document).ready(function() {
 
         document.getElementById("Run").onclick = function beginRun() {
 
-            $("#nodeSelect").append("<option value="+currentSelectedNode.NodeNum+">Node"+currentSelectedNode.NodeNum+"</option>")
+            $("#nodeSelect").append("<option value="+currentSelectedNode.NodeNum+">Node"+currentSelectedNode.NodeNum+"</option>");
 
-            /*for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                 
-                calcPoints(currentSelectedNode);
-                
-                plotPoints(currentSelectedNode.alleleData);
-                
-            }*/
+            for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                 currentSelectedNode.runSim();
-                plotPoints(currentSelectedNode.alleleData);
+                
+                plotPoints(currentSelectedNode.alleleData[j]);
+                
+            }
+                
 
 
             
@@ -138,42 +138,50 @@ $(document).ready(function() {
         }
 
          document.getElementById("nodeSelect").onchange = function changeBarGraph(){
+          
+         
 
-            barGraphCtx.clearRect(0, 0, barGraphCtx.width, barGraphCtx.height);
+        
+        
+            barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+            barGraphCtx.fillStyle = "#FDFEFE";
+            barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
             intializeBarGraph();
-            var sel = document.getElementById("nodeSelect");
-              switch(sel.options[sel.selectedIndex].value) {
-                case "1":
-                    plotBars(allNodes[0].alleleData);
+            
+        for(var k = 0; k < allNodes[(sel.options[sel.selectedIndex].value)-1].numRuns; k++){
+            switch(sel.options[sel.selectedIndex].value) {
+                
+                 case "1":
+                    plotBars(allNodes[0].alleleData[k]);
                     break;
                 case "2":
-                    plotBars(allNodes[1].alleleData);
+                    plotBars(allNodes[1].alleleData[k]);
                     break;
                 case "3":
-                   plotBars(allNodes[2].alleleData);
+                   plotBars(allNodes[2].alleleData[k]);
                    break;
                 case "4":
-                  plotBars(allNodes[3].alleleData);
+                  plotBars(allNodes[3].alleleData[k]);
                   break;
                 case "5":
-                   plotBars(allNodes[4].alleleData);
+                   plotBars(allNodes[4].alleleData[k]);
                    break;
                 case "6":
-                   plotBars(allNodes[5].alleleData);
+                   plotBars(allNodes[5].alleleData[k]);
                    break;
                 case "7":
-                   plotBars(allNodes[6].alleleData);
+                   plotBars(allNodes[6].alleleData[k]);
                    break;
                 case "8":
-                   plotBars(allNodes[7].alleleData);
+                   plotBars(allNodes[7].alleleData[k]);
                    break;
                 case "9":
-                   plotBars(allNodes[8].alleleData);
+                   plotBars(allNodes[8].alleleData[k]);
                    break;
                 case "10":
-                   plotBars(allNodes[9].alleleData);
+                   plotBars(allNodes[9].alleleData[k]);
                    break;
-                 
+                 }
               }
           
          }
@@ -315,6 +323,7 @@ $(document).ready(function() {
 
    
     function plotBars(genData){
+        
 
         finalFreq = genData[genData.length-1][1];
         barGraphCtx.fillStyle =  String(allNodes[(sel.options[sel.selectedIndex].value)-1].Color);
@@ -323,12 +332,17 @@ $(document).ready(function() {
 
             barGraphCtx.strokeRect(0,300,50,100);
             barGraphCtx.fillRect(0,300,50,100);
-            
+            rectX = 0;
+            rectY = 300;
+           
             
 
         }else if(finalFreq > 0.1 && finalFreq <= 0.2){
             barGraphCtx.strokeRect(50,300,50,100);
             barGraphCtx.fillRect(50,300,50,100);
+            rectX = 50;
+            rectY = 300;
+            
             
             
             
@@ -337,30 +351,44 @@ $(document).ready(function() {
         else if(finalFreq > 0.2 && finalFreq <= 0.3){
             barGraphCtx.strokeRect(100,300,50,100);
             barGraphCtx.fillRect(100,300,50,100);
+            rectX = 100;
+            rectY = 300;
+            
                         
         }
         else if(finalFreq > 0.3 && finalFreq <= 0.4){
             barGraphCtx.strokeRect(150,300,50,100);
             barGraphCtx.fillRect(150,300,50,100);
-            
+            rectX = 150;
+            rectY = 300;
+           
 
             
         }
         else if(finalFreq > 0.4 && finalFreq <= 0.5){
             barGraphCtx.strokeRect(200,300,50,100);
             barGraphCtx.fillRect(200,300,50,100);
+            rectX = 200;
+            rectY = 300;
+           
+
             
             
         }
         else if(finalFreq > 0.5 && finalFreq <= 0.6){
             barGraphCtx.strokeRect(250,300,50,100);
             barGraphCtx.fillRect(250,300,50,100);
+            rectX = 250;
+            rectY = 300;
             
             
         }
         else if(finalFreq > 0.6 && finalFreq <= 0.7){
             barGraphCtx.strokeRect(300,300,50,100);
             barGraphCtx.fillRect(300,300,50,100);
+            rectX = 300;
+            rectY = 300;
+           
 
             
             
@@ -368,22 +396,32 @@ $(document).ready(function() {
         else if(finalFreq > 0.7 && finalFreq <= 0.8){
             barGraphCtx.strokeRect(350,300,50,100);
             barGraphCtx.fillRect(350,300,50,100);
-
+            rectX = 350;
+            rectY = 300;
+           
             
            
         }
         else if(finalFreq > 0.8 && finalFreq <= 0.9){
             barGraphCtx.strokeRect(400,300,50,100);
             barGraphCtx.fillRect(400,300,50,100);
+            rectX = 400;
+            rectY = 300;
             
            
         }
         else if(finalFreq > 0.9 && finalFreq <= 1.0){
             barGraphCtx.strokeRect(450,300,50,100);
             barGraphCtx.fillRect(450,300,50,100);
+            rectX = 450;
+            rectY = 300;
+            
+
             
            
         }
+
+        
 
     }
 
