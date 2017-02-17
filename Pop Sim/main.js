@@ -152,17 +152,17 @@ $(document).ready(function() {
             switch(sel.options[sel.selectedIndex].value) {
                 
                  case "1":
-                    plotBars(allNodes[0].alleleData[k]);
-                    break;
+                   plotBars(allNodes[0].alleleData[k]);
+                   break;
                 case "2":
-                    plotBars(allNodes[1].alleleData[k]);
-                    break;
+                   plotBars(allNodes[1].alleleData[k]);
+                   break;
                 case "3":
                    plotBars(allNodes[2].alleleData[k]);
                    break;
                 case "4":
-                  plotBars(allNodes[3].alleleData[k]);
-                  break;
+                   plotBars(allNodes[3].alleleData[k]);
+                   break;
                 case "5":
                    plotBars(allNodes[4].alleleData[k]);
                    break;
