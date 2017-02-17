@@ -18,7 +18,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
 
 
   Node.prototype.runSim = function () {
-        var index = 0;
+       
         var genArray = [];
 
         var nextPopArray = [];
@@ -104,8 +104,8 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
             genArray.push(nextPopArray);
         }
 
-        this.alleleData[index] = genArray;
-        index+=1;
+        this.alleleData.push(genArray);
+        
 
         
 
