@@ -247,7 +247,7 @@ $(document).ready(function() {
     }
 
     function intializeLineGraph() {
-        var lineSpaceHor = (lineGraph.height / 11);
+        var lineSpaceHor = lineGraph.height / 10;
         var lineSpaceVer = lineGraph.width / 11;
         lineGraphCtx.beginPath();
         for (var i = 0; i < lineGraph.height; i += lineSpaceHor) {
@@ -297,14 +297,14 @@ $(document).ready(function() {
 
 
             if (genArray[r][1] > .500) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 402));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 402));
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
             } else if (genArray[r][1] < .500) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 402));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 402));
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
@@ -326,7 +326,6 @@ $(document).ready(function() {
     function plotBars(genData){
         
         var rectHeight = 300;
-        var freq01,freq12,freq23,freq34,freq45,freq56,freq67,freq78,freq89,freq91;
         var numOfFreq = 1;
         finalFreq = genData[genData.length-2][1];
         alert(finalFreq);
