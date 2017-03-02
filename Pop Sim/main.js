@@ -132,7 +132,7 @@ $(document).ready(function() {
             
             
 
-            document.getElementById("RunTotal").innerHTML = " " + currentSelectedNode.numRuns;
+            
 
             return false;
 
@@ -324,106 +324,157 @@ $(document).ready(function() {
 
    
     function plotBars(genData){
-        
+        var endFreqs = [];
         var rectHeight = 300;
-        var numOfFreq = 1;
-        finalFreq = genData[genData.length-2][1];
-        alert(finalFreq);
+        var freq = 1;
+        var freq01 = 0,freq12= 0,freq23= 0,freq34= 0,freq45= 0,freq56= 0,freq67= 0,freq78= 0,freq89= 0,freq91= 0;
         barGraphCtx.fillStyle =  String(allNodes[(sel.options[sel.selectedIndex].value)-1].Color);
+        for (var i = 0; i < currentSelectedNode.numRuns; i++) {
+            finalFreq = genData[genData.length-2][1];
+             endFreqs.push(finalFreq);
+
+            switch(endFreqs[i]){
+
+                case 1:
+                    if(endFreqs[i] <= 0.1)
+                        freq01+=1;
+                    break;
+                
+                case 2:
+                    if(endFreq[i] > 0.1 && endFreq[i] <= 0.2)
+                        freq12+=1;
+                    break;
+
+                case 3:
+                    if(endFreq[i] > 0.2 && endFreq[i] <= 0.3)
+                        freq23+=1;
+                    break;
+
+                case 4:
+                    if(endFreq[i] > 0.3 && endFreq[i] <= 0.4)
+                        freq34+=1;
+                    break;
+
+                case 5:
+                    if(endFreq[i] > 0.4 && endFreq[i] <= 0.5)
+                        freq45+=1;
+                    break;
+
+                case 6:
+                    if(endFreq[i] > 0.5 && endFreq[i] <= 0.6)
+                        freq56+=1;
+                    break;
+
+                case 7:
+                    if(endFreq[i] > 0.6 && endFreq[i] <= 0.7)
+                        freq67+=1;
+                    break;
+
+                case 8:
+                    if(endFreq[i] > 0.7 && endFreq[i] <= 0.8)
+                        freq78+=1;
+                    break;
+
+                case 9:
+                    if(endFreq[i] > 0.8 && endFreq[i] <= 0.9)
+                        freq89+=1;
+                    break;
+
+                case 10:
+                    if(endFreq[i] > 0.9 && endFreq[i] <= 1.0)
+                        freq91+=1;
+                    break;
+            }
+
+
+        }
+
+
+        alert(freq01);
         
-        if(finalFreq <= 0.1){
             
 
-            barGraphCtx.strokeRect(0,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(0,rectHeight*numOfFreq,50,100);
+            barGraphCtx.strokeRect(0,rectHeight*freq01,50,100);
+            barGraphCtx.fillRect(0,rectHeight*freq01,50,100);
             rectX = 0;
             rectY = rectHeight;
            
             
 
-        }else if(finalFreq > 0.1 && finalFreq <= 0.2){
-            barGraphCtx.strokeRect(50,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(50,rectHeight*numOfFreq,50,100);
+        
+            barGraphCtx.strokeRect(50,rectHeight*freq12,50,100);
+            barGraphCtx.fillRect(50,rectHeight*freq12,50,100);
             rectX = 50;
             rectY = rectHeight;
             
             
             
             
-        }
-        
-        else if(finalFreq > 0.2 && finalFreq <= 0.3){
-            barGraphCtx.strokeRect(100,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(100,rectHeight*numOfFreq,50,100);
+       
+            barGraphCtx.strokeRect(100,rectHeight*freq23,50,100);
+            barGraphCtx.fillRect(100,rectHeight*freq23,50,100);
             rectX = 100;
             rectY = rectHeight;
             
                         
-        }
-        else if(finalFreq > 0.3 && finalFreq <= 0.4){
-            barGraphCtx.strokeRect(150,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(150,rectHeight*numOfFreq,50,100);
+       
+            barGraphCtx.strokeRect(150,rectHeight*freq34,50,100);
+            barGraphCtx.fillRect(150,rectHeight*freq34,50,100);
             rectX = 150;
             rectY = rectHeight;
            
 
             
-        }
-        else if(finalFreq > 0.4 && finalFreq <= 0.5){
-            barGraphCtx.strokeRect(200,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(200,rectHeight*numOfFreq,50,100);
+       
+            barGraphCtx.strokeRect(200,rectHeight*freq45,50,100);
+            barGraphCtx.fillRect(200,rectHeight*freq45,50,100);
             rectX = 200;
             rectY = rectHeight;
            
 
             
             
-        }
-        else if(finalFreq > 0.5 && finalFreq <= 0.6){
-            barGraphCtx.strokeRect(250,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(250,rectHeight*numOfFreq,50,100);
+       
+            barGraphCtx.strokeRect(250,rectHeight*freq56,50,100);
+            barGraphCtx.fillRect(250,rectHeight*freq56,50,100);
             rectX = 250;
             rectY = rectHeight;
             
             
-        }
-        else if(finalFreq > 0.6 && finalFreq <= 0.7){
-            barGraphCtx.strokeRect(rectHeight*numOfFreq,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(rectHeight*numOfFreq,rectHeight*numOfFreq,50,100);
+       
+            barGraphCtx.strokeRect(300,rectHeight*freq67,50,100);
+            barGraphCtx.fillRect(300,rectHeight*freq67,50,100);
             rectX = rectHeight;
             rectY = rectHeight;
            
 
             
             
-        }
-        else if(finalFreq > 0.7 && finalFreq <= 0.8){
-            barGraphCtx.strokeRect(350,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(350,rectHeight*numOfFreq,50,100);
+        
+            barGraphCtx.strokeRect(350,rectHeight*freq78,50,100);
+            barGraphCtx.fillRect(350,rectHeight*freq78,50,100);
             rectX = 350;
             rectY = rectHeight;
            
             
            
-        }
-        else if(finalFreq > 0.8 && finalFreq <= 0.9){
-            barGraphCtx.strokeRect(400,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(400,rectHeight*numOfFreq,50,100);
+        
+            barGraphCtx.strokeRect(400,rectHeight*freq89,50,100);
+            barGraphCtx.fillRect(400,rectHeight*freq89,50,100);
             rectX = 400;
             rectY = rectHeight;
             
            
-        }
-        else if(finalFreq > 0.9 && finalFreq <= 1.0){
-            barGraphCtx.strokeRect(450,rectHeight*numOfFreq,50,100);
-            barGraphCtx.fillRect(450,rectHeight*numOfFreq,50,100);
+       
+            barGraphCtx.strokeRect(450,rectHeight*freq91,50,100);
+            barGraphCtx.fillRect(450,rectHeight*freq91,50,100);
             rectX = 450;
-            rectY = rectHeight*numOfFreq;
+            rectY = rectHeight*freq;
             
 
             
            
-        }
+        
 
         
 
@@ -441,10 +492,10 @@ $(document).ready(function() {
                 var distance = (x - allNodes[NodeCount-1].CoordX) * (x - allNodes[NodeCount-1].CoordX) + (y - allNodes[NodeCount-1].CoordY) * (y - allNodes[NodeCount-1].CoordY);
             }
             
-                if(distance < rectHeight*numOfFreq0){
+                if(distance < rectHeight*freq0){
                   return true;
                 }
-                else if(distance > rectHeight*numOfFreq0){
+                else if(distance > rectHeight*freq0){
                   return false;
                   
                 }
