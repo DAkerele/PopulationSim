@@ -16,11 +16,11 @@ $(document).ready(function() {
     var unselectedColor = "#FFFFFF";
     var genArray = [];
     var sel = document.getElementById("nodeSelect");
-    var rectX,rectY;
-    
+    var rectX, rectY;
 
 
-    context.fillStyle = "#FDFEFE";
+
+    context.fillStyle = "#FDFEFE"
     lineGraphCtx.fillStyle = "#FDFEFE";
     barGraphCtx.fillStyle = "#FDFEFE";
     barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
@@ -56,7 +56,7 @@ $(document).ready(function() {
                 context.fillStyle = "black";
                 context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1,[]);
+                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, []);
 
 
                 allNodes.push(node);
@@ -109,7 +109,7 @@ $(document).ready(function() {
 
         document.getElementById("enterVals").onclick = function enterValues() {
             setSelectedNodeInfo(currentSelectedNode);
-            
+
             return false;
 
 
@@ -117,75 +117,69 @@ $(document).ready(function() {
 
         document.getElementById("Run").onclick = function beginRun() {
 
-            $("#nodeSelect").append("<option value="+currentSelectedNode.NodeNum+">Node"+currentSelectedNode.NodeNum+"</option>");
+            $("#nodeSelect").append("<option value=" + currentSelectedNode.NodeNum + ">Node" + currentSelectedNode.NodeNum + "</option>");
 
             for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                 currentSelectedNode.runSim();
-                
+
                 plotPoints(currentSelectedNode.alleleData[j]);
-                
+
             }
-                
-            
-            
 
-            
-            
 
-            
+
 
             return false;
 
         }
 
-         document.getElementById("nodeSelect").onchange = function changeBarGraph(){
-          
-         
+        document.getElementById("nodeSelect").onchange = function changeBarGraph() {
 
-        
-        
+
+
+
             barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
             barGraphCtx.fillStyle = "#FDFEFE";
             barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
             intializeBarGraph();
-            
-        for(var k = 0; k < allNodes[(sel.options[sel.selectedIndex].value)-1].numRuns; k++){
-            switch(sel.options[sel.selectedIndex].value) {
-                
-                 case "1":
-                   plotBars(allNodes[0].alleleData[k]);
-                   break;
-                case "2":
-                   plotBars(allNodes[1].alleleData[k]);
-                   break;
-                case "3":
-                   plotBars(allNodes[2].alleleData[k]);
-                   break;
-                case "4":
-                   plotBars(allNodes[3].alleleData[k]);
-                   break;
-                case "5":
-                   plotBars(allNodes[4].alleleData[k]);
-                   break;
-                case "6":
-                   plotBars(allNodes[5].alleleData[k]);
-                   break;
-                case "7":
-                   plotBars(allNodes[6].alleleData[k]);
-                   break;
-                case "8":
-                   plotBars(allNodes[7].alleleData[k]);
-                   break;
-                case "9":
-                   plotBars(allNodes[8].alleleData[k]);
-                   break;
-                case "10":
-                   plotBars(allNodes[9].alleleData[k]);
-                   break;
-                 }
-              }
-          
-         }
+
+            for (var k = 0; k < allNodes[(sel.options[sel.selectedIndex].value) - 1].numRuns; k++) {
+                switch (sel.options[sel.selectedIndex].value) {
+
+                    case "1":
+                        plotBars(allNodes[0].alleleData[k]);
+                        break;
+                    case "2":
+                        plotBars(allNodes[1].alleleData[k]);
+                        break;
+                    case "3":
+                        plotBars(allNodes[2].alleleData[k]);
+                        break;
+                    case "4":
+                        plotBars(allNodes[3].alleleData[k]);
+                        break;
+                    case "5":
+                        plotBars(allNodes[4].alleleData[k]);
+                        break;
+                    case "6":
+                        plotBars(allNodes[5].alleleData[k]);
+                        break;
+                    case "7":
+                        plotBars(allNodes[6].alleleData[k]);
+                        break;
+                    case "8":
+                        plotBars(allNodes[7].alleleData[k]);
+                        break;
+                    case "9":
+                        plotBars(allNodes[8].alleleData[k]);
+                        break;
+                    case "10":
+                        plotBars(allNodes[9].alleleData[k]);
+                        break;
+                }
+            }
+
+        }
 
 
 
@@ -228,8 +222,6 @@ $(document).ready(function() {
 
 
     }
-
-    
 
 
 
@@ -285,7 +277,7 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(genArray){
+    function plotPoints(genArray) {
 
         var pointSpace = lineGraph.width / 100;
         var lastPointY = 220;
@@ -315,195 +307,157 @@ $(document).ready(function() {
 
         }
         lineGraphCtx.closePath();
-    
+
     }
 
 
+
+
+    function plotBars(genData) {
+        
+        var rectHeight = 400;
+        var finalFreq = genData[genData.length - 2][1];
+        var freqs = []
+        var freq01 = 0,
+            freq12 = 0,
+            freq23 = 0,
+            freq34 = 0,
+            freq45 = 0,
+            freq56 = 0,
+            freq67 = 0,
+            freq78 = 0,
+            freq89 = 0,
+            freq91 = 0;
+        barGraphCtx.fillStyle = String(allNodes[(sel.options[sel.selectedIndex].value) - 1].Color);
+       
+            if (finalFreq <= 0.1){
+                freq01 += 50;
+            }   
+            else if (finalFreq > 0.1 && finalFreq <= 0.2){
+                freq12 += 50;
+            }
+            else if (finalFreq > 0.2 && finalFreq <= 0.3){
+                freq23 += 50;
+            }
+            else if (finalFreq > 0.3 && finalFreq <= 0.4){
+                freq34 += 50;
+            }
+            else if (finalFreq > 0.4 && finalFreq <= 0.5){
+                freq45 += 50;
+            }
+            else if (finalFreq > 0.5 && finalFreq <= 0.6){
+                freq56 += 50;
+            }
+            else if (finalFreq > 0.6 && finalFreq <= 0.7){
+                freq67 += 50;
+            }
+            else if (finalFreq > 0.7 && finalFreq <= 0.8){
+                 freq78 += 50;
+            }
+            else if (finalFreq > 0.8 && finalFreq <= 0.9){
+                freq89 += 50;
+            }
+            else if (finalFreq > 0.9 && finalFreq <= 1.0){
+                freq91 += 50;
+            }
+                
+       
+
+        barGraphCtx.strokeRect(0, rectHeight-freq01, 50, barGraph.height);
+        barGraphCtx.fillRect(0, rectHeight-freq01, 50, barGraph.height);
+       
+
+
+
+
+        barGraphCtx.strokeRect(50, rectHeight-freq12, 50, barGraph.height);
+        barGraphCtx.fillRect(50, rectHeight-freq12, 50, barGraph.height);
+        
+
+
+
+
+        barGraphCtx.strokeRect(100, rectHeight-freq23, 50, barGraph.height);
+        barGraphCtx.fillRect(100, rectHeight-freq23, 50, barGraph.height);
+       
+
+
+
+        barGraphCtx.strokeRect(150, rectHeight-freq34, 50, barGraph.height);
+        barGraphCtx.fillRect(150, rectHeight-freq34, 50, barGraph.height);
+       
+
+
+
+        barGraphCtx.strokeRect(200, rectHeight-freq45, 50, barGraph.height);
+        barGraphCtx.fillRect(200, rectHeight-freq45, 50, barGraph.height);
+       
+
+
+
+        barGraphCtx.strokeRect(250, rectHeight-freq56, 50, barGraph.height);
+        barGraphCtx.fillRect(250, rectHeight-freq56,50, barGraph.height);
+       
+
+        barGraphCtx.strokeRect(300, rectHeight-freq67, 50, barGraph.height);
+        barGraphCtx.fillRect(300, rectHeight-freq67, 50, barGraph.height);
+       
+
+
+
+        barGraphCtx.strokeRect(350, rectHeight-freq78, 50, barGraph.height);
+        barGraphCtx.fillRect(350, rectHeight-freq78, 50, barGraph.height);
+        
+
+
+
+        barGraphCtx.strokeRect(400, rectHeight-freq89, 50, barGraph.height);
+        barGraphCtx.fillRect(400, rectHeight-freq89, 50, barGraph.height);
+       
+
+
+        barGraphCtx.strokeRect(450, rectHeight-freq91, 50, barGraph.height);
+        barGraphCtx.fillRect(450, rectHeight-freq91, 50, barGraph.height);
+       
     
+
+}
 
 
    
-    function plotBars(genData){
-        var endFreqs = [];
-        var rectHeight = 300;
-        var freq = 1;
-        var freq01 = 0,freq12= 0,freq23= 0,freq34= 0,freq45= 0,freq56= 0,freq67= 0,freq78= 0,freq89= 0,freq91= 0;
-        barGraphCtx.fillStyle =  String(allNodes[(sel.options[sel.selectedIndex].value)-1].Color);
-        for (var i = 0; i < currentSelectedNode.numRuns; i++) {
-            finalFreq = genData[genData.length-2][1];
-             endFreqs.push(finalFreq);
-
-            switch(endFreqs[i]){
-
-                case 1:
-                    if(endFreqs[i] <= 0.1)
-                        freq01+=1;
-                    break;
-                
-                case 2:
-                    if(endFreq[i] > 0.1 && endFreq[i] <= 0.2)
-                        freq12+=1;
-                    break;
-
-                case 3:
-                    if(endFreq[i] > 0.2 && endFreq[i] <= 0.3)
-                        freq23+=1;
-                    break;
-
-                case 4:
-                    if(endFreq[i] > 0.3 && endFreq[i] <= 0.4)
-                        freq34+=1;
-                    break;
-
-                case 5:
-                    if(endFreq[i] > 0.4 && endFreq[i] <= 0.5)
-                        freq45+=1;
-                    break;
-
-                case 6:
-                    if(endFreq[i] > 0.5 && endFreq[i] <= 0.6)
-                        freq56+=1;
-                    break;
-
-                case 7:
-                    if(endFreq[i] > 0.6 && endFreq[i] <= 0.7)
-                        freq67+=1;
-                    break;
-
-                case 8:
-                    if(endFreq[i] > 0.7 && endFreq[i] <= 0.8)
-                        freq78+=1;
-                    break;
-
-                case 9:
-                    if(endFreq[i] > 0.8 && endFreq[i] <= 0.9)
-                        freq89+=1;
-                    break;
-
-                case 10:
-                    if(endFreq[i] > 0.9 && endFreq[i] <= 1.0)
-                        freq91+=1;
-                    break;
-            }
 
 
+
+   
+
+
+
+
+
+
+
+/*function intersects(x,y){
+        
+      for (var i = 0; i < allNodes.length; i++) {
+        if(NodeCount == 1){
+            var distance = (x - allNodes[0].CoordX) * (x - allNodes[0].CoordX) + (y - allNodes[0].CoordY) * (y - allNodes[0].CoordY);
         }
-
-
-        alert(freq01);
+        else if(NodeCount > 1){
+            var distance = (x - allNodes[NodeCount-1].CoordX) * (x - allNodes[NodeCount-1].CoordX) + (y - allNodes[NodeCount-1].CoordY) * (y - allNodes[NodeCount-1].CoordY);
+        }
         
-            
-
-            barGraphCtx.strokeRect(0,rectHeight*freq01,50,100);
-            barGraphCtx.fillRect(0,rectHeight*freq01,50,100);
-            rectX = 0;
-            rectY = rectHeight;
-           
-            
-
-        
-            barGraphCtx.strokeRect(50,rectHeight*freq12,50,100);
-            barGraphCtx.fillRect(50,rectHeight*freq12,50,100);
-            rectX = 50;
-            rectY = rectHeight;
-            
-            
-            
-            
-       
-            barGraphCtx.strokeRect(100,rectHeight*freq23,50,100);
-            barGraphCtx.fillRect(100,rectHeight*freq23,50,100);
-            rectX = 100;
-            rectY = rectHeight;
-            
-                        
-       
-            barGraphCtx.strokeRect(150,rectHeight*freq34,50,100);
-            barGraphCtx.fillRect(150,rectHeight*freq34,50,100);
-            rectX = 150;
-            rectY = rectHeight;
-           
-
-            
-       
-            barGraphCtx.strokeRect(200,rectHeight*freq45,50,100);
-            barGraphCtx.fillRect(200,rectHeight*freq45,50,100);
-            rectX = 200;
-            rectY = rectHeight;
-           
-
-            
-            
-       
-            barGraphCtx.strokeRect(250,rectHeight*freq56,50,100);
-            barGraphCtx.fillRect(250,rectHeight*freq56,50,100);
-            rectX = 250;
-            rectY = rectHeight;
-            
-            
-       
-            barGraphCtx.strokeRect(300,rectHeight*freq67,50,100);
-            barGraphCtx.fillRect(300,rectHeight*freq67,50,100);
-            rectX = rectHeight;
-            rectY = rectHeight;
-           
-
-            
-            
-        
-            barGraphCtx.strokeRect(350,rectHeight*freq78,50,100);
-            barGraphCtx.fillRect(350,rectHeight*freq78,50,100);
-            rectX = 350;
-            rectY = rectHeight;
-           
-            
-           
-        
-            barGraphCtx.strokeRect(400,rectHeight*freq89,50,100);
-            barGraphCtx.fillRect(400,rectHeight*freq89,50,100);
-            rectX = 400;
-            rectY = rectHeight;
-            
-           
-       
-            barGraphCtx.strokeRect(450,rectHeight*freq91,50,100);
-            barGraphCtx.fillRect(450,rectHeight*freq91,50,100);
-            rectX = 450;
-            rectY = rectHeight*freq;
-            
-
-            
-           
-        
-
-        
-
-    }
-
-
-
-    /*function intersects(x,y){
-            
-          for (var i = 0; i < allNodes.length; i++) {
-            if(NodeCount == 1){
-                var distance = (x - allNodes[0].CoordX) * (x - allNodes[0].CoordX) + (y - allNodes[0].CoordY) * (y - allNodes[0].CoordY);
+            if(distance < rectHeight-freq*freq0){
+              return true;
             }
-            else if(NodeCount > 1){
-                var distance = (x - allNodes[NodeCount-1].CoordX) * (x - allNodes[NodeCount-1].CoordX) + (y - allNodes[NodeCount-1].CoordY) * (y - allNodes[NodeCount-1].CoordY);
+            else if(distance > rectHeight-freq*freq0){
+              return false;
+              
             }
             
-                if(distance < rectHeight*freq0){
-                  return true;
-                }
-                else if(distance > rectHeight*freq0){
-                  return false;
-                  
-                }
-                
-            }
-    }*/
+        }
+}*/
 
 
 
 
-    });
+});
