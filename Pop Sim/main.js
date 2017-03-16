@@ -118,6 +118,7 @@ $(document).ready(function() {
         document.getElementById("Run").onclick = function beginRun() {
 
             $("#nodeSelect").append("<option value=" + currentSelectedNode.NodeNum + ">Node" + currentSelectedNode.NodeNum + "</option>");
+            
 
             for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                 currentSelectedNode.runSim();
@@ -134,7 +135,7 @@ $(document).ready(function() {
         }
 
         document.getElementById("nodeSelect").onchange = function changeBarGraph() {
-
+            $("#RunTotal").html(""+currentSelectedNode.numRuns);
 
 
 
@@ -148,33 +149,43 @@ $(document).ready(function() {
 
                     case "1":
                         plotBars(allNodes[0]);
+                        $("#RunTotal").html(""+allNodes[0].numRuns);
                         break;
                     case "2":
                         plotBars(allNodes[1]);
+                        $("#RunTotal").html(""+allNodes[1].numRuns);
                         break;
                     case "3":
                         plotBars(allNodes[2]);
+                        $("#RunTotal").html(""+allNodes[2].numRuns);
                         break;
                     case "4":
                         plotBars(allNodes[3]);
+                        $("#RunTotal").html(""+allNodes[3].numRuns);
                         break;
                     case "5":
                         plotBars(allNodes[4]);
+                        $("#RunTotal").html(""+allNodes[4].numRuns);
                         break;
                     case "6":
                         plotBars(allNodes[5]);
+                        $("#RunTotal").html(""+allNodes[5].numRuns);
                         break;
                     case "7":
                         plotBars(allNodes[6]);
+                        $("#RunTotal").html(""+allNodes[6].numRuns);
                         break;
                     case "8":
                         plotBars(allNodes[7]);
+                        $("#RunTotal").html(""+allNodes[7].numRuns);
                         break;
                     case "9":
                         plotBars(allNodes[8]);
+                        $("#RunTotal").html(""+allNodes[8].numRuns);
                         break;
                     case "10":
                         plotBars(allNodes[9]);
+                        $("#RunTotal").html(""+allNodes[9].numRuns);
                         break;
                 }
             
@@ -316,7 +327,7 @@ $(document).ready(function() {
     function plotBars(node) {
         
         var rectHeight = 400;
-        var barIncrease = barGraph.height/250;
+        var barIncrease = barGraph.height/node.numRuns;
         var freqs = []
         var freq01 = 0,
             freq12 = 0,
