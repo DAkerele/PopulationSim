@@ -17,6 +17,8 @@ $(document).ready(function() {
     var genArray = [];
     var sel = document.getElementById("nodeSelect");
     var rectX, rectY;
+    var confirmVal = false;
+    var nodesListed = [10];
 
 
 
@@ -42,16 +44,21 @@ $(document).ready(function() {
 
             if (overlap(posX,posY) == false) {
     
+                
+                context.beginPath();
+                context.arc(posX, posY, 30, 0, 2 * Math.PI, false);
+                context.closePath();
+
                 context.fillStyle = nodeColors[NodeCount];
                 context.beginPath();
-                context.arc(posX, posY, 25, 0, 2 * Math.PI, false);
-                context.closePath();
+                context.arc(posX,posY,20,0,2*Math.PI,false);
+                context.closePath()
                 context.fill();
 
-                /*context.strokeStyle = "#f44242";
+                context.strokeStyle = "#f44242";
                 context.beginPath();
                 context.arc(posX, posY, 30, 0, 2 * Math.PI);
-                context.stroke();*/
+                context.stroke();
 
 
                 context.fillStyle = "black";
@@ -116,21 +123,57 @@ $(document).ready(function() {
         }
 
         document.getElementById("Run").onclick = function beginRun() {
+            var notUsed = true;
+           if(confirmVal){
 
-            $("#nodeSelect").append("<option value=" + currentSelectedNode.NodeNum + ">Node" + currentSelectedNode.NodeNum + "</option>");
-            
+                for (var i = 0; i < nodesListed.length; i++) {
+                    if(currentSelectedNode.NodeNum == nodesListed[i]){
+                        notUsed = false;
+                        
+                    }
+                    else{
+                        notUsed = true;
+                    }
+                    
+                    
+                }
 
-            for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                currentSelectedNode.runSim();
+                if(notUsed){
+                    $("#nodeSelect").append("<option value=" + currentSelectedNode.NodeNum + ">Node" + currentSelectedNode.NodeNum + "</option>");
+                        nodesListed.push(currentSelectedNode.NodeNum);
+                }
+                
+                
 
-                plotPoints(currentSelectedNode.alleleData[j]);
+                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                    currentSelectedNode.runSim();
 
+                    plotPoints(currentSelectedNode.alleleData[j]);
+
+                }
+                    confirmVal = false;
+                    return false;
+            }
+
+            else {
+              alert("Please confirm values before running simulation.");
+
+              return false;
+            } 
+
+              
+        }
+
+        document.getElementById("reset").onclick = function resetVals(){
+            if(confirm("Are you sure you want to reset all nodes?")){
+                context.clearRect(0,0,canvas.width, canvas.height);
+                lineGraphCtx.clearRect(0,0,lineGraph.width,lineGraph.height);
+                barGraphCtx.clearRect(0,0,barGraph.width,barGraph.height);
             }
 
 
 
 
-            return false;
 
         }
 
@@ -199,8 +242,8 @@ $(document).ready(function() {
 
     function pointInCircle(x, y) { //checks if mouse click is located within a node
         for (var i = 0; i < allNodes.length; i++) {
-            var distance = Math.sqrt((x - allNodes[i].CoordX) * (x - allNodes[i].CoordX) + (y - allNodes[i].CoordY) * (y - allNodes[i].CoordY));
-            if (distance <= 25) {
+            var distance = Math.sqrt(Math.pow((x - allNodes[i].CoordX),2)  + Math.pow((y - allNodes[i].CoordY),2));
+            if (distance <= 35) {
                 currentSelectedNode = allNodes[i];
                 return allNodes[i];
             }
@@ -211,13 +254,40 @@ $(document).ready(function() {
     }
 
     function setSelectedNodeInfo(node) { //sets Text fields to set value for corresponding node
-        node.numRuns = parseInt($("#NumRuns").val());
-        node.startPer = parseFloat($("#Starting").val());
-        node.genNum = parseInt($("#NumGenerations").val());
-        node.startPop = parseInt($("#StartingPop").val());
-        node.plusplusS = parseFloat($("#PPSurvival").val());
-        node.plusminusS = parseFloat($("#PMSurvival").val());
-        node.minusminusS = parseFloat($("#MMSurvival").val());
+        if(parseFloat($("#Starting").val()) > 1 || parseFloat($("#Starting").val()) < 0){
+            alert("Please enter a valid starting percentage(0-1)");
+        }
+        else if(parseInt($("#NumGenerations").val()) > 250 || parseInt($("#NumGenerations").val()) <= 0){
+            alert("Please enter a valid number of generations(1-250)");
+        }
+        else if(parseFloat($("#PPSurvival").val()) > 1 || parseFloat($("#PPSurvival").val()) < 0){
+            alert("Please enter a valid survival percentage(0-1)");
+        }
+        else if(parseFloat($("#PMSurvival").val()) > 1 || parseFloat($("#PMSurvival").val())< 0){
+            alert("Please enter a valid survival percentage(0-1)");
+        }
+        else if(parseFloat($("#MMSurvival").val()) > 1 || parseFloat($("#MMSurvival").val())< 0){
+            alert("Please enter a valid survival percentage(0-1)");
+        }
+        else if(parseInt($("#NumRuns").val()) > 250 || parseInt($("#NumRuns").val())<= 0){
+            alert("Please enter a valid number of runs(1-250)");
+        }
+        else if (parseInt($("#StartingPop").val()) < 0){
+            alert("Please enter a valid starting population");
+        }
+        else{
+
+
+            node.numRuns = parseInt($("#NumRuns").val());
+            node.startPer = parseFloat($("#Starting").val());
+            node.genNum = parseInt($("#NumGenerations").val());
+            node.startPop = parseInt($("#StartingPop").val());
+            node.plusplusS = parseFloat($("#PPSurvival").val());
+            node.plusminusS = parseFloat($("#PMSurvival").val());
+            node.minusminusS = parseFloat($("#MMSurvival").val());
+            confirmVal = true;
+
+        }
 
 
     }
