@@ -26,16 +26,7 @@
 
 
 			<!-- numbering for x-axis linegraph-->
-			<p style = "position:absolute; top:420px; left:835px; ">10</p>
-			<p style = "position:absolute; top:420px; left:885px; ">20</p>
-			<p style = "position:absolute; top:420px; left:930px; ">30</p>
-			<p style = "position:absolute; top:420px; left:975px; ">40</p>
-			<p style = "position:absolute; top:420px; left:1020px; ">50</p>
-			<p style = "position:absolute; top:420px; left:1065px; ">60</p>
-			<p style = "position:absolute; top:420px; left:1110px; ">70</p>
-			<p style = "position:absolute; top:420px; left:1150px; ">80</p>
-			<p style = "position:absolute; top:420px; left:1200px; ">90</p>
-			<p style = "position:absolute; top:420px; left:1245px; ">100</p>
+			<p style = "position:absolute; top:420px; left:1290px;" id = "endGen">100</p>
 
 			<!--numbering for bargraph x axis-->
 			<p style = "position:absolute; top:900px; left:800px; ">0.0</p>
@@ -56,9 +47,11 @@
 
 
 
-
+			<!--node canvas-->
 			<canvas style="border:1px solid #000000; position:absolute; left:20px; top:20px" id = "canvas" height= "400" width = "500" ></canvas>
+			<!--linegraph-->
 			<canvas style="border:1px solid #000000; position:absolute; top:20px; left:800px;" id = "lineGraph" height= "400" width = "500"></canvas>
+			<!--bargraph-->
 			<canvas style="border:1px solid #000000; position:absolute; left:800px; top:500px" id = "barGraph" height= "400" width = "500" ></canvas>
 		
 
@@ -75,7 +68,7 @@
 					<input value  = "1"  id = "NumRuns" type = "number"> </input>
 					<br>Starting Percent:<br>
 					<input min = "0.0" max = "1.0"step = "0.1" value  = ".5"  id = "Starting" type = "number"></input>
-					<br>Number of Generation:<br>
+					<br>Number of Generation(universal):<br>
 					<input value  = "100"  id = "NumGenerations" type = "number"></input>
 					<br>Starting Population:<br>
 					<input value  = "100"  id = "StartingPop" type = "number"></input>
