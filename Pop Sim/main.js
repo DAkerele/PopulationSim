@@ -125,34 +125,36 @@ $(document).ready(function() {
         document.getElementById("Run").onclick = function beginRun() {
             var notUsed = true;
            if(confirmVal){
-
-                for (var i = 0; i < nodesListed.length; i++) {
-                    if(currentSelectedNode.NodeNum == nodesListed[i]){
-                        notUsed = false;
+                    
+                    for (var i = 0; i < nodesListed.length; i++) {
+                        if(currentSelectedNode.NodeNum == nodesListed[i]){
+                            notUsed = false;
+                            
+                        }
+                        else{
+                            notUsed = true;
+                        }
+                        
                         
                     }
-                    else{
-                        notUsed = true;
+
+                    if(notUsed){
+                        $("#nodeSelect").append("<option value=" + currentSelectedNode.NodeNum + ">Node" + currentSelectedNode.NodeNum + "</option>");
+                            nodesListed.push(currentSelectedNode.NodeNum);
                     }
                     
                     
-                }
 
-                if(notUsed){
-                    $("#nodeSelect").append("<option value=" + currentSelectedNode.NodeNum + ">Node" + currentSelectedNode.NodeNum + "</option>");
-                        nodesListed.push(currentSelectedNode.NodeNum);
-                }
-                
-                
+                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                        currentSelectedNode.runSim();
 
-                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                    currentSelectedNode.runSim();
+                        plotPoints(currentSelectedNode.alleleData[j]);
 
-                    plotPoints(currentSelectedNode.alleleData[j]);
+                    }
+                        confirmVal = false;
+                        return false;
 
-                }
-                    confirmVal = false;
-                    return false;
+
             }
 
             else {
@@ -335,6 +337,7 @@ $(document).ready(function() {
     
 
     function intializeLineGraph() {
+        lineGraphCtx.fillStyle = "#FDFEFE";
         var lineSpaceHor = lineGraph.height / 10;
         var lineSpaceVer = lineGraph.width / 11;
         lineGraphCtx.beginPath();
