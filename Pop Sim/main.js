@@ -237,10 +237,34 @@ $(document).ready(function() {
 
         }
 
-
-
+    document.getElementById("nodeSelect").onchange = function changeLineGraph() { 
+         for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+            
+            lineGraphCtx.fillStyle = "#FDFEFE";
+            lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
+            intializeLineGraph();
+             switch (sel.options[sel.selectedIndex].value) {
+                case "200":
+                    plotPoints(currentSelectedNode.alleleData[j],100,200);
+                    break;
+                case "300":
+                    plotPoints(currentSelectedNode.alleleData[j],200,300);
+                    break;
+                case "400":
+                    plotPoints(currentSelectedNode.alleleData[j],300,400);
+                    break;
+                case "500":
+                    plotPoints(currentSelectedNode.alleleData[j],400,500);
+                    break;
+                default:
+                    plotPoints(currentSelectedNode.alleleData[j]);
+                    break;
+             }
+        }  
 
     }
+
+}
 
     function pointInCircle(x, y) { //checks if mouse click is located within a node
         for (var i = 0; i < allNodes.length; i++) {
@@ -259,8 +283,8 @@ $(document).ready(function() {
         if(parseFloat($("#Starting").val()) > 1 || parseFloat($("#Starting").val()) < 0){
             alert("Please enter a valid starting percentage(0-1)");
         }
-        else if(parseInt($("#NumGenerations").val()) > 250 || parseInt($("#NumGenerations").val()) <= 0){
-            alert("Please enter a valid number of generations(1-250)");
+        else if(parseInt($("#NumGenerations").val()) > 500 || parseInt($("#NumGenerations").val()) <= 0){
+            alert("Please enter a valid number of generations(1-500)");
         }
         else if(parseFloat($("#PPSurvival").val()) > 1 || parseFloat($("#PPSurvival").val()) < 0){
             alert("Please enter a valid survival percentage(0-1)");
@@ -288,7 +312,9 @@ $(document).ready(function() {
             node.plusminusS = parseFloat($("#PMSurvival").val());
             node.minusminusS = parseFloat($("#MMSurvival").val());
             confirmVal = true;
-
+            for(var i = 0; i < node.genNum; i+=100){
+                $("#genSelect").append("<option value=" + (i+100) + ">"+i+"-"+ (i+100) + "</option>");
+            }
         }
 
 
@@ -376,7 +402,7 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(genArray) {
+    function plotPoints(array = genArray,start = 0,end = 100) {
 
         var pointSpace = lineGraph.width / 100;
         var lastPointY = 220;
@@ -384,18 +410,18 @@ $(document).ready(function() {
         lineGraphCtx.lineWidth = 0.5;
         lineGraphCtx.strokeStyle = currentSelectedNode.Color;
         lineGraphCtx.moveTo(0, 220); //zeroY
-        for (var r = 0; r < genArray.length; r++) {
+        for (var r = start; r < end; r++) {
 
 
-            if (genArray[r][1] > .500) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
+            if (array[r][1] > .500) {
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
-            } else if (genArray[r][1] < .500) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (genArray[r][1] * 400));
+            } else if (array[r][1] < .500) {
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
