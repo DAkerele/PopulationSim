@@ -134,9 +134,3 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
 
         return bnl;
     }
-
-
-
-
-
-
