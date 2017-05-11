@@ -16,6 +16,7 @@ $(document).ready(function() {
     var unselectedColor = "#FFFFFF";
     var genArray = [];
     var sel = document.getElementById("nodeSelect");
+    var genSel = document.getElementById("genSelect");
     var rectX, rectY;
     var confirmVal = false;
     var nodesListed = [10];
@@ -237,13 +238,13 @@ $(document).ready(function() {
 
         }
 
-    document.getElementById("nodeSelect").onchange = function changeLineGraph() { 
+    document.getElementById("genSelect").onchange = function changeLineGraph() { 
          for (var j = 0; j < currentSelectedNode.numRuns; j++) {
             
             lineGraphCtx.fillStyle = "#FDFEFE";
             lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
             intializeLineGraph();
-             switch (sel.options[sel.selectedIndex].value) {
+             switch (genSel.options[genSel.selectedIndex].value) {
                 case "200":
                     plotPoints(currentSelectedNode.alleleData[j],100,200);
                     break;
@@ -403,23 +404,25 @@ $(document).ready(function() {
 
 
     function plotPoints(array = genArray,start = 0,end = 100) {
-
+        alert(array.length);
+        alert(start);
+        alert(end);
+        
         var pointSpace = lineGraph.width / 100;
-        var lastPointY = 220;
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
         lineGraphCtx.strokeStyle = currentSelectedNode.Color;
-        lineGraphCtx.moveTo(0, 220); //zeroY
+        lineGraphCtx.moveTo(0, ((402 - (array[start][1] * 400))+18)); //zeroY
         for (var r = start; r < end; r++) {
 
 
-            if (array[r][1] > .500) {
+            if (array[r][1] > array[start][1]) {
                 lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
                 lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
-            } else if (array[r][1] < .500) {
+            } else if (array[r][1] < array[start][1]) {
                 lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
                 lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
 
@@ -427,7 +430,7 @@ $(document).ready(function() {
 
             }
 
-
+            console.log(array[r][1]);
 
 
         }
