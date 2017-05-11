@@ -365,6 +365,7 @@ $(document).ready(function() {
 
     function intializeLineGraph() {
         lineGraphCtx.fillStyle = "#FDFEFE";
+        lineGraphCtx.strokeStyle = "#000000";
         var lineSpaceHor = lineGraph.height / 10;
         var lineSpaceVer = lineGraph.width / 11;
         lineGraphCtx.beginPath();
@@ -404,36 +405,40 @@ $(document).ready(function() {
 
 
     function plotPoints(array = genArray,start = 0,end = 100) {
-        alert(array.length);
-        alert(start);
-        alert(end);
-        
+        sectionArray = array.slice(start,end);
         var pointSpace = lineGraph.width / 100;
         lineGraphCtx.beginPath();
-        lineGraphCtx.lineWidth = 0.5;
+        lineGraphCtx.lineWidth = 0.5;        
         lineGraphCtx.strokeStyle = currentSelectedNode.Color;
-        lineGraphCtx.moveTo(0, ((402 - (array[start][1] * 400))+18)); //zeroY
-        for (var r = start; r < end; r++) {
+        if(start > 0){
+            lineGraphCtx.moveTo(0, ((402 - (array[start-1][1] * 400)))); //zeroY
+        }
+        else if(start = 0) {
+            lineGraphCtx.moveTo(0, ((402 - (array[start][1] * 400))+18)); //zeroY
+        }
+            
+        for (var r = 0; r < sectionArray.length; r++) {
 
 
-            if (array[r][1] > array[start][1]) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
+            if (sectionArray[r][1] > sectionArray[0][1]) {
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
-            } else if (array[r][1] < array[start][1]) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (array[r][1] * 400));
+            } else if (sectionArray[r][1] < sectionArray[0][1]) {
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
             }
 
-            console.log(array[r][1]);
+            console.log(sectionArray[r][1]);
 
 
         }
+        sectionArray = null;
         lineGraphCtx.closePath();
 
     }
