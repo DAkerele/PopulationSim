@@ -20,6 +20,7 @@ $(document).ready(function() {
     var rectX, rectY;
     var confirmVal = false;
     var nodesListed = [10];
+    var genCap = 0;
 
 
 
@@ -172,6 +173,7 @@ $(document).ready(function() {
                 context.clearRect(0,0,canvas.width, canvas.height);
                 lineGraphCtx.clearRect(0,0,lineGraph.width,lineGraph.height);
                 barGraphCtx.clearRect(0,0,barGraph.width,barGraph.height);
+                genCap = 0;
             }
 
 
@@ -239,29 +241,43 @@ $(document).ready(function() {
         }
 
     document.getElementById("genSelect").onchange = function changeLineGraph() { 
-         for (var j = 0; j < currentSelectedNode.numRuns; j++) {
             
             lineGraphCtx.fillStyle = "#FDFEFE";
             lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
             intializeLineGraph();
              switch (genSel.options[genSel.selectedIndex].value) {
                 case "200":
+                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                     plotPoints(currentSelectedNode.alleleData[j],100,200);
+                }
+                    
                     break;
                 case "300":
+                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                     plotPoints(currentSelectedNode.alleleData[j],200,300);
+                }
+                    
                     break;
                 case "400":
+                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                     plotPoints(currentSelectedNode.alleleData[j],300,400);
+                }
+                    
                     break;
                 case "500":
+                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                     plotPoints(currentSelectedNode.alleleData[j],400,500);
+                }
+                    
                     break;
                 default:
+                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
                     plotPoints(currentSelectedNode.alleleData[j]);
+                }
+                    
                     break;
              }
-        }  
+        
 
     }
 
@@ -313,13 +329,12 @@ $(document).ready(function() {
             node.plusminusS = parseFloat($("#PMSurvival").val());
             node.minusminusS = parseFloat($("#MMSurvival").val());
             confirmVal = true;
-            for(var i = 0; i < node.genNum; i+=100){
-                $("#genSelect").append("<option value=" + (i+100) + ">"+i+"-"+ (i+100) + "</option>");
+                
             }
         }
 
 
-    }
+    
 
 
     canvas.addEventListener("click", draw);
@@ -411,24 +426,24 @@ $(document).ready(function() {
         lineGraphCtx.lineWidth = 0.5;        
         lineGraphCtx.strokeStyle = currentSelectedNode.Color;
         if(start > 0){
-            lineGraphCtx.moveTo(0, ((402 - (array[start-1][1] * 400)))); //zeroY
+            lineGraphCtx.moveTo(0, (400 - (array[start-1][1] * 400))); //zeroY
         }
-        else if(start = 0) {
-            lineGraphCtx.moveTo(0, ((402 - (array[start][1] * 400))+18)); //zeroY
+        else if(start == 0) {
+            lineGraphCtx.moveTo(0, (400 - (array[start][1] * 400))); //zeroY
         }
             
         for (var r = 0; r < sectionArray.length; r++) {
 
 
             if (sectionArray[r][1] > sectionArray[0][1]) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
             } else if (sectionArray[r][1] < sectionArray[0][1]) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 402 - (sectionArray[r][1] * 400));
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
@@ -438,7 +453,7 @@ $(document).ready(function() {
 
 
         }
-        sectionArray = null;
+        sectionArray = [];
         lineGraphCtx.closePath();
 
     }
