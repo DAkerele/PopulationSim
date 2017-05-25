@@ -24,7 +24,7 @@ $(document).ready(function() {
 
 
 
-    context.fillStyle = "#FDFEFE"
+    context.fillStyle = "#FDFEFE";
     lineGraphCtx.fillStyle = "#FDFEFE";
     barGraphCtx.fillStyle = "#FDFEFE";
     barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
@@ -86,7 +86,7 @@ $(document).ready(function() {
 
         for (var i = 0; i < allNodes.length; i++) {
 
-            if (allNodes[i].NodeNum == isInCircle.NodeNum) {
+            if (allNodes[i].NodeNum == isInCircle.NodeNum) {//creates red rings surrounding selected node
 
                 allNodes[i].isSelected = true;
                 currentSelectedNode = allNodes[i];
@@ -97,7 +97,7 @@ $(document).ready(function() {
                 context.stroke();
 
 
-            } else if (allNodes[i].NodeNum != currentSelectedNode) {
+            } else if (allNodes[i].NodeNum != currentSelectedNode) {// overshadows red ring(selected ring) when another node is selected
                 allNodes[i].isSelected = false;
                 for (var j = 0; j < 10; j++) {
                     context.strokeStyle = "#FFFFFF";
@@ -116,7 +116,7 @@ $(document).ready(function() {
 
 
 
-        document.getElementById("enterVals").onclick = function enterValues() {
+        document.getElementById("enterVals").onclick = function enterValues() {//sets values for each node
             setSelectedNodeInfo(currentSelectedNode);
 
             return false;
@@ -124,12 +124,12 @@ $(document).ready(function() {
 
         }
 
-        document.getElementById("Run").onclick = function beginRun() {
+        document.getElementById("Run").onclick = function beginRun() {//calculates points data
             var notUsed = true;
            if(confirmVal){
                     
                     for (var i = 0; i < nodesListed.length; i++) {
-                        if(currentSelectedNode.NodeNum == nodesListed[i]){
+                        if(currentSelectedNode.NodeNum == nodesListed[i]){//prevents repetition of nodes in bargraph selection list
                             notUsed = false;
                             
                         }
@@ -168,13 +168,12 @@ $(document).ready(function() {
               
         }
 
-        document.getElementById("reset").onclick = function resetVals(){
+        document.getElementById("reset").onclick = function resetVals(){//resets data
             if(confirm("Are you sure you want to reset all nodes?")){
                 context.clearRect(0,0,canvas.width, canvas.height);
                 lineGraphCtx.clearRect(0,0,lineGraph.width,lineGraph.height);
                 barGraphCtx.clearRect(0,0,barGraph.width,barGraph.height);
                 genCap = 0;
-                document.getElementById("app").reset();
             }
 
 
@@ -183,7 +182,7 @@ $(document).ready(function() {
 
         }
 
-        document.getElementById("nodeSelect").onchange = function changeBarGraph() {
+        document.getElementById("nodeSelect").onchange = function changeBarGraph() {//plots bars on barcanvas
             $("#RunTotal").html(""+currentSelectedNode.numRuns);
 
 
@@ -241,40 +240,40 @@ $(document).ready(function() {
 
         }
 
-    document.getElementById("genSelect").onchange = function changeLineGraph() { 
+    document.getElementById("genSelect").onchange = function changeLineGraph() {//switches canvas to graph points in given range 
             
             lineGraphCtx.fillStyle = "#FDFEFE";
             lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
             intializeLineGraph();
-             switch (genSel.options[genSel.selectedIndex].value) {
+            switch (genSel.options[genSel.selectedIndex].value) {
                 case "200":
-                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                    plotPoints(currentSelectedNode.alleleData[j],100,200);
-                }
+                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                        plotPoints(currentSelectedNode.alleleData[j],100,200);
+                    }
                     
                     break;
                 case "300":
-                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                    plotPoints(currentSelectedNode.alleleData[j],200,300);
-                }
+                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                        plotPoints(currentSelectedNode.alleleData[j],200,300);
+                    }
                     
                     break;
                 case "400":
-                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                    plotPoints(currentSelectedNode.alleleData[j],300,400);
-                }
+                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                        plotPoints(currentSelectedNode.alleleData[j],300,400);
+                    }
                     
                     break;
                 case "500":
-                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                    plotPoints(currentSelectedNode.alleleData[j],400,500);
-                }
+                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                        plotPoints(currentSelectedNode.alleleData[j],400,500);
+                    }
                     
                     break;
                 default:
-                for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                    plotPoints(currentSelectedNode.alleleData[j]);
-                }
+                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
+                        plotPoints(currentSelectedNode.alleleData[j]);
+                    }
                     
                     break;
              }
@@ -297,7 +296,7 @@ $(document).ready(function() {
         
     }
 
-    function setSelectedNodeInfo(node) { //sets Text fields to set value for corresponding node
+    function setSelectedNodeInfo(node) { //Text fields value set to value for corresponding node
         if(parseFloat($("#Starting").val()) > 1 || parseFloat($("#Starting").val()) < 0){
             alert("Please enter a valid starting percentage(0-1)");
         }
@@ -355,7 +354,7 @@ $(document).ready(function() {
 
 
 
-    function overlap(x, y) {
+    function overlap(x, y) {//checks if node will overlap another node before drawn
     var temp = 0;
         for (var i = 0; i < allNodes.length; i++) {
             var distance = Math.sqrt(Math.pow((x - allNodes[i].CoordX),2)  + Math.pow((y - allNodes[i].CoordY),2));
@@ -434,21 +433,10 @@ $(document).ready(function() {
         }
             
         for (var r = 0; r < sectionArray.length; r++) {
-
-
-            if (sectionArray[r][1] > sectionArray[0][1]) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
+            lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
+            lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
 
                 lineGraphCtx.stroke();
-
-            } else if (sectionArray[r][1] < sectionArray[0][1]) {
-                lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
-
-                lineGraphCtx.stroke();
-
-            }
 
             console.log(sectionArray[r][1]);
 
@@ -574,42 +562,6 @@ $(document).ready(function() {
     
 
 }
-
-
-   
-
-
-
-   
-
-
-
-
-
-
-
-/*function intersects(x,y){
-        
-      for (var i = 0; i < allNodes.length; i++) {
-        if(NodeCount == 1){
-            var distance = (x - allNodes[0].CoordX) * (x - allNodes[0].CoordX) + (y - allNodes[0].CoordY) * (y - allNodes[0].CoordY);
-        }
-        else if(NodeCount > 1){
-            var distance = (x - allNodes[NodeCount-1].CoordX) * (x - allNodes[NodeCount-1].CoordX) + (y - allNodes[NodeCount-1].CoordY) * (y - allNodes[NodeCount-1].CoordY);
-        }
-        
-            if(distance < rectHeight-freq*freq0){
-              return true;
-            }
-            else if(distance > rectHeight-freq*freq0){
-              return false;
-              
-            }
-            
-        }
-}*/
-
-
 
 
 });
