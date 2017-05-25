@@ -174,6 +174,7 @@ $(document).ready(function() {
                 lineGraphCtx.clearRect(0,0,lineGraph.width,lineGraph.height);
                 barGraphCtx.clearRect(0,0,barGraph.width,barGraph.height);
                 genCap = 0;
+                document.getElementById("app").reset();
             }
 
 
