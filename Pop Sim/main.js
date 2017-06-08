@@ -419,9 +419,9 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(array = genArray,start = 0,end = 100) {
-        sectionArray = array.slice(start,end);
-        var pointSpace = lineGraph.width / 100;
+    function plotPoints(array = genArray) {
+        
+        var pointSpace = lineGraph.width /currentSelectedNode.NumGenerations;
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;        
         lineGraphCtx.strokeStyle = currentSelectedNode.Color;
@@ -432,20 +432,25 @@ $(document).ready(function() {
             lineGraphCtx.moveTo(0, (400 - (array[start][1] * 400))); //zeroY
         }
             
-        for (var r = 0; r < sectionArray.length; r++) {
-            lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
-            lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (sectionArray[r][1] * 400));
+        for (var r = 0; r < array.length; r++) {
+            lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
+            lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
 
                 lineGraphCtx.stroke();
 
-            console.log(sectionArray[r][1]);
+            console.log(array[r][1]);
 
 
         }
-        sectionArray = [];
+        array = [];
         lineGraphCtx.closePath();
 
     }
+
+    function linkNodes(intiNode,endNode){
+
+    }
+
 
 
 
