@@ -58,10 +58,17 @@
 
 			<form style= "position:absolute; top:450px; left:20px">
 
-			<button style = "position:absolute; top:20px; left:225px;"id ="Run">Begin Run</button>
-			<button style = "position:absolute; top:20px; left:125px;" id = "enterVals">Confirm Values</button>
+				<button style = "position:absolute; top:20px; left:225px;"id ="Run">Begin Run</button>
+				<button style = "position:absolute; top:20px; left:125px;" id = "enterVals">Confirm Values</button>
 
-			<button style = "position:absolute; top:50px; left:125px;" id = "reset">Reset Values</button>
+				<button style = "position:absolute; top:50px; left:125px;" id = "reset">Reset Values</button>
+				<select id = "startLink" style = "position:absolute; top:50px; left:225px;"></select>
+				<p style = "position:absolute; top:33px; left:262px;">to</p>
+				<select id = "endLink" style = "position:absolute; top:50px; left:275px;"></select>
+				<button style = "position:absolute; top:80px; left:235px; width:75px; height:30px;" id = "link">link</button>
+				<button style = "position:absolute; top:130px; left:235px; width:75px; height:30px;" id = "unlink">unlink</button>
+
+				
 
 					Number of Runs:<br>
 					<input value  = "1"  id = "NumRuns" type = "number"> </input>
@@ -77,6 +84,7 @@
 					<input min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "PMSurvival" type = "number"></input>
 					<br>--Survival Percent:<br>
 					<input  min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "MMSurvival" type = "number"></input>
+
 			</form>
 			
 			<select id = "nodeSelect" style= "position:absolute; left:675px; top:495px">
