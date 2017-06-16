@@ -17,6 +17,8 @@ $(document).ready(function() {
     var genArray = [];
     var sel = document.getElementById("nodeSelect");
     var genSel = document.getElementById("genSelect");
+    var startLinkSel = document.getElementById("startLink");
+    var endLinkSel = document.getElementById("endLink");
     var rectX, rectY;
     var confirmVal = false;
     var nodesListed = [10];
@@ -67,12 +69,13 @@ $(document).ready(function() {
                 context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
                 var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, []);
+                $("#startLink").append("<option value=" +   (NodeCount+1) + ">" +(NodeCount+1)+ "</option>");
+                $("#endLink").append("<option value=" +   (NodeCount+1) + ">" +(NodeCount+1)+ "</option>");
 
 
                 allNodes.push(node);
                 NodeCount++;
-                
-
+              
 
             }
 
@@ -114,7 +117,18 @@ $(document).ready(function() {
         }
 
 
-
+    }   
+        document.getElementById("link").onclick = function linkNodes(){
+            start = startLinkSel.options[startLinkSel.selectedIndex].value
+            end = endLinkSel.options[endLinkSel.selectedIndex].value
+            context.beginPath();
+            context.lineWidth = 0.5;
+            context.moveTo(allNodes[start-1].CoordX,allNodes[start-1].CoordY);
+            context.lineTo(allNodes[end-1].CoordX,allNodes[end-1].CoordY);
+            context.stroke();
+            context.closePath();
+            return false;
+        }
 
         document.getElementById("enterVals").onclick = function enterValues() {//sets values for each node
             setSelectedNodeInfo(currentSelectedNode);
@@ -174,6 +188,9 @@ $(document).ready(function() {
                 lineGraphCtx.clearRect(0,0,lineGraph.width,lineGraph.height);
                 barGraphCtx.clearRect(0,0,barGraph.width,barGraph.height);
                 genCap = 0;
+            }
+            else{
+                return false;
             }
 
 
@@ -281,7 +298,7 @@ $(document).ready(function() {
 
     }
 
-}
+  
 
     function pointInCircle(x, y) { //checks if mouse click is located within a node
         for (var i = 0; i < allNodes.length; i++) {
@@ -334,6 +351,9 @@ $(document).ready(function() {
         }
 
 
+      
+
+
     
 
 
@@ -350,6 +370,8 @@ $(document).ready(function() {
 
 
     }
+
+
 
 
 
@@ -420,17 +442,13 @@ $(document).ready(function() {
 
 
     function plotPoints(array = genArray) {
-        
-        var pointSpace = lineGraph.width /currentSelectedNode.NumGenerations;
+       
+        var pointSpace = lineGraph.width /100;
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;        
         lineGraphCtx.strokeStyle = currentSelectedNode.Color;
-        if(start > 0){
-            lineGraphCtx.moveTo(0, (400 - (array[start-1][1] * 400))); //zeroY
-        }
-        else if(start == 0) {
-            lineGraphCtx.moveTo(0, (400 - (array[start][1] * 400))); //zeroY
-        }
+        lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
+
             
         for (var r = 0; r < array.length; r++) {
             lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
@@ -447,15 +465,9 @@ $(document).ready(function() {
 
     }
 
-    function linkNodes(intiNode,endNode){
-
-    }
 
 
-
-
-
-    function plotBars(node) {
+function plotBars(node) {
         
         var rectHeight = 400;
         var barIncrease = barGraph.height/node.numRuns;
