@@ -23,6 +23,8 @@ $(document).ready(function() {
     var confirmVal = false;
     var nodesListed = [10];
     var genCap = 0;
+    var running;
+    var largestGen = 0;
 
 
 
@@ -39,270 +41,230 @@ $(document).ready(function() {
 
 
     function draw(e) { //draws nodes on click event
-        var pos = getMousePos(canvas, e);
-        posX = pos.x;
-        posY = pos.y;
+        if (!running) {
+            var pos = getMousePos(canvas, e);
+            posX = pos.x;
+            posY = pos.y;
 
 
-        if (NodeCount < 10) {
+            if (NodeCount < 10) {
 
-            if (overlap(posX,posY) == false) {
-    
-                
-                context.beginPath();
-                context.arc(posX, posY, 30, 0, 2 * Math.PI, false);
-                context.closePath();
-
-                context.fillStyle = nodeColors[NodeCount];
-                context.beginPath();
-                context.arc(posX,posY,20,0,2*Math.PI,false);
-                context.closePath()
-                context.fill();
-
-                context.strokeStyle = "#f44242";
-                context.beginPath();
-                context.arc(posX, posY, 30, 0, 2 * Math.PI);
-                context.stroke();
+                if (overlap(posX, posY) == false) {
 
 
-                context.fillStyle = "black";
-                context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
+                    context.beginPath();
+                    context.arc(posX, posY, 30, 0, 2 * Math.PI, false);
+                    context.closePath();
 
-                var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, []);
-                $("#startLink").append("<option value=" +   (NodeCount+1) + ">" +(NodeCount+1)+ "</option>");
-                $("#endLink").append("<option value=" +   (NodeCount+1) + ">" +(NodeCount+1)+ "</option>");
+                    context.fillStyle = nodeColors[NodeCount];
+                    context.beginPath();
+                    context.arc(posX, posY, 20, 0, 2 * Math.PI, false);
+                    context.closePath()
+                    context.fill();
+
+                    context.strokeStyle = "#f44242";
+                    context.beginPath();
+                    context.arc(posX, posY, 30, 0, 2 * Math.PI);
+                    context.stroke();
 
 
-                allNodes.push(node);
-                NodeCount++;
-              
+                    context.fillStyle = "black";
+                    context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
+
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, []);
+                    $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
+                    $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
+
+
+                    allNodes.push(node);
+                    NodeCount++;
+
+
+                }
 
             }
+            var isInCircle = pointInCircle(posX, posY);
+            document.getElementById("NodeSelected").innerHTML = "Data for Node: " + isInCircle.NodeNum;
 
-        }
-        var isInCircle = pointInCircle(posX, posY);
-        document.getElementById("NodeSelected").innerHTML = "Data for Node: " + isInCircle.NodeNum;
+            var nodeX = isInCircle.CoordX;
+            var nodeY = isInCircle.CoordY;
+            var nodeColor = isInCircle.nodeColor;
 
-        var nodeX = isInCircle.CoordX;
-        var nodeY = isInCircle.CoordY;
-        var nodeColor = isInCircle.nodeColor;
+            for (var i = 0; i < allNodes.length; i++) {
 
-        for (var i = 0; i < allNodes.length; i++) {
+                if (allNodes[i].NodeNum == isInCircle.NodeNum) { //creates red rings surrounding selected node
 
-            if (allNodes[i].NodeNum == isInCircle.NodeNum) {//creates red rings surrounding selected node
-
-                allNodes[i].isSelected = true;
-                currentSelectedNode = allNodes[i];
-                selectedNode = allNodes[i];
-                context.strokeStyle = "#f44242";
-                context.beginPath();
-                context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI);
-                context.stroke();
-
-
-            } else if (allNodes[i].NodeNum != currentSelectedNode) {// overshadows red ring(selected ring) when another node is selected
-                allNodes[i].isSelected = false;
-                for (var j = 0; j < 10; j++) {
-                    context.strokeStyle = "#FFFFFF";
+                    allNodes[i].isSelected = true;
+                    currentSelectedNode = allNodes[i];
+                    selectedNode = allNodes[i];
+                    context.strokeStyle = "#f44242";
                     context.beginPath();
                     context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI);
                     context.stroke();
+
+
+                } else if (allNodes[i].NodeNum != currentSelectedNode) { // overshadows red ring(selected ring) when another node is selected
+                    allNodes[i].isSelected = false;
+                    for (var j = 0; j < 10; j++) {
+                        context.strokeStyle = "#FFFFFF";
+                        context.beginPath();
+                        context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI);
+                        context.stroke();
+                    }
+
                 }
 
-            }
 
-
-
-
-        }
-
-
-    }   
-        document.getElementById("link").onclick = function linkNodes(){
-            start = startLinkSel.options[startLinkSel.selectedIndex].value
-            end = endLinkSel.options[endLinkSel.selectedIndex].value
-            context.beginPath();
-            context.lineWidth = 0.5;
-            context.moveTo(allNodes[start-1].CoordX,allNodes[start-1].CoordY);
-            context.lineTo(allNodes[end-1].CoordX,allNodes[end-1].CoordY);
-            context.stroke();
-            context.closePath();
-            return false;
-        }
-
-        document.getElementById("enterVals").onclick = function enterValues() {//sets values for each node
-            setSelectedNodeInfo(currentSelectedNode);
-
-            return false;
-
-
-        }
-
-        document.getElementById("Run").onclick = function beginRun() {//calculates points data
-            var notUsed = true;
-           if(confirmVal){
-                    
-                    for (var i = 0; i < nodesListed.length; i++) {
-                        if(currentSelectedNode.NodeNum == nodesListed[i]){//prevents repetition of nodes in bargraph selection list
-                            notUsed = false;
-                            
-                        }
-                        else{
-                            notUsed = true;
-                        }
-                        
-                        
-                    }
-
-                    if(notUsed){
-                        $("#nodeSelect").append("<option value=" + currentSelectedNode.NodeNum + ">Node" + currentSelectedNode.NodeNum + "</option>");
-                            nodesListed.push(currentSelectedNode.NodeNum);
-                    }
-                    
-                    
-
-                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                        currentSelectedNode.runSim();
-
-                        plotPoints(currentSelectedNode.alleleData[j]);
-
-                    }
-                        confirmVal = false;
-                        return false;
 
 
             }
-
-            else {
-              alert("Please confirm values before running simulation.");
-
-              return false;
-            } 
-
-              
         }
 
-        document.getElementById("reset").onclick = function resetVals(){//resets data
-            if(confirm("Are you sure you want to reset all nodes?")){
-                context.clearRect(0,0,canvas.width, canvas.height);
-                lineGraphCtx.clearRect(0,0,lineGraph.width,lineGraph.height);
-                barGraphCtx.clearRect(0,0,barGraph.width,barGraph.height);
-                genCap = 0;
-            }
-            else{
-                return false;
-            }
+    }
+    document.getElementById("link").onclick = function linkNodes() {
+        start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+        end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+        context.beginPath();
+        context.lineWidth = 0.5;
+        context.moveTo(allNodes[start].CoordX, allNodes[start].CoordY);
+        context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
+        context.stroke();
+        context.closePath();
+
+        return false;
+    }
 
 
 
-
-
-        }
-
-        document.getElementById("nodeSelect").onchange = function changeBarGraph() {//plots bars on barcanvas
-            $("#RunTotal").html(""+currentSelectedNode.numRuns);
-
-
-
-            barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
-            barGraphCtx.fillStyle = "#FDFEFE";
-            barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
-            intializeBarGraph();
-
-            
-                switch (sel.options[sel.selectedIndex].value) {
-
-                    case "1":
-                        plotBars(allNodes[0]);
-                        $("#RunTotal").html(""+allNodes[0].numRuns);
-                        break;
-                    case "2":
-                        plotBars(allNodes[1]);
-                        $("#RunTotal").html(""+allNodes[1].numRuns);
-                        break;
-                    case "3":
-                        plotBars(allNodes[2]);
-                        $("#RunTotal").html(""+allNodes[2].numRuns);
-                        break;
-                    case "4":
-                        plotBars(allNodes[3]);
-                        $("#RunTotal").html(""+allNodes[3].numRuns);
-                        break;
-                    case "5":
-                        plotBars(allNodes[4]);
-                        $("#RunTotal").html(""+allNodes[4].numRuns);
-                        break;
-                    case "6":
-                        plotBars(allNodes[5]);
-                        $("#RunTotal").html(""+allNodes[5].numRuns);
-                        break;
-                    case "7":
-                        plotBars(allNodes[6]);
-                        $("#RunTotal").html(""+allNodes[6].numRuns);
-                        break;
-                    case "8":
-                        plotBars(allNodes[7]);
-                        $("#RunTotal").html(""+allNodes[7].numRuns);
-                        break;
-                    case "9":
-                        plotBars(allNodes[8]);
-                        $("#RunTotal").html(""+allNodes[8].numRuns);
-                        break;
-                    case "10":
-                        plotBars(allNodes[9]);
-                        $("#RunTotal").html(""+allNodes[9].numRuns);
-                        break;
-                }
-            
+    document.getElementById("enterVals").onclick = function enterValues() { //sets values for each node
+        if(!running){
+             setSelectedNodeInfo(currentSelectedNode);
 
         }
-
-    document.getElementById("genSelect").onchange = function changeLineGraph() {//switches canvas to graph points in given range 
-            
-            lineGraphCtx.fillStyle = "#FDFEFE";
-            lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
-            intializeLineGraph();
-            switch (genSel.options[genSel.selectedIndex].value) {
-                case "200":
-                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                        plotPoints(currentSelectedNode.alleleData[j],100,200);
-                    }
-                    
-                    break;
-                case "300":
-                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                        plotPoints(currentSelectedNode.alleleData[j],200,300);
-                    }
-                    
-                    break;
-                case "400":
-                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                        plotPoints(currentSelectedNode.alleleData[j],300,400);
-                    }
-                    
-                    break;
-                case "500":
-                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                        plotPoints(currentSelectedNode.alleleData[j],400,500);
-                    }
-                    
-                    break;
-                default:
-                    for (var j = 0; j < currentSelectedNode.numRuns; j++) {
-                        plotPoints(currentSelectedNode.alleleData[j]);
-                    }
-                    
-                    break;
-             }
-        
+       
+        return false;
 
     }
 
-  
+    document.getElementById("Run").onclick = function beginRun() { //calculates points data
+        largestGen = allNodes[0].genNum;
+        if (confirmVal) {
+            for (var j = 0; j < allNodes.length; j++) {
+                $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                if(largestGen < allNodes[j].genNum){
+                    largestGen = allNodes[j].genNum;
+                }
+                for (var k = 0; k < allNodes[j].numRuns; k++) {
+                    lineGraphCtx.strokeStyle = allNodes[j].Color;
+                    allNodes[j].runSim();
+                    plotPoints(allNodes[j].alleleData[k]);
+                }
+            }
+            confirmVal = false;
+            running = true;
+            $("#endGen").innerHTML = largestGen;
+            return false;
+
+
+        } else {
+            alert("Please confirm values before running simulation.");
+
+            return false;
+        }
+
+
+    }
+
+    document.getElementById("reset").onclick = function resetVals() { //resets data
+        if (confirm("Are you sure you want to reset all nodes?")) {
+            for (var i = 0; i < allNodes.length; i++) {
+                allNodes[i].numRuns = 1;
+                allNodes[i].startPer = .5;
+                allNodes[i].genNum = 100;
+                allNodes[i].startPop = 100;
+                allNodes[i].plusplusS = 1.0;
+                allNodes[i].plusminusS = 1.0;
+                allNodes[i].minusminusS = 1.0;
+            }
+
+            lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
+            intializeLineGraph();
+            barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+            barGraphCtx.fillStyle = "#FDFEFE";
+            intializeBarGraph();
+            genCap = 0;
+            running = false;
+        }
+
+        return false;
+
+
+
+
+    }
+
+    document.getElementById("nodeSelect").onchange = function changeBarGraph() { //plots bars on barcanvas
+        $("#RunTotal").html("" + currentSelectedNode.numRuns);
+
+
+
+        barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+        barGraphCtx.fillStyle = "#FDFEFE";
+        barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
+        intializeBarGraph();
+
+
+        switch (sel.options[sel.selectedIndex].value) {
+
+            case "1":
+                plotBars(allNodes[0]);
+                $("#RunTotal").html("" + allNodes[0].numRuns);
+                break;
+            case "2":
+                plotBars(allNodes[1]);
+                $("#RunTotal").html("" + allNodes[1].numRuns);
+                break;
+            case "3":
+                plotBars(allNodes[2]);
+                $("#RunTotal").html("" + allNodes[2].numRuns);
+                break;
+            case "4":
+                plotBars(allNodes[3]);
+                $("#RunTotal").html("" + allNodes[3].numRuns);
+                break;
+            case "5":
+                plotBars(allNodes[4]);
+                $("#RunTotal").html("" + allNodes[4].numRuns);
+                break;
+            case "6":
+                plotBars(allNodes[5]);
+                $("#RunTotal").html("" + allNodes[5].numRuns);
+                break;
+            case "7":
+                plotBars(allNodes[6]);
+                $("#RunTotal").html("" + allNodes[6].numRuns);
+                break;
+            case "8":
+                plotBars(allNodes[7]);
+                $("#RunTotal").html("" + allNodes[7].numRuns);
+                break;
+            case "9":
+                plotBars(allNodes[8]);
+                $("#RunTotal").html("" + allNodes[8].numRuns);
+                break;
+            case "10":
+                plotBars(allNodes[9]);
+                $("#RunTotal").html("" + allNodes[9].numRuns);
+                break;
+        }
+
+
+    }
+
 
     function pointInCircle(x, y) { //checks if mouse click is located within a node
         for (var i = 0; i < allNodes.length; i++) {
-            var distance = Math.sqrt(Math.pow((x - allNodes[i].CoordX),2)  + Math.pow((y - allNodes[i].CoordY),2));
+            var distance = Math.sqrt(Math.pow((x - allNodes[i].CoordX), 2) + Math.pow((y - allNodes[i].CoordY), 2));
             if (distance <= 35) {
                 currentSelectedNode = allNodes[i];
                 return allNodes[i];
@@ -310,32 +272,25 @@ $(document).ready(function() {
 
         }
 
-        
+
     }
 
     function setSelectedNodeInfo(node) { //Text fields value set to value for corresponding node
-        if(parseFloat($("#Starting").val()) > 1 || parseFloat($("#Starting").val()) < 0){
+        if (parseFloat($("#Starting").val()) > 1 || parseFloat($("#Starting").val()) < 0) {
             alert("Please enter a valid starting percentage(0-1)");
-        }
-        else if(parseInt($("#NumGenerations").val()) > 500 || parseInt($("#NumGenerations").val()) <= 0){
+        } else if (parseInt($("#NumGenerations").val()) > 500 || parseInt($("#NumGenerations").val()) <= 0) {
             alert("Please enter a valid number of generations(1-500)");
-        }
-        else if(parseFloat($("#PPSurvival").val()) > 1 || parseFloat($("#PPSurvival").val()) < 0){
+        } else if (parseFloat($("#PPSurvival").val()) > 1 || parseFloat($("#PPSurvival").val()) < 0) {
             alert("Please enter a valid survival percentage(0-1)");
-        }
-        else if(parseFloat($("#PMSurvival").val()) > 1 || parseFloat($("#PMSurvival").val())< 0){
+        } else if (parseFloat($("#PMSurvival").val()) > 1 || parseFloat($("#PMSurvival").val()) < 0) {
             alert("Please enter a valid survival percentage(0-1)");
-        }
-        else if(parseFloat($("#MMSurvival").val()) > 1 || parseFloat($("#MMSurvival").val())< 0){
+        } else if (parseFloat($("#MMSurvival").val()) > 1 || parseFloat($("#MMSurvival").val()) < 0) {
             alert("Please enter a valid survival percentage(0-1)");
-        }
-        else if(parseInt($("#NumRuns").val()) > 250 || parseInt($("#NumRuns").val())<= 0){
+        } else if (parseInt($("#NumRuns").val()) > 250 || parseInt($("#NumRuns").val()) <= 0) {
             alert("Please enter a valid number of runs(1-250)");
-        }
-        else if (parseInt($("#StartingPop").val()) < 0){
+        } else if (parseInt($("#StartingPop").val()) < 0) {
             alert("Please enter a valid starting population");
-        }
-        else{
+        } else {
 
 
             node.numRuns = parseInt($("#NumRuns").val());
@@ -346,15 +301,11 @@ $(document).ready(function() {
             node.plusminusS = parseFloat($("#PMSurvival").val());
             node.minusminusS = parseFloat($("#MMSurvival").val());
             confirmVal = true;
-                
-            }
+
         }
+    }
 
 
-      
-
-
-    
 
 
     canvas.addEventListener("click", draw);
@@ -374,34 +325,32 @@ $(document).ready(function() {
 
 
 
-
-
-    function overlap(x, y) {//checks if node will overlap another node before drawn
-    var temp = 0;
+    function overlap(x, y) { //checks if node will overlap another node before drawn
+        var temp = 0;
         for (var i = 0; i < allNodes.length; i++) {
-            var distance = Math.sqrt(Math.pow((x - allNodes[i].CoordX),2)  + Math.pow((y - allNodes[i].CoordY),2));
-            
-             if(NodeCount == 0 || distance > 40){
-               temp++;
-               
+            var distance = Math.sqrt(Math.pow((x - allNodes[i].CoordX), 2) + Math.pow((y - allNodes[i].CoordY), 2));
+
+            if (NodeCount == 0 || distance > 40) {
+                temp++;
+
             }
 
-            
+
         }
-        if(temp == NodeCount){
+        if (temp == NodeCount) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
-        
-        
+
+
 
     }
-    
+
 
     function intializeLineGraph() {
         lineGraphCtx.fillStyle = "#FDFEFE";
+        lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
         lineGraphCtx.strokeStyle = "#000000";
         var lineSpaceHor = lineGraph.height / 10;
         var lineSpaceVer = lineGraph.width / 11;
@@ -427,7 +376,8 @@ $(document).ready(function() {
     }
 
     function intializeBarGraph() {
-
+        barGraphCtx.fillStyle = "#FDFEFE";
+        barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
         var ylineSpace = barGraph.height / 4;
         var xValueSpace = barGraph.width / 10;
 
@@ -442,19 +392,18 @@ $(document).ready(function() {
 
 
     function plotPoints(array = genArray) {
-       
-        var pointSpace = lineGraph.width /100;
+
+        var pointSpace = lineGraph.width /largestGen;
         lineGraphCtx.beginPath();
-        lineGraphCtx.lineWidth = 0.5;        
-        lineGraphCtx.strokeStyle = currentSelectedNode.Color;
+        lineGraphCtx.lineWidth = 0.5;
         lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
 
-            
+
         for (var r = 0; r < array.length; r++) {
             lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
             lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
 
-                lineGraphCtx.stroke();
+            lineGraphCtx.stroke();
 
             console.log(array[r][1]);
 
@@ -467,10 +416,10 @@ $(document).ready(function() {
 
 
 
-function plotBars(node) {
-        
+    function plotBars(node) {
+
         var rectHeight = 400;
-        var barIncrease = barGraph.height/node.numRuns;
+        var barIncrease = barGraph.height / node.numRuns;
         var freqs = []
         var freq01 = 0,
             freq12 = 0,
@@ -479,106 +428,103 @@ function plotBars(node) {
             freq45 = 0,
             freq56 = 0,
             freq67 = 0,
-            freq78 = 0, 
+            freq78 = 0,
             freq89 = 0,
             freq91 = 0;
         barGraphCtx.fillStyle = String(allNodes[(sel.options[sel.selectedIndex].value) - 1].Color);
-       for(var i = 0; i < node.numRuns; i++)
-       {
+        for (var i = 0; i < node.numRuns; i++) {
             var finalFreq = node.alleleData[i][node.alleleData[i].length - 2][1];
 
-            if (finalFreq <= 0.1){
+            if (finalFreq <= 0.1) {
                 freq01 += barIncrease;
-            }   
-            else if (finalFreq > 0.1 && finalFreq <= 0.2){
+            } else if (finalFreq > 0.1 && finalFreq <= 0.2) {
                 freq12 += barIncrease;
-            }
-            else if (finalFreq > 0.2 && finalFreq <= 0.3){
+            } else if (finalFreq > 0.2 && finalFreq <= 0.3) {
                 freq23 += barIncrease;
-            }
-            else if (finalFreq > 0.3 && finalFreq <= 0.4){
+            } else if (finalFreq > 0.3 && finalFreq <= 0.4) {
                 freq34 += barIncrease;
-            }
-            else if (finalFreq > 0.4 && finalFreq <= 0.5){
+            } else if (finalFreq > 0.4 && finalFreq <= 0.5) {
                 freq45 += barIncrease;
-            }
-            else if (finalFreq > 0.5 && finalFreq <= 0.6){
+            } else if (finalFreq > 0.5 && finalFreq <= 0.6) {
                 freq56 += barIncrease;
-            }
-            else if (finalFreq > 0.6 && finalFreq <= 0.7){
+            } else if (finalFreq > 0.6 && finalFreq <= 0.7) {
                 freq67 += barIncrease;
-            }
-            else if (finalFreq > 0.7 && finalFreq <= 0.8){
-                 freq78 += barIncrease;
-            }
-            else if (finalFreq > 0.8 && finalFreq <= 0.9){
+            } else if (finalFreq > 0.7 && finalFreq <= 0.8) {
+                freq78 += barIncrease;
+            } else if (finalFreq > 0.8 && finalFreq <= 0.9) {
                 freq89 += barIncrease;
-            }
-            else if (finalFreq > 0.9 && finalFreq <= 1.0){
+            } else if (finalFreq > 0.9 && finalFreq <= 1.0) {
                 freq91 += barIncrease;
             }
-                
-       }
 
-        barGraphCtx.strokeRect(0, rectHeight-freq01, 50, barGraph.height+freq01);
-        barGraphCtx.fillRect(0, rectHeight-freq01, 50, barGraph.height+freq01);
-       
+        }
 
-
-
-
-        barGraphCtx.strokeRect(50, rectHeight-freq12, 50, barGraph.height+freq12);
-        barGraphCtx.fillRect(50, rectHeight-freq12, 50, barGraph.height+freq12);
-        
+        barGraphCtx.strokeRect(0, rectHeight - freq01, 50, barGraph.height + freq01);
+        barGraphCtx.fillRect(0, rectHeight - freq01, 50, barGraph.height + freq01);
 
 
 
 
-        barGraphCtx.strokeRect(100, rectHeight-freq23, 50, barGraph.height+freq23);
-        barGraphCtx.fillRect(100, rectHeight-freq23, 50, barGraph.height+freq23);
-       
+        barGraphCtx.strokeRect(50, rectHeight - freq12, 50, barGraph.height + freq12);
+        barGraphCtx.fillRect(50, rectHeight - freq12, 50, barGraph.height + freq12);
 
 
 
-        barGraphCtx.strokeRect(150, rectHeight-freq34, 50, barGraph.height+freq34);
-        barGraphCtx.fillRect(150, rectHeight-freq34, 50, barGraph.height+freq34);
-       
+
+        barGraphCtx.strokeRect(100, rectHeight - freq23, 50, barGraph.height + freq23);
+        barGraphCtx.fillRect(100, rectHeight - freq23, 50, barGraph.height + freq23);
 
 
 
-        barGraphCtx.strokeRect(200, rectHeight-freq45, 50, barGraph.height+freq45);
-        barGraphCtx.fillRect(200, rectHeight-freq45, 50, barGraph.height+freq45);
-       
+
+        barGraphCtx.strokeRect(150, rectHeight - freq34, 50, barGraph.height + freq34);
+        barGraphCtx.fillRect(150, rectHeight - freq34, 50, barGraph.height + freq34);
 
 
 
-        barGraphCtx.strokeRect(250, rectHeight-freq56, 50, barGraph.height+freq56);
-        barGraphCtx.fillRect(250, rectHeight-freq56,50, barGraph.height+freq56);
-       
 
-        barGraphCtx.strokeRect(300, rectHeight-freq67, 50, barGraph.height+freq67);
-        barGraphCtx.fillRect(300, rectHeight-freq67, 50, barGraph.height+freq67);
-       
+        barGraphCtx.strokeRect(200, rectHeight - freq45, 50, barGraph.height + freq45);
+        barGraphCtx.fillRect(200, rectHeight - freq45, 50, barGraph.height + freq45);
 
 
 
-        barGraphCtx.strokeRect(350, rectHeight-freq78, 50, barGraph.height+freq78);
-        barGraphCtx.fillRect(350, rectHeight-freq78, 50, barGraph.height+freq78);
-        
+
+        barGraphCtx.strokeRect(250, rectHeight - freq56, 50, barGraph.height + freq56);
+        barGraphCtx.fillRect(250, rectHeight - freq56, 50, barGraph.height + freq56);
+
+
+        barGraphCtx.strokeRect(300, rectHeight - freq67, 50, barGraph.height + freq67);
+        barGraphCtx.fillRect(300, rectHeight - freq67, 50, barGraph.height + freq67);
 
 
 
-        barGraphCtx.strokeRect(400, rectHeight-freq89, 50, barGraph.height+freq89);
-        barGraphCtx.fillRect(400, rectHeight-freq89, 50, barGraph.height+freq89);
-       
+
+        barGraphCtx.strokeRect(350, rectHeight - freq78, 50, barGraph.height + freq78);
+        barGraphCtx.fillRect(350, rectHeight - freq78, 50, barGraph.height + freq78);
 
 
-        barGraphCtx.strokeRect(450, rectHeight-freq91, 50, barGraph.height+freq91);
-        barGraphCtx.fillRect(450, rectHeight-freq91, 50, barGraph.height+freq91);
-       
-    
 
-}
+
+        barGraphCtx.strokeRect(400, rectHeight - freq89, 50, barGraph.height + freq89);
+        barGraphCtx.fillRect(400, rectHeight - freq89, 50, barGraph.height + freq89);
+
+
+
+        barGraphCtx.strokeRect(450, rectHeight - freq91, 50, barGraph.height + freq91);
+        barGraphCtx.fillRect(450, rectHeight - freq91, 50, barGraph.height + freq91);
+
+
+
+    }
 
 
 });
+    var genCap = 0;
+    var running;
+
+
+
+    
+
+
+
