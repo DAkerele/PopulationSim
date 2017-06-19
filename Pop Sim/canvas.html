@@ -11,21 +11,21 @@
 		<div id = "app" style = "height:100%; width:100%; top:0px; ">
 			<!-- numbering for y-axis linegraph -->
 			<p id = "yAxis"style = "position:absolute; top:192.5px; left:680px; ">%"+"Allele</p>
-			<p style = "position:absolute; top:1px; left:770px; ">1.0</p>
-			<p style = "position:absolute; top:35px; left:770px; ">0.9</p>
-			<p style = "position:absolute; top:78px; left:770px; ">0.8</p>
-			<p style = "position:absolute; top:120px; left:770px; ">0.7</p>
-			<p style = "position:absolute; top:157px; left:770px; ">0.6</p>
-			<p style = "position:absolute; top:195px; left:770px; ">0.5</p>
-			<p style = "position:absolute; top:235px; left:770px; ">0.4</p>
-			<p style = "position:absolute; top:276px; left:770px; ">0.3</p>
-			<p style = "position:absolute; top:315px; left:770px; ">0.2</p>
-			<p style = "position:absolute; top:355px; left:770px; ">0.1</p>
+			<p style = "position:absolute; top:1px; left:770px; ">100</p>
+			<p style = "position:absolute; top:35px; left:770px; ">90</p>
+			<p style = "position:absolute; top:78px; left:770px; ">80</p>
+			<p style = "position:absolute; top:120px; left:770px; ">70</p>
+			<p style = "position:absolute; top:157px; left:770px; ">60</p>
+			<p style = "position:absolute; top:195px; left:770px; ">50</p>
+			<p style = "position:absolute; top:235px; left:770px; ">40</p>
+			<p style = "position:absolute; top:276px; left:770px; ">30</p>
+			<p style = "position:absolute; top:315px; left:770px; ">20</p>
+			<p style = "position:absolute; top:355px; left:770px; ">10</p>
 			
 
 
 			<!-- numbering for x-axis linegraph-->
-			<p style = "position:absolute; top:420px; left:1290px;" id = "endGen">500</p>
+			<p style = "position:absolute; top:420px; left:1290px;" id = "endGen"></p>
 
 			<!--numbering for bargraph x axis-->
 			<p style = "position:absolute; top:900px; left:800px; ">0.0</p>
@@ -74,7 +74,7 @@
 					<input value  = "1"  id = "NumRuns" type = "number"> </input>
 					<br>Starting Percent:<br>
 					<input min = "0.0" max = "1.0"step = "0.1" value  = ".5"  id = "Starting" type = "number"></input>
-					<br>Number of Generation(universal):<br>
+					<br>Number of Generation:<br>
 					<input value  = "100"  id = "NumGenerations" type = "number"></input>
 					<br>Starting Population:<br>
 					<input value  = "100"  id = "StartingPop" type = "number"></input>
@@ -94,14 +94,7 @@
   				
 
 			</select>
-			<select id = "genSelect" style= "position:absolute; left:675px; top:240px">
-				<option value="100">0-100</option>
-				<option value="200">100-200</option>
-				<option value="300">200-300</option>
-				<option value="400">300-400</option>
-				<option value="500">400-500</option>
-
-			</select>
+			
 
 		</div>
 
