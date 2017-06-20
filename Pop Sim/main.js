@@ -147,22 +147,24 @@ $(document).ready(function() {
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
-        largestGen = allNodes[0].genNum;
+        for (var i=0; i < allNodes.length;i++){
+            if (allNodes[i].genNum > largestGen) {
+                 largestGen = allNodes[i].genNum;
+             }
+        }
+
         if (confirmVal) {
             for (var j = 0; j < allNodes.length; j++) {
                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                if(largestGen < allNodes[j].genNum){
-                    largestGen = allNodes[j].genNum;
-                }
                 for (var k = 0; k < allNodes[j].numRuns; k++) {
                     lineGraphCtx.strokeStyle = allNodes[j].Color;
                     allNodes[j].runSim();
-                    plotPoints(allNodes[j].alleleData[k]);
+                    plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum);
                 }
             }
             confirmVal = false;
             running = true;
-            $("#endGen").innerHTML = largestGen;
+            document.getElementById("endGen").innerHTML = largestGen;
             return false;
 
 
@@ -391,9 +393,9 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(array = genArray) {
+    function plotPoints(array = genArray, gens = 100) {
 
-        var pointSpace = lineGraph.width /largestGen;
+        var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
         lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
@@ -406,9 +408,22 @@ $(document).ready(function() {
             lineGraphCtx.stroke();
 
             console.log(array[r][1]);
-
+            
 
         }
+
+        if(gens != largestGen){
+                alert("hi");
+                lineGraphCtx.beginPath();
+                lineGraphCtx.strokeStyle = "#1A1717";
+                lineGraphCtx.moveTo((pointSpace*gens),lineGraph.height);
+                lineGraphCtx.lineTo((pointSpace*gens),0);
+                lineGraphCtx.font = "30px Arial";
+                lineGraphCtx.fillStyle = "black";
+                lineGraphCtx.fillText(""+gens,(pointSpace*gens),200);
+                lineGraphCtx.stroke();
+                lineGraphCtx.closePath();
+            }
         array = [];
         lineGraphCtx.closePath();
 
