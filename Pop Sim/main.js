@@ -25,7 +25,8 @@ $(document).ready(function() {
     var genCap = 0;
     var running;
     var largestGen = 0;
-
+    var linkedArr;
+    var start,end;
 
 
     context.fillStyle = "#FDFEFE";
@@ -71,7 +72,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, []);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [],null);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -82,6 +83,7 @@ $(document).ready(function() {
 
                 }
 
+                
             }
             var isInCircle = pointInCircle(posX, posY);
             document.getElementById("NodeSelected").innerHTML = "Data for Node: " + isInCircle.NodeNum;
@@ -122,15 +124,25 @@ $(document).ready(function() {
 
     }
     document.getElementById("link").onclick = function linkNodes() {
-        start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
-        end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
         context.beginPath();
         context.lineWidth = 0.5;
         context.moveTo(allNodes[start].CoordX, allNodes[start].CoordY);
         context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
         context.stroke();
         context.closePath();
-
+        for (var i = 0; i < allNodes.length; i++) {
+            for (var j = 0; j < allNodes[i].numRuns; j++){
+                if(allNodes[start].numRuns == allNodes[end].numRuns){
+                    allNodes[start].runSim();
+                    allNodes[end].runSim();
+                    linkedArr = allNodes[start].alleleData[j].push(allNodes[end].alleleData[j]);
+                    allNodes[start].linkedData = linkedArr;
+                    
+                }
+            }
+        }
         return false;
     }
 
@@ -147,6 +159,8 @@ $(document).ready(function() {
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
+         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
         for (var i=0; i < allNodes.length;i++){
             if (allNodes[i].genNum > largestGen) {
                  largestGen = allNodes[i].genNum;
@@ -157,9 +171,10 @@ $(document).ready(function() {
             for (var j = 0; j < allNodes.length; j++) {
                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                 for (var k = 0; k < allNodes[j].numRuns; k++) {
+                    
                     lineGraphCtx.strokeStyle = allNodes[j].Color;
                     allNodes[j].runSim();
-                    plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum);
+                    plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum,allNodes[j].linkedData);
                 }
             }
             confirmVal = false;
@@ -177,8 +192,8 @@ $(document).ready(function() {
 
     }
 
-    document.getElementById("reset").onclick = function resetVals() { //resets data
-        if (confirm("Are you sure you want to reset all nodes?")) {
+    document.getElementById("restart").onclick = function resetVals() { //resets data
+        if (confirm("Are you sure you want to restart the simulation?")) {
             for (var i = 0; i < allNodes.length; i++) {
                 allNodes[i].numRuns = 1;
                 allNodes[i].startPer = .5;
@@ -187,6 +202,8 @@ $(document).ready(function() {
                 allNodes[i].plusplusS = 1.0;
                 allNodes[i].plusminusS = 1.0;
                 allNodes[i].minusminusS = 1.0;
+                allNodes[i].alleleData = [];
+                
             }
 
             lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
@@ -196,6 +213,7 @@ $(document).ready(function() {
             intializeBarGraph();
             genCap = 0;
             running = false;
+            largestGen = 0;
         }
 
         return false;
@@ -393,40 +411,75 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(array = genArray, gens = 100) {
+    function plotPoints(array = genArray, gens = 100, linked = null) {
+         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+        if(linked == null){
+            var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
+            lineGraphCtx.beginPath();
+            lineGraphCtx.lineWidth = 0.5;
+            lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
 
-        var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
-        lineGraphCtx.beginPath();
-        lineGraphCtx.lineWidth = 0.5;
-        lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
+            for (var r = 0; r < array.length; r++) {
+                lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
 
-
-        for (var r = 0; r < array.length; r++) {
-            lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
-            lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
-
-            lineGraphCtx.stroke();
-
-            console.log(array[r][1]);
-            
-
-        }
-
-        if(gens != largestGen){
-                alert("hi");
-                lineGraphCtx.beginPath();
-                lineGraphCtx.strokeStyle = "#1A1717";
-                lineGraphCtx.moveTo((pointSpace*gens),lineGraph.height);
-                lineGraphCtx.lineTo((pointSpace*gens),0);
-                lineGraphCtx.font = "30px Arial";
-                lineGraphCtx.fillStyle = "black";
-                lineGraphCtx.fillText(""+gens,(pointSpace*gens),200);
                 lineGraphCtx.stroke();
-                lineGraphCtx.closePath();
-            }
-        array = [];
-        lineGraphCtx.closePath();
 
+                console.log(array[r][1]);
+                
+
+            }
+
+
+            if(gens != largestGen){
+                    lineGraphCtx.beginPath();
+                    lineGraphCtx.strokeStyle = "#1A1717";
+                    lineGraphCtx.moveTo((pointSpace*gens),lineGraph.height);
+                    lineGraphCtx.lineTo((pointSpace*gens),0);
+                    lineGraphCtx.font = "30px Arial";
+                    lineGraphCtx.fillStyle = "black";
+                    lineGraphCtx.fillText(""+gens,(pointSpace*gens),200);
+                    lineGraphCtx.stroke();
+                    lineGraphCtx.closePath();
+                }
+            array = [];
+            lineGraphCtx.closePath();
+        }else{
+            alert("hi");
+            var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
+            lineGraphCtx.beginPath();
+            lineGraphCtx.lineWidth = 0.5;
+            lineGraphCtx.strokeStyle  = allNodes[start].Color;
+            lineGraphCtx.moveTo(0, (400 - (linked[0] * 400))); //zeroY
+
+             for (var s = 0; s < linked.length; s++) {
+                if(s == allNodes[start].length){
+                    lineGraphCtx.strokeStyle = allNodes[end].Color;
+                }
+                lineGraphCtx.lineTo(pointSpace * (s + 1), 400 - (array[s][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (s + 1), 400 - (array[s][1] * 400));
+
+                lineGraphCtx.stroke();
+
+                console.log(array[s][1]);
+                
+
+            }
+             if(gens != largestGen){
+                    lineGraphCtx.beginPath();
+                    lineGraphCtx.strokeStyle = "#1A1717";
+                    lineGraphCtx.moveTo((pointSpace*allNodes[start].genNum),lineGraph.height);
+                    lineGraphCtx.lineTo((pointSpace*allNodes[start].genNum),0);
+                    lineGraphCtx.font = "30px Arial";
+                    lineGraphCtx.fillStyle = "black";
+                    lineGraphCtx.fillText(""+gens,(pointSpace*allNodes[start].genNum),200);
+                    lineGraphCtx.stroke();
+                    lineGraphCtx.closePath();
+                }
+            array = [];
+            lineGraphCtx.closePath();
+        }    
     }
 
 
