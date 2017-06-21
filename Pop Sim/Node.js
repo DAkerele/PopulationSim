@@ -1,4 +1,4 @@
-function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData){
+function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,linkedData){
         this.isSelected = selected;
         this.CoordX = posX;
         this.CoordY = posY;
@@ -12,6 +12,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         this.minusminusS = minusminusS;
         this.numRuns = numRuns;
         this.alleleData = alleleData;
+        this.linkedData = linkedData;
 
 
     }
