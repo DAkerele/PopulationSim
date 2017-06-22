@@ -27,6 +27,7 @@ $(document).ready(function() {
     var largestGen = 0;
     var linkedArr;
     var start,end;
+    var allConfirmed = 0;
 
 
     context.fillStyle = "#FDFEFE";
@@ -72,7 +73,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [],null);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [],null,false);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -151,6 +152,8 @@ $(document).ready(function() {
     document.getElementById("enterVals").onclick = function enterValues() { //sets values for each node
         if(!running){
              setSelectedNodeInfo(currentSelectedNode);
+             currentSelectedNode.isConfirm = true;
+             allConfirmed++;
 
         }
        
@@ -159,36 +162,38 @@ $(document).ready(function() {
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
-         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
-         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
-        for (var i=0; i < allNodes.length;i++){
-            if (allNodes[i].genNum > largestGen) {
-                 largestGen = allNodes[i].genNum;
-             }
-        }
-
-        if (confirmVal) {
-            for (var j = 0; j < allNodes.length; j++) {
-                $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                for (var k = 0; k < allNodes[j].numRuns; k++) {
-                    
-                    lineGraphCtx.strokeStyle = allNodes[j].Color;
-                    allNodes[j].runSim();
-                    plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum,allNodes[j].linkedData);
-                }
+             start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+             end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+            for (var i=0; i < allNodes.length;i++){
+                if (allNodes[i].genNum > largestGen) {
+                     largestGen = allNodes[i].genNum;
+                 }
             }
-            confirmVal = false;
-            running = true;
-            document.getElementById("endGen").innerHTML = largestGen;
-            return false;
-
-
-        } else {
-            alert("Please confirm values before running simulation.");
-
-            return false;
+         for(var p = 0; p < allNodes.length;p++){
+            if (!allNodes[p].isConfirm) {
+                alert("Please confirm values for node:"+allNodes[p].NodeNum+" before running simulation.");
+                p=0;
+                return false;
+            }
         }
+            if(allConfirmed >= allNodes.length){
+                for (var j = 0; j < allNodes.length; j++) {
+                    $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                    for (var k = 0; k < allNodes[j].numRuns; k++) {
+                        
+                        lineGraphCtx.strokeStyle = allNodes[j].Color;
+                        allNodes[j].runSim();
+                        plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum,allNodes[j].linkedData);
+                    }
+                }
+                confirmVal = false;
+                running = true;
+                document.getElementById("endGen").innerHTML = largestGen;
+                return false;
 
+           }     
+            
+           
 
     }
 
@@ -203,7 +208,7 @@ $(document).ready(function() {
                 allNodes[i].plusminusS = 1.0;
                 allNodes[i].minusminusS = 1.0;
                 allNodes[i].alleleData = [];
-                
+                allNodes[i].isConfirm = false;
             }
 
             lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
@@ -214,6 +219,9 @@ $(document).ready(function() {
             genCap = 0;
             running = false;
             largestGen = 0;
+            allConfirmed =0;
+            $("#nodeSelect").empty();
+            $("#nodeSelect").append("<option value='None'>None</option>");
         }
 
         return false;
@@ -593,6 +601,3 @@ $(document).ready(function() {
 
 
     
-
-
-
