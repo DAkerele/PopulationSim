@@ -73,7 +73,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [],null,false);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [],0,false,null);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -133,17 +133,10 @@ $(document).ready(function() {
         context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
         context.stroke();
         context.closePath();
-        for (var i = 0; i < allNodes.length; i++) {
-            for (var j = 0; j < allNodes[i].numRuns; j++){
-                if(allNodes[start].numRuns == allNodes[end].numRuns){
-                    allNodes[start].runSim();
-                    allNodes[end].runSim();
-                    linkedArr = allNodes[start].alleleData[j].push(allNodes[end].alleleData[j]);
-                    allNodes[start].linkedData = linkedArr;
-                    
-                }
-            }
-        }
+        allNodes[start].isLinked = true;
+        allNodes[end].isLinked = true;
+        allNodes[end].startLinkNode = allNodes[start];
+        
         return false;
     }
 
@@ -154,7 +147,6 @@ $(document).ready(function() {
              setSelectedNodeInfo(currentSelectedNode);
              currentSelectedNode.isConfirm = true;
              allConfirmed++;
-
         }
        
         return false;
@@ -162,28 +154,32 @@ $(document).ready(function() {
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
-             start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
-             end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
-            for (var i=0; i < allNodes.length;i++){
-                if (allNodes[i].genNum > largestGen) {
-                     largestGen = allNodes[i].genNum;
-                 }
-            }
+         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+        for (var i=0; i < allNodes.length;i++){
+            if (allNodes[i].genNum > largestGen) {
+                 largestGen = allNodes[i].genNum;
+             }
+        }
+
          for(var p = 0; p < allNodes.length;p++){
             if (!allNodes[p].isConfirm) {
                 alert("Please confirm values for node:"+allNodes[p].NodeNum+" before running simulation.");
                 p=0;
                 return false;
             }
-        }
+         }
             if(allConfirmed >= allNodes.length){
                 for (var j = 0; j < allNodes.length; j++) {
+                    if(allNodes[j].isLinked){
+
+                    }
                     $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                     for (var k = 0; k < allNodes[j].numRuns; k++) {
                         
                         lineGraphCtx.strokeStyle = allNodes[j].Color;
                         allNodes[j].runSim();
-                        plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum,allNodes[j].linkedData);
+                        plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum);
                     }
                 }
                 confirmVal = false;
@@ -191,13 +187,12 @@ $(document).ready(function() {
                 document.getElementById("endGen").innerHTML = largestGen;
                 return false;
 
-           }     
-            
-           
 
-    }
+            } 
 
-    document.getElementById("restart").onclick = function resetVals() { //resets data
+        }
+
+     document.getElementById("restart").onclick = function resetVals() { //resets data
         if (confirm("Are you sure you want to restart the simulation?")) {
             for (var i = 0; i < allNodes.length; i++) {
                 allNodes[i].numRuns = 1;
@@ -225,11 +220,8 @@ $(document).ready(function() {
         }
 
         return false;
-
-
-
-
     }
+    
 
     document.getElementById("nodeSelect").onchange = function changeBarGraph() { //plots bars on barcanvas
         $("#RunTotal").html("" + currentSelectedNode.numRuns);
@@ -419,26 +411,22 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(array = genArray, gens = 100, linked = null) {
-         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
-         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
-        if(linked == null){
-            var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
-            lineGraphCtx.beginPath();
-            lineGraphCtx.lineWidth = 0.5;
-            lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
+    function plotPoints(array = genArray, gens = 100) {
+       
+         var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
 
+        lineGraphCtx.beginPath();
+        lineGraphCtx.lineWidth = 0.5;
+        lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
             for (var r = 0; r < array.length; r++) {
                 lineGraphCtx.lineTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
                 lineGraphCtx.moveTo(pointSpace * (r + 1), 400 - (array[r][1] * 400));
 
                 lineGraphCtx.stroke();
-
                 console.log(array[r][1]);
                 
 
             }
-
 
             if(gens != largestGen){
                     lineGraphCtx.beginPath();
@@ -453,42 +441,13 @@ $(document).ready(function() {
                 }
             array = [];
             lineGraphCtx.closePath();
-        }else{
-            alert("hi");
-            var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
-            lineGraphCtx.beginPath();
-            lineGraphCtx.lineWidth = 0.5;
-            lineGraphCtx.strokeStyle  = allNodes[start].Color;
-            lineGraphCtx.moveTo(0, (400 - (linked[0] * 400))); //zeroY
-
-             for (var s = 0; s < linked.length; s++) {
-                if(s == allNodes[start].length){
-                    lineGraphCtx.strokeStyle = allNodes[end].Color;
-                }
-                lineGraphCtx.lineTo(pointSpace * (s + 1), 400 - (array[s][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (s + 1), 400 - (array[s][1] * 400));
-
-                lineGraphCtx.stroke();
-
-                console.log(array[s][1]);
-                
-
-            }
-             if(gens != largestGen){
-                    lineGraphCtx.beginPath();
-                    lineGraphCtx.strokeStyle = "#1A1717";
-                    lineGraphCtx.moveTo((pointSpace*allNodes[start].genNum),lineGraph.height);
-                    lineGraphCtx.lineTo((pointSpace*allNodes[start].genNum),0);
-                    lineGraphCtx.font = "30px Arial";
-                    lineGraphCtx.fillStyle = "black";
-                    lineGraphCtx.fillText(""+gens,(pointSpace*allNodes[start].genNum),200);
-                    lineGraphCtx.stroke();
-                    lineGraphCtx.closePath();
-                }
-            array = [];
-            lineGraphCtx.closePath();
-        }    
     }
+
+    function plotLinks(startNode,endNode){
+         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+    }
+    
 
 
 
@@ -601,3 +560,6 @@ $(document).ready(function() {
 
 
     
+
+
+
