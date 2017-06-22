@@ -1,4 +1,4 @@
-function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,linkedData){
+function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,linkedData,isConfirm){
         this.isSelected = selected;
         this.CoordX = posX;
         this.CoordY = posY;
@@ -13,6 +13,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         this.numRuns = numRuns;
         this.alleleData = alleleData;
         this.linkedData = linkedData;
+        this.isConfirm = isConfirm;
 
 
     }
