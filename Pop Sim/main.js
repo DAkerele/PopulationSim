@@ -25,10 +25,10 @@ $(document).ready(function() {
     var genCap = 0;
     var running;
     var largestGen = 0;
-    var linkedArr;
     var start,end;
     var allConfirmed = 0;
-
+    var linkedNodes = [];
+    var notLinked = [];
 
     context.fillStyle = "#FDFEFE";
     lineGraphCtx.fillStyle = "#FDFEFE";
@@ -133,9 +133,8 @@ $(document).ready(function() {
         context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
         context.stroke();
         context.closePath();
-        allNodes[start].isLinked = true;
-        allNodes[end].isLinked = true;
         allNodes[end].startLinkNode = allNodes[start];
+        
         
         return false;
     }
@@ -156,6 +155,7 @@ $(document).ready(function() {
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
          start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
          end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+         notLinked = allNodes.filter(linkCheck);
         for (var i=0; i < allNodes.length;i++){
             if (allNodes[i].genNum > largestGen) {
                  largestGen = allNodes[i].genNum;
@@ -170,18 +170,29 @@ $(document).ready(function() {
             }
          }
             if(allConfirmed >= allNodes.length){
-                for (var j = 0; j < allNodes.length; j++) {
-                    if(allNodes[j].isLinked){
+                for (var j = 0; j < notLinked.length; j++) {
+                    $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                    for (var k = 0; k < notLinked[j].numRuns; k++) {
+                        notLinked[j].runSim();
+                        lineGraphCtx.strokeStyle = notLinked[j].Color;
+                        plotPoints(notLinked[j].alleleData[k],notLinked[j].genNum);
+                        }   
+                    }
+                for(var l = 0; l < allNodes.length;l++){
+                    for(var m = 0; m < allNodes[l].numRuns;m++){
+                        if(allNodes[l] != notLinked[l]){
+                            $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                            alert(allNodes[l].startLinkNode.alleleData[m].length-1);
+                            allNodes[l].startPer = allNodes[l].startLinkNode.alleleData[m][allNodes[l].startLinkNode.alleleData[m].length-1][1];
+                            allNodes[l].runSim();
+                            plotLinks(allNodes[l].startLinkNode.alleleData[m],allNodes[l].alleleData[m],allNodes[l].Color);
+
+                        }
 
                     }
-                    $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                    for (var k = 0; k < allNodes[j].numRuns; k++) {
-                        
-                        lineGraphCtx.strokeStyle = allNodes[j].Color;
-                        allNodes[j].runSim();
-                        plotPoints(allNodes[j].alleleData[k],allNodes[j].genNum);
-                    }
                 }
+
+            }
                 confirmVal = false;
                 running = true;
                 document.getElementById("endGen").innerHTML = largestGen;
@@ -190,7 +201,11 @@ $(document).ready(function() {
 
             } 
 
-        }
+
+    function linkCheck(node){
+        return node.startLinkNode == null;
+        
+    }
 
      document.getElementById("restart").onclick = function resetVals() { //resets data
         if (confirm("Are you sure you want to restart the simulation?")) {
@@ -413,7 +428,7 @@ $(document).ready(function() {
 
     function plotPoints(array = genArray, gens = 100) {
        
-         var pointSpace = (((gens/largestGen)*(lineGraph.width))/gens);
+         var pointSpace = (((gens/200)*(lineGraph.width))/gens);
 
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
@@ -443,9 +458,28 @@ $(document).ready(function() {
             lineGraphCtx.closePath();
     }
 
-    function plotLinks(startNode,endNode){
+    function plotLinks(startData,endData,Color){
          start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
          end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+
+          var pointSpace = (((endData.length/200)*(lineGraph.width))/endData.length);
+
+        lineGraphCtx.beginPath();
+        lineGraphCtx.strokeStyle = Color;
+        lineGraphCtx.lineWidth = 0.5;
+        lineGraphCtx.moveTo((pointSpace * (startData.length)), (400 - (startData[startData.length-1][1] * 400))); //zeroY
+        alert((pointSpace * (startData.length)));
+            for (var s = 0; s < endData.length; s++) {
+                lineGraphCtx.lineTo(pointSpace * (startData.length + (s+1)), 400 - (endData[s][1] * 400));
+                lineGraphCtx.moveTo(pointSpace * (startData.length+(s+1)), 400 - (endData[s][1] * 400));
+
+                lineGraphCtx.stroke();
+                console.log(endData[s][1]);
+                
+
+            }
+            lineGraphCtx.closePath();
+
     }
     
 
