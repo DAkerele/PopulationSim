@@ -29,6 +29,7 @@ $(document).ready(function() {
     var allConfirmed = 0;
     var linkedNodes = [];
     var notLinked = [];
+    var linkLen = 0;
 
     context.fillStyle = "#FDFEFE";
     lineGraphCtx.fillStyle = "#FDFEFE";
@@ -73,7 +74,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [],0,false,null);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [],false,null);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -133,10 +134,32 @@ $(document).ready(function() {
         context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
         context.stroke();
         context.closePath();
-        allNodes[end].startLinkNode = allNodes[start];
+        allNodes[end].linkStartNode = allNodes[start];
+        
         
         
         return false;
+    }
+
+    document.getElementById("unlink").onclick = function unlinkNodes(){
+        alert("hi");
+        running = false;
+        lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
+        context.clearRect(0,0,canvas.width,canvas.height);
+        for(var i = 0 ; i < allNodes.length; i++){
+            context.fillStyle = allNodes[i].Color;
+            context.beginPath();
+            context.arc(allNodes[i].posX, allNodes[i].posY, 20, 0, 2 * Math.PI, false);
+            context.closePath()
+            context.fill();
+
+            context.fillStyle = "black";
+            context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].posX - 3, allNodes[i].posY + 2);
+        }
+            intializeLineGraph();
+            barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+            barGraphCtx.fillStyle = "#FDFEFE";
+            intializeBarGraph();
     }
 
 
@@ -153,6 +176,7 @@ $(document).ready(function() {
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
+        
          start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
          end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
          notLinked = allNodes.filter(linkCheck);
@@ -180,13 +204,14 @@ $(document).ready(function() {
                     }
                 for(var l = 0; l < allNodes.length;l++){
                     for(var m = 0; m < allNodes[l].numRuns;m++){
-                        if(allNodes[l] != notLinked[l]){
-                            $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                            alert(allNodes[l].startLinkNode.alleleData[m].length-1);
-                            allNodes[l].startPer = allNodes[l].startLinkNode.alleleData[m][allNodes[l].startLinkNode.alleleData[m].length-1][1];
-                            allNodes[l].runSim();
-                            plotLinks(allNodes[l].startLinkNode.alleleData[m],allNodes[l].alleleData[m],allNodes[l].Color);
 
+                        if(allNodes[l] != notLinked[l]){
+                            if(allNodes[l].linkStartNode != null){
+                                $("#nodeSelect").append("<option value=" + allNodes[l].NodeNum + ">Node" + allNodes[l].NodeNum + "</option>");
+                                allNodes[l].linkTo();
+                                
+                            }
+                            
                         }
 
                     }
@@ -199,11 +224,19 @@ $(document).ready(function() {
                 return false;
 
 
-            } 
+    } 
 
 
     function linkCheck(node){
-        return node.startLinkNode == null;
+        for (var i = 0; i < allNodes.length; i++) {
+            if(allNodes[i].linkStartNode != null){
+                if(node.NodeNum != allNodes[i].linkStartNode.NodeNum && node.linkStartNode == null){
+                    return true;
+                }
+            }
+            
+        };
+        
         
     }
 
@@ -426,9 +459,9 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(array = genArray, gens = 100) {
+    function plotPoints(array = genArray, gens = 100, endData = 0) {
        
-         var pointSpace = (((gens/200)*(lineGraph.width))/gens);
+         var pointSpace =(((gens/largestGen)*(lineGraph.width)/gens));
 
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
@@ -458,29 +491,7 @@ $(document).ready(function() {
             lineGraphCtx.closePath();
     }
 
-    function plotLinks(startData,endData,Color){
-         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
-         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
-
-          var pointSpace = (((endData.length/200)*(lineGraph.width))/endData.length);
-
-        lineGraphCtx.beginPath();
-        lineGraphCtx.strokeStyle = Color;
-        lineGraphCtx.lineWidth = 0.5;
-        lineGraphCtx.moveTo((pointSpace * (startData.length)), (400 - (startData[startData.length-1][1] * 400))); //zeroY
-        alert((pointSpace * (startData.length)));
-            for (var s = 0; s < endData.length; s++) {
-                lineGraphCtx.lineTo(pointSpace * (startData.length + (s+1)), 400 - (endData[s][1] * 400));
-                lineGraphCtx.moveTo(pointSpace * (startData.length+(s+1)), 400 - (endData[s][1] * 400));
-
-                lineGraphCtx.stroke();
-                console.log(endData[s][1]);
-                
-
-            }
-            lineGraphCtx.closePath();
-
-    }
+    
     
 
 
