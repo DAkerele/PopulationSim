@@ -1,4 +1,7 @@
-function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,linkStartX,isConfirm,linkStartNode){
+var lineGraph = document.getElementById("lineGraph");
+var lineGraphCtx = lineGraph.getContext("2d");
+
+function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,isConfirm,linkStartNode){
         this.isSelected = selected;
         this.CoordX = posX;
         this.CoordY = posY;
@@ -12,9 +15,9 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         this.minusminusS = minusminusS;
         this.numRuns = numRuns;
         this.alleleData = alleleData;
-        this.linkStartX = linkStartX;
         this.isConfirm = isConfirm;
         this.linkStartNode = linkStartNode;
+        
 
 
     }
@@ -116,6 +119,53 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         
 
     }
+
+
+    Node.prototype.linkTo = function() {
+    
+    for(var i = 0; i < this.linkStartNode.numRuns;i++){// # runs must be same to link
+        this.linkStartNode.runSim();
+        this.startPer = this.linkStartNode.alleleData[i][this.linkStartNode.alleleData[i].length-1][1];
+        this.runSim();
+        var pointSpaceInit =(((this.linkStartNode.genNum/(this.genNum+this.linkStartNode.genNum))*(lineGraph.width)/this.linkStartNode.genNum));//point Spacing for start node
+        var pointSpaceF = (((this.genNum/(this.genNum+this.linkStartNode.genNum))*(lineGraph.width)/this.linkStartNode.genNum));// point Spacing for end node
+        
+
+        lineGraphCtx.beginPath();
+        lineGraphCtx.lineWidth = 0.5;
+        lineGraphCtx.strokeStyle = this.linkStartNode.Color;
+        lineGraphCtx.moveTo(0, (400 - (this.linkStartNode.alleleData[i][0][1] * 400))); //zeroY
+        for (var j = 0; j < this.linkStartNode.alleleData[i].length; j++) {
+            lineGraphCtx.lineTo(pointSpaceInit * (j + 1), 400 - (this.linkStartNode.alleleData[i][j][1] * 400));
+            lineGraphCtx.moveTo(pointSpaceInit * (j + 1), 400 - (this.linkStartNode.alleleData[i][j][1] * 400));
+
+            lineGraphCtx.stroke();
+                
+
+        }
+
+        lineGraphCtx.closePath();
+
+         
+            lineGraphCtx.beginPath();
+            lineGraphCtx.lineWidth = 0.5;
+            lineGraphCtx.strokeStyle = this.Color;
+            lineGraphCtx.moveTo((pointSpaceF * (this.linkStartNode.alleleData[i].length)), (400 - ((this.linkStartNode.alleleData[i][this.linkStartNode.alleleData[i].length-1][1] * 400)))); //zeroY
+                for (var k = 0; k < this.alleleData[i].length; k++) {
+                    lineGraphCtx.lineTo(pointSpaceF * (this.alleleData[i].length + (k+1)), 400 - (this.alleleData[i][k][1] * 400));
+                    lineGraphCtx.moveTo(pointSpaceF * (this.alleleData[i].length + (k+1)), 400 - (this.alleleData[i][k][1] * 400));
+
+                    lineGraphCtx.stroke();
+                    
+
+                }
+
+            lineGraphCtx.closePath();
+                   
+    }                
+
+   
+};
 
     
 
