@@ -142,24 +142,38 @@ $(document).ready(function() {
     }
 
     document.getElementById("unlink").onclick = function unlinkNodes(){
-        alert("hi");
         running = false;
         lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
         context.clearRect(0,0,canvas.width,canvas.height);
+        context.fillStyle = "#FFFFFF";
+        context.fillRect(0,0,canvas.width,canvas.height);
+        intializeLineGraph();
+        barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+        barGraphCtx.fillStyle = "#FDFEFE";
+        intializeBarGraph();
         for(var i = 0 ; i < allNodes.length; i++){
+            context.beginPath();
+            context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI, false);
+            context.closePath();
+
             context.fillStyle = allNodes[i].Color;
             context.beginPath();
-            context.arc(allNodes[i].posX, allNodes[i].posY, 20, 0, 2 * Math.PI, false);
+            context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 20, 0, 2 * Math.PI, false);
             context.closePath()
             context.fill();
 
             context.fillStyle = "black";
-            context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].posX - 3, allNodes[i].posY + 2);
+            context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].CoordX - 3, allNodes[i].CoordY + 2);
+            allNodes[i].linkStartNode = null;
+            for (var j = 0; j < allNodes[i].numRuns; j++) {
+                lineGraphCtx.strokeStyle = allNodes[i].Color;
+                plotPoints(allNodes[i].alleleData[j],allNodes[i].genNum);
+                        
+            }
         }
-            intializeLineGraph();
-            barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
-            barGraphCtx.fillStyle = "#FDFEFE";
-            intializeBarGraph();
+            
+
+            return false;
     }
 
 
@@ -180,6 +194,7 @@ $(document).ready(function() {
          start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
          end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
          notLinked = allNodes.filter(linkCheck);
+         alert(notLinked.length);
         for (var i=0; i < allNodes.length;i++){
             if (allNodes[i].genNum > largestGen) {
                  largestGen = allNodes[i].genNum;
