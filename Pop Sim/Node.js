@@ -1,5 +1,6 @@
 var lineGraph = document.getElementById("lineGraph");
 var lineGraphCtx = lineGraph.getContext("2d");
+var startX = 0;
 
 function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,isConfirm,linkStartNode){
         this.isSelected = selected;
@@ -134,7 +135,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
         lineGraphCtx.strokeStyle = this.linkStartNode.Color;
-        lineGraphCtx.moveTo(0, (400 - (this.linkStartNode.alleleData[i][0][1] * 400))); //zeroY
+        lineGraphCtx.moveTo(startX, (400 - (this.linkStartNode.alleleData[i][0][1] * 400))); //zeroY
         for (var j = 0; j < this.linkStartNode.alleleData[i].length; j++) {
             lineGraphCtx.lineTo(pointSpaceInit * (j + 1), 400 - (this.linkStartNode.alleleData[i][j][1] * 400));
             lineGraphCtx.moveTo(pointSpaceInit * (j + 1), 400 - (this.linkStartNode.alleleData[i][j][1] * 400));
@@ -143,6 +144,8 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
                 
 
         }
+
+        startX+= (pointSpaceF * (this.linkStartNode.alleleData[i].length));
 
         lineGraphCtx.closePath();
 
