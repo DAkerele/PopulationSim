@@ -74,7 +74,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,0);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -135,6 +135,13 @@ $(document).ready(function() {
         context.stroke();
         context.closePath();
         allNodes[end].linkStartNode = allNodes[start];
+        /*var temp = this.linkStartNode;
+        var linkLen = 1;
+
+       while(temp != null){//get link string length
+        temp = temp.linkStartNode;
+        linkLen++;
+       }*/
 
 
 
@@ -242,24 +249,24 @@ $(document).ready(function() {
 
 
     function linkCheck(node) {
-        var links = allNodes.filter(startNodeCheck);
-        if (links.length != 0) {
-            for (var i = 0; i < links.length; i++) {
-                if(node.NodeNum == links[i].linkStartNode.NodeNum && node.linkStartNode != null){
-                    return false;
-                }
+        var links = allNodes.filter(startNodeCheck);//all nodes with a starting link
+        for (var i = 0; i < links.length; i++) {
+            if (links.length == 0) {
+                return true;
+            } 
+            else if(node.NodeNum == links[i].linkStartNode.NodeNum && node.linkStartNode != null){
+                return false;
             }
-        } 
-        else if (links.length == 0) {
-            return true;
-        } 
-        else {
-            return true;;
         }
-    }
 
-    function startNodeCheck(node) {
-        return node.linkStartNode != null;
+        return true;
+    } 
+       
+        
+    
+
+    function startNodeCheck(item) {
+        return item.linkStartNode != null;
     }
 
     document.getElementById("restart").onclick = function resetVals() { //resets data
