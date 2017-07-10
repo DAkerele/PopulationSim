@@ -74,7 +74,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,0);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,null,[]);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -135,6 +135,7 @@ $(document).ready(function() {
         context.stroke();
         context.closePath();
         allNodes[end].linkStartNode = allNodes[start];
+        allNodes[start].linkEndNode = allNodes[end];
         /*var temp = this.linkStartNode;
         var linkLen = 1;
 
@@ -197,10 +198,11 @@ $(document).ready(function() {
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
-        
+        createStrings();
         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
         notLinked = allNodes.filter(linkCheck);
+        
         for (var i = 0; i < allNodes.length; i++) {
             if (allNodes[i].genNum > largestGen) {
                 largestGen = allNodes[i].genNum;
@@ -215,28 +217,24 @@ $(document).ready(function() {
             }
         }
         if (allConfirmed >= allNodes.length) {
-            for (var j = 0; j < notLinked.length; j++) {
+            for (var j = 0; j < allNodes.length; j++) {
                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                for (var k = 0; k < notLinked[j].numRuns; k++) {
-                    notLinked[j].runSim();
-                    lineGraphCtx.strokeStyle = notLinked[j].Color;
-                    plotPoints(notLinked[j].alleleData[k], notLinked[j].genNum);
-                }
-            }
-            for (var l = 0; l < allNodes.length; l++) {
-                for (var m = 0; m < allNodes[l].numRuns; m++) {
-
-                    if (allNodes[l] != notLinked[l]) {
-                        if (allNodes[l].linkStartNode != null) {
-                            $("#nodeSelect").append("<option value=" + allNodes[l].NodeNum + ">Node" + allNodes[l].NodeNum + "</option>");
-                            allNodes[l].linkTo();
-
-                        }
-
+                for (var k = 0; k < allNodes[j].numRuns; k++) {
+                    if(allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null){
+                        allNodes[j].runSim();
+                        lineGraphCtx.strokeStyle = allNodes[j].Color;
+                        plotPoints(allNodes[j].alleleData[k], allNodes[j].genNum);
                     }
+                    else if(allNodes[j].linkString.length > 0 || allNodes[j].linkStartNode != null){
+                        $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                        allNodes[j].linkTo();
 
+                        
+                    }
+                    
                 }
             }
+           
 
         }
         confirmVal = false;
@@ -249,25 +247,41 @@ $(document).ready(function() {
 
 
     function linkCheck(node) {
-        var links = allNodes.filter(startNodeCheck);//all nodes with a starting link
-        for (var i = 0; i < links.length; i++) {
-            if (links.length == 0) {
-                return true;
-            } 
-            else if(node.NodeNum == links[i].linkStartNode.NodeNum && node.linkStartNode != null){
-                return false;
+
+        var links = [];
+        for (var i = 0; i < allNodes.length; i++) {
+            if(allNodes[i].linkStartNode != null){
+                links.push(allNodes[i].linkStartNode);
             }
         }
-
-        return true;
+          if (links.length == 0) {
+                return true;
+            } 
+        
+            else if(links.indexOf(node) != -1 && node.linkStartNode != null){//isLinked
+                return false;
+            }
+            else if(links.indexOf(node) == -1 && node.linkStartNode == null){//not Linked
+                return true;
+            }
+            
     } 
+
+    function createStrings(){
+        for(var x = 0;x < allNodes.length;x++){
+            var z = 0;
+            var temp = allNodes[x].linkEndNode;
+            while(temp != null){
+                allNodes[x].linkString.push(temp);
+                temp = allNodes[x].linkString[z].linkEndNode;
+                z++;
+            }
+        }
+        
+    }
        
         
     
-
-    function startNodeCheck(item) {
-        return item.linkStartNode != null;
-    }
 
     document.getElementById("restart").onclick = function resetVals() { //resets data
         if (confirm("Are you sure you want to restart the simulation?")) {
