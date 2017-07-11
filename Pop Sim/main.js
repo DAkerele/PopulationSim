@@ -74,7 +74,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,null,[]);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,[],[]);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -135,7 +135,7 @@ $(document).ready(function() {
         context.stroke();
         context.closePath();
         allNodes[end].linkStartNode = allNodes[start];
-        allNodes[start].linkEndNode = allNodes[end];
+        allNodes[start].linkEndNodes.push(allNodes[end]);
         /*var temp = this.linkStartNode;
         var linkLen = 1;
 
@@ -186,7 +186,8 @@ $(document).ready(function() {
 
 
 
-    document.getElementById("enterVals").onclick = function enterValues() { //sets values for each node
+    document.getElementById("enterVals").onclick = function enterValues() {
+     //sets values for each node
         if (!running) {
             setSelectedNodeInfo(currentSelectedNode);
             currentSelectedNode.isConfirm = true;
@@ -220,14 +221,15 @@ $(document).ready(function() {
             for (var j = 0; j < allNodes.length; j++) {
                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                 for (var k = 0; k < allNodes[j].numRuns; k++) {
-                    if(allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null){
+                    if(allNodes[j].linkString.length == 1 && allNodes[j].linkStartNode == null){
                         allNodes[j].runSim();
                         lineGraphCtx.strokeStyle = allNodes[j].Color;
                         plotPoints(allNodes[j].alleleData[k], allNodes[j].genNum);
                     }
-                    else if(allNodes[j].linkString.length > 0 || allNodes[j].linkStartNode != null){
+                    else if(allNodes[j].linkString.length > 1 || allNodes[j].linkStartNode != null){
                         $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                         allNodes[j].linkTo();
+                        
 
                         
                     }
@@ -246,7 +248,7 @@ $(document).ready(function() {
     }
 
 
-    function linkCheck(node) {
+    function linkCheck(node) {//filters notLinked nodes from allNodes array
 
         var links = [];
         for (var i = 0; i < allNodes.length; i++) {
@@ -267,15 +269,23 @@ $(document).ready(function() {
             
     } 
 
-    function createStrings(){
+    function createStrings(){//creates node linkStrings
+
         for(var x = 0;x < allNodes.length;x++){
+            allNodes[x].linkString.push(allNodes[x]);
             var z = 0;
-            var temp = allNodes[x].linkEndNode;
-            while(temp != null){
-                allNodes[x].linkString.push(temp);
-                temp = allNodes[x].linkString[z].linkEndNode;
+            var temp = allNodes[x].linkEndNodes;
+            while(z < allNodes[x].linkString.length){
+                for (var y = 1; y < allNodes[x].linkEndNodes.length; y++) {
+                     allNodes[x].linkString.push(temp[y]);
+                     alert(allNodes[0].linkString.length);
+                }
+                
                 z++;
+                temp = allNodes[x].linkString[z].linkEndNodes;
+                
             }
+
         }
         
     }
