@@ -141,11 +141,11 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         if(notPrint.indexOf(this) == 0){
             for (var l = 0; l < this.linkString.length; l++) {
 
-                startX = 0;
+                //startX = 0;
                 for(var m = 0; m < this.linkString[l].numRuns;m++){// # runs must be same to link
                     startX = 0;
                     if(l > 0){
-                        this.linkString[l].startPer = this.linkString[l-1].alleleData[m][this.linkString[l-1].alleleData[m].length-1][1];
+                        this.linkString[l].startPer = this.linkString[l].linkStartNode.alleleData[m][this.linkString[l].linkStartNode.alleleData[m].length-1][1];
                     }
                     
                     this.linkString[l].runSim();
@@ -173,27 +173,9 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
                     lineGraphCtx.closePath();
             }       
 
-                 
-                    /*lineGraphCtx.beginPath();
-                    lineGraphCtx.lineWidth = 0.5;
-                    lineGraphCtx.strokeStyle = this.Color;
-                    lineGraphCtx.moveTo(startX+(pointSpaceInit * (this.linkStartNode.alleleData[i].length)), (400 - ((this.linkStartNode.alleleData[i][this.linkStartNode.alleleData[i].length-1][1] * 400)))); //zeroY
-                        for (var k = 0; k < this.alleleData[i].length; k++) {
-                            lineGraphCtx.lineTo(startX+(pointSpaceInit * (this.linkStartNode.alleleData[i].length + (k+1))), 400 - (this.alleleData[i][k][1] * 400));
-                            lineGraphCtx.moveTo(startX+(pointSpaceInit * (this.linkStartNode.alleleData[i].length + (k+1))), 400 - (this.alleleData[i][k][1] * 400));
+        } 
 
-
-                            lineGraphCtx.stroke();
-                            
-
-                        }
-                    
-
-                    lineGraphCtx.closePath();
-                    */
-
-    } 
-};
+    };
 
 
     
