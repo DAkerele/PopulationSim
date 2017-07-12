@@ -229,6 +229,7 @@ $(document).ready(function() {
                     else if(allNodes[j].linkString.length > 1 || allNodes[j].linkStartNode != null){
                         $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                         allNodes[j].linkTo();
+
                         
 
                         
@@ -272,23 +273,64 @@ $(document).ready(function() {
     function createStrings(){//creates node linkStrings
 
         for(var x = 0;x < allNodes.length;x++){
-            allNodes[x].linkString.push(allNodes[x]);
-            var z = 0;
-            var temp = allNodes[x].linkEndNodes;
-            while(z < allNodes[x].linkString.length){
-                for (var y = 1; y < allNodes[x].linkEndNodes.length; y++) {
-                     allNodes[x].linkString.push(temp[y]);
-                     alert(allNodes[0].linkString.length);
-                }
-                
-                z++;
-                temp = allNodes[x].linkString[z].linkEndNodes;
-                
-            }
+            if(allNodes[x].linkEndNodes.length > 0){
+                allNodes[x].linkString.push(allNodes[x]);
+                var z = 0;
+                var u = 0;
+                var temp = allNodes[x].linkEndNodes;
+                do{
+                    for (var y = 0; y < temp.length; y++) {
+                        allNodes[x].linkString.push(temp[y]);
+                        
+                    }
+                    
+                    z++;
+                    temp = allNodes[x].linkString[z].linkEndNodes;
 
-        }
+                }while(z < allNodes[x].linkString.length-1);
+                
+                   
+                
+                    
+            }
+        }      
+        
         
     }
+
+    /* function createStrings(){//creates node linkStrings//WORK IN PROGRESS
+
+        for(var x = 0;x < allNodes.length;x++){
+            if(allNodes[x].linkEndNodes.length > 0){
+                var z = 0;
+                var temp = allNodes[x];
+                do{
+                    if(z == 0){
+                        allNodes[x].linkString.push(temp);
+                    }else if(z>0){
+
+                        for (var y = 0; y < temp.length; y++) {
+                            allNodes[x].linkString.push(temp[y]);
+                        
+                        }
+                        
+                    }
+                    
+                   
+
+                        temp = allNodes[x].linkString[z].linkEndNodes;
+                        z++;
+
+                }while(z < allNodes[x].linkString.length);
+                
+                   console.log(allNodes[0].linkString.length);
+                
+                    
+            }
+        }      
+        
+        
+    }*/
        
         
     
