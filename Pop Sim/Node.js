@@ -4,7 +4,7 @@ var startX = 0;
 var notPrint = [];
 var pointSpaceInit,addedSpace,startX;
 
-function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,isConfirm,linkStartNode,linkEndNodes,linkString){
+function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,isConfirm,linkStartNode,endNodes,linkString){
         this.isSelected = selected;
         this.CoordX = posX;
         this.CoordY = posY;
@@ -20,7 +20,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         this.alleleData = alleleData;
         this.isConfirm = isConfirm;
         this.linkStartNode = linkStartNode;
-        this.linkEndNodes = linkEndNodes;
+        this.endNodes = endNodes;
         this.linkString = linkString;
 
         
@@ -127,7 +127,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
     }
 
 
-    Node.prototype.linkTo = function() {
+    Node.prototype.link = function() {
         
         pointSpaceInit =((lineGraph.width)/300);//point Spacing for start node
          var temp = 0;
