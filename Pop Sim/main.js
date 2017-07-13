@@ -30,6 +30,7 @@ $(document).ready(function() {
     var linkedNodes = [];
     var notLinked = [];
     var linkLen = 0;
+    var x = 0;
 
     context.fillStyle = "#FDFEFE";
     lineGraphCtx.fillStyle = "#FDFEFE";
@@ -135,7 +136,7 @@ $(document).ready(function() {
         context.stroke();
         context.closePath();
         allNodes[end].linkStartNode = allNodes[start];
-        allNodes[start].linkEndNodes.push(allNodes[end]);
+        allNodes[start].endNodes.push(allNodes[end]);
         /*var temp = this.linkStartNode;
         var linkLen = 1;
 
@@ -221,14 +222,14 @@ $(document).ready(function() {
             for (var j = 0; j < allNodes.length; j++) {
                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                 for (var k = 0; k < allNodes[j].numRuns; k++) {
-                    if(allNodes[j].linkString.length == 1 && allNodes[j].linkStartNode == null){
+                    if(allNodes[j].linkString.length == 1 && allNodes[j].linkStartNode == null){//plots unlinked nodes
                         allNodes[j].runSim();
                         lineGraphCtx.strokeStyle = allNodes[j].Color;
                         plotPoints(allNodes[j].alleleData[k], allNodes[j].genNum);
                     }
-                    else if(allNodes[j].linkString.length > 1 || allNodes[j].linkStartNode != null){
+                    else if(allNodes[j].linkString.length > 1 || allNodes[j].linkStartNode != null){//plots linked nodes
                         $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                        allNodes[j].linkTo();
+                        allNodes[j].link();
 
                         
 
@@ -270,67 +271,36 @@ $(document).ready(function() {
             
     } 
 
-    function createStrings(){//creates node linkStrings
-
-        for(var x = 0;x < allNodes.length;x++){
-            if(allNodes[x].linkEndNodes.length > 0){
-                allNodes[x].linkString.push(allNodes[x]);
-                var z = 0;
-                var u = 0;
-                var temp = allNodes[x].linkEndNodes;
-                do{
+    function createStrings(z=0){//creates node linkStrings
+        var temp = 0;
+        
+        while(x < allNodes.length){
+            if(allNodes[x].endNodes.length > 0){
+                if(z == 0){
+                    allNodes[x].linkString.push(allNodes[x]);//appends intial node to linkString
+                }
+                
+                
+                if(z <= allNodes[x].linkString.length-1){
+                     temp = allNodes[x].linkString[z].endNodes;
                     for (var y = 0; y < temp.length; y++) {
-                        allNodes[x].linkString.push(temp[y]);
+                        allNodes[x].linkString.push(temp[y]); // appends endNodes of current endNode in linkString
                         
                     }
                     
-                    z++;
-                    temp = allNodes[x].linkString[z].linkEndNodes;
+                    return createStrings(z+1);
 
-                }while(z < allNodes[x].linkString.length-1);
+                }
                 
-                   
+                z=0;
                 
                     
             }
+            x++;
         }      
         
         
     }
-
-    /* function createStrings(){//creates node linkStrings//WORK IN PROGRESS
-
-        for(var x = 0;x < allNodes.length;x++){
-            if(allNodes[x].linkEndNodes.length > 0){
-                var z = 0;
-                var temp = allNodes[x];
-                do{
-                    if(z == 0){
-                        allNodes[x].linkString.push(temp);
-                    }else if(z>0){
-
-                        for (var y = 0; y < temp.length; y++) {
-                            allNodes[x].linkString.push(temp[y]);
-                        
-                        }
-                        
-                    }
-                    
-                   
-
-                        temp = allNodes[x].linkString[z].linkEndNodes;
-                        z++;
-
-                }while(z < allNodes[x].linkString.length);
-                
-                   console.log(allNodes[0].linkString.length);
-                
-                    
-            }
-        }      
-        
-        
-    }*/
        
         
     
