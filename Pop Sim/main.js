@@ -75,7 +75,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,[],[]);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,[],[],0);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -206,10 +206,22 @@ $(document).ready(function() {
         notLinked = allNodes.filter(linkCheck);
         
         for (var i = 0; i < allNodes.length; i++) {
+             for (var p = 0; p < allNodes[i].linkString.length; p++) {
+                allNodes[i].stringSum+=allNodes[i].linkString[p].genNum; 
+            }
+
             if (allNodes[i].genNum > largestGen) {
                 largestGen = allNodes[i].genNum;
             }
         }
+
+        for (var i = 0; i < allNodes.length; i++) {
+            if(allNodes[i].stringSum > largestGen){
+                largestGen = allNodes[i].stringSum;
+            }
+           
+        }
+
 
         for (var p = 0; p < allNodes.length; p++) {
             if (!allNodes[p].isConfirm) {
@@ -222,14 +234,14 @@ $(document).ready(function() {
             for (var j = 0; j < allNodes.length; j++) {
                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                 for (var k = 0; k < allNodes[j].numRuns; k++) {
-                    if(allNodes[j].linkString.length == 1 && allNodes[j].linkStartNode == null){//plots unlinked nodes
+                    if(allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null){//plots unlinked nodes
                         allNodes[j].runSim();
                         lineGraphCtx.strokeStyle = allNodes[j].Color;
                         plotPoints(allNodes[j].alleleData[k], allNodes[j].genNum);
                     }
-                    else if(allNodes[j].linkString.length > 1 || allNodes[j].linkStartNode != null){//plots linked nodes
+                    else if(allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null){//plots linked nodes
                         $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                        allNodes[j].link();
+                        allNodes[j].link(largestGen);
 
                         
 
