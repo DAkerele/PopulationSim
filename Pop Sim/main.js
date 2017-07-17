@@ -215,12 +215,7 @@ $(document).ready(function() {
             }
         }
 
-        for (var i = 0; i < allNodes.length; i++) {
-            if(allNodes[i].stringSum > largestGen){
-                largestGen = allNodes[i].stringSum;
-            }
-           
-        }
+        
 
 
         for (var p = 0; p < allNodes.length; p++) {
@@ -232,16 +227,18 @@ $(document).ready(function() {
         }
         if (allConfirmed >= allNodes.length) {
             for (var j = 0; j < allNodes.length; j++) {
-                $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                 for (var k = 0; k < allNodes[j].numRuns; k++) {
                     if(allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null){//plots unlinked nodes
+
                         allNodes[j].runSim();
                         lineGraphCtx.strokeStyle = allNodes[j].Color;
                         plotPoints(allNodes[j].alleleData[k], allNodes[j].genNum);
                     }
                     else if(allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null){//plots linked nodes
-                        $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                         allNodes[j].link(largestGen);
+                        console.log("stringSum"+allNodes[j].stringSum);
+                        console.log("largestGen:"+largestGen);
 
                         
 
@@ -313,6 +310,22 @@ $(document).ready(function() {
         
         
     }
+
+    /*function findLongestLink(){
+        var i = 0;
+        var pathSum;
+        
+        var largest = 0;
+        for (var j = 0; j < allNodes.length; j++) {
+            var temp = allNodes[j].endNodes[i];
+            while(i < allNodes[j].endNodes){
+            pathSum += temp.genNum
+            temp = temp.endNodes
+
+                
+        };
+        
+    }*/
        
         
     
