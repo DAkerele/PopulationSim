@@ -131,7 +131,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
     Node.prototype.link = function(scale=100) {
        
         var temp = 0;
-        pointSpace =((this.stringSum/scale)*(lineGraph.width)/scale);//point Spacing for start node
+        pointSpace =((lineGraph.width)/scale);//point Spacing for start node
             for (var l = 0; l < this.linkString.length; l++) {
                 startX = 0;
                 for(var m = 0; m < this.linkString[l].numRuns;m++){// # runs must be same to link
