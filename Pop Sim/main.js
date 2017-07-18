@@ -24,7 +24,6 @@ $(document).ready(function() {
     var nodesListed = [10];
     var genCap = 0;
     var running;
-    var largestGen = 0;
     var start, end;
     var allConfirmed = 0;
     var linkedNodes = [];
@@ -205,19 +204,6 @@ $(document).ready(function() {
         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
         notLinked = allNodes.filter(linkCheck);
         
-        for (var i = 0; i < allNodes.length; i++) {
-             for (var p = 0; p < allNodes[i].linkString.length; p++) {
-                allNodes[i].stringSum+=allNodes[i].linkString[p].genNum; 
-            }
-
-            if (allNodes[i].genNum > largestGen) {
-                largestGen = allNodes[i].genNum;
-            }
-        }
-
-        
-
-
         for (var p = 0; p < allNodes.length; p++) {
             if (!allNodes[p].isConfirm) {
                 alert("Please confirm values for node:" + allNodes[p].NodeNum + " before running simulation.");
@@ -236,13 +222,8 @@ $(document).ready(function() {
                         plotPoints(allNodes[j].alleleData[k], allNodes[j].genNum);
                     }
                     else if(allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null){//plots linked nodes
-                        allNodes[j].link(largestGen);
-                        console.log("stringSum"+allNodes[j].stringSum);
-                        console.log("largestGen:"+largestGen);
+                        allNodes[j].link(400);
 
-                        
-
-                        
                     }
                     
                 }
@@ -252,7 +233,7 @@ $(document).ready(function() {
         }
         confirmVal = false;
         running = true;
-        document.getElementById("endGen").innerHTML = largestGen;
+        document.getElementById("endGen").innerHTML = 400;
         return false;
 
 
@@ -311,21 +292,44 @@ $(document).ready(function() {
         
     }
 
-    /*function findLongestLink(){
+    function findLongestLink(){//finds biggest sum of generations from linked and unlinked nodes for graph scaling
+        //TRACE BACKWARDS INSTEAD OF FORWARDS
         var i = 0;
-        var pathSum;
-        
-        var largest = 0;
-        for (var j = 0; j < allNodes.length; j++) {
-            var temp = allNodes[j].endNodes[i];
-            while(i < allNodes[j].endNodes){
-            pathSum += temp.genNum
-            temp = temp.endNodes
-
+        var largestGen = 0;
+        var pathSum = 0;
+       
+        for (var k = allNodes.length - 1; k >= 0; k--) {
+            
+            var temp = allNodes[k];
                 
-        };
+
+                if(temp.endNodes.length == 0 && temp.linkStartNode == null){//if node is not linked
+                    pathSum+=temp.genNum;
+                    
+
+                }else{
+
+                    while(temp != null){//if node is linked
+                        pathSum += temp.genNum;
+                        temp = temp.linkStartNode;//set to endNode of previous node
+
+                            
+                    }
+                
+                
+                }
+
+               if(pathSum > largestGen){
+                    largestGen = pathSum;
+                }
+
+                pathSum = 0;
+                   
+        }
+            
         
-    }*/
+        return largestGen;    
+    }
        
         
     
@@ -551,7 +555,7 @@ $(document).ready(function() {
 
     function plotPoints(array = genArray, gens = 100, endData = 0) {
 
-        var pointSpace = (((gens / largestGen) * (lineGraph.width) / gens));
+        var pointSpace = (((gens / 400) * (lineGraph.width) / gens));
 
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
@@ -566,7 +570,7 @@ $(document).ready(function() {
 
         }
 
-        if (gens != largestGen) {
+        if (gens != 400) {
             lineGraphCtx.beginPath();
             lineGraphCtx.strokeStyle = "#1A1717";
             lineGraphCtx.moveTo((pointSpace * gens), lineGraph.height);
