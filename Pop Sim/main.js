@@ -74,7 +74,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null,[],[],0);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null, [], []);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -128,21 +128,21 @@ $(document).ready(function() {
     document.getElementById("link").onclick = function linkNodes() {
         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+
+        if (allNodes[end].linkStartNode == null) {
+            allNodes[end].linkStartNode = allNodes[start];
+        } else if (allNodes[end].linkStartNode != null) {
+            return false;
+        }
+        allNodes[start].endNodes.push(allNodes[end]);
+
         context.beginPath();
         context.lineWidth = 0.5;
         context.moveTo(allNodes[start].CoordX, allNodes[start].CoordY);
         context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
         context.stroke();
         context.closePath();
-        allNodes[end].linkStartNode = allNodes[start];
-        allNodes[start].endNodes.push(allNodes[end]);
-        /*var temp = this.linkStartNode;
-        var linkLen = 1;
 
-       while(temp != null){//get link string length
-        temp = temp.linkStartNode;
-        linkLen++;
-       }*/
 
 
 
@@ -175,7 +175,7 @@ $(document).ready(function() {
             allNodes[i].linkStartNode = null;
             for (var j = 0; j < allNodes[i].numRuns; j++) {
                 lineGraphCtx.strokeStyle = allNodes[i].Color;
-                plotPoints(allNodes[i].alleleData[j], allNodes[i].genNum);
+                plotPoints(allNodes[i].alleleData[j]);
 
             }
         }
@@ -187,7 +187,7 @@ $(document).ready(function() {
 
 
     document.getElementById("enterVals").onclick = function enterValues() {
-     //sets values for each node
+        //sets values for each node
         if (!running) {
             setSelectedNodeInfo(currentSelectedNode);
             currentSelectedNode.isConfirm = true;
@@ -203,136 +203,144 @@ $(document).ready(function() {
         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
         notLinked = allNodes.filter(linkCheck);
-        
+        if (runsCheck().length > 0) {
+            alert(" Please be sure nodes in the same link share an identical amount of runs");
+            alert("The following nodes' runs do not match the rest of link:" + runsCheck().toString());
+            return false;
+        }
+
         for (var p = 0; p < allNodes.length; p++) {
             if (!allNodes[p].isConfirm) {
                 alert("Please confirm values for node:" + allNodes[p].NodeNum + " before running simulation.");
                 p = 0;
                 return false;
             }
+
         }
-        if (allConfirmed >= allNodes.length) {
+        if (allConfirmed >= allNodes.length && runsCheck().length == 0) {
             for (var j = 0; j < allNodes.length; j++) {
-                 $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                 for (var k = 0; k < allNodes[j].numRuns; k++) {
-                    if(allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null){//plots unlinked nodes
+                    if (allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null) { //plots unlinked nodes
 
                         allNodes[j].runSim();
                         lineGraphCtx.strokeStyle = allNodes[j].Color;
-                        plotPoints(allNodes[j].alleleData[k], allNodes[j].genNum);
-                    }
-                    else if(allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null){//plots linked nodes
-                        allNodes[j].link(400);
+                        plotPoints(allNodes[j].alleleData[k]);
+                    } else if (allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null) { //plots linked nodes
+                        allNodes[j].link(findLongestLink());
 
                     }
-                    
+
                 }
             }
-           
+
 
         }
         confirmVal = false;
         running = true;
-        document.getElementById("endGen").innerHTML = 400;
+        document.getElementById("endGen").innerHTML = findLongestLink();
         return false;
 
 
     }
 
 
-    function linkCheck(node) {//filters notLinked nodes from allNodes array
+    function linkCheck(node) { //filters notLinked nodes from allNodes array
 
         var links = [];
         for (var i = 0; i < allNodes.length; i++) {
-            if(allNodes[i].linkStartNode != null){
+            if (allNodes[i].linkStartNode != null) {
                 links.push(allNodes[i].linkStartNode);
             }
         }
-          if (links.length == 0) {
-                return true;
-            } 
-        
-            else if(links.indexOf(node) != -1 && node.linkStartNode != null){//isLinked
-                return false;
-            }
-            else if(links.indexOf(node) == -1 && node.linkStartNode == null){//not Linked
-                return true;
-            }
-            
-    } 
+        if (links.length == 0) {
+            return true;
+        } else if (links.indexOf(node) != -1 && node.linkStartNode != null) { //isLinked
+            return false;
+        } else if (links.indexOf(node) == -1 && node.linkStartNode == null) { //not Linked
+            return true;
+        }
 
-    function createStrings(z=0){//creates node linkStrings
-        var temp = 0;
-        
-        while(x < allNodes.length){
-            if(allNodes[x].endNodes.length > 0){
-                if(z == 0){
-                    allNodes[x].linkString.push(allNodes[x]);//appends intial node to linkString
-                }
-                
-                
-                if(z <= allNodes[x].linkString.length-1){
-                     temp = allNodes[x].linkString[z].endNodes;
-                    for (var y = 0; y < temp.length; y++) {
-                        allNodes[x].linkString.push(temp[y]); // appends endNodes of current endNode in linkString
-                        
-                    }
-                    
-                    return createStrings(z+1);
-
-                }
-                
-                z=0;
-                
-                    
-            }
-            x++;
-        }      
-        
-        
     }
 
-    function findLongestLink(){//finds biggest sum of generations from linked and unlinked nodes for graph scaling
-        //TRACE BACKWARDS INSTEAD OF FORWARDS
+    function createStrings(z = 0) { //creates node linkStrings
+        var temp = 0;
+        while (x < allNodes.length) {
+            if (allNodes[x].endNodes.length > 0) {
+                if (z == 0) {
+                    allNodes[x].linkString.push(allNodes[x]); //appends intial node to linkString
+                }
+
+
+                if (z <= allNodes[x].linkString.length - 1) {
+                    temp = allNodes[x].linkString[z].endNodes;
+                    for (var y = 0; y < temp.length; y++) {
+                        allNodes[x].linkString.push(temp[y]); // appends endNodes of current endNode in linkString
+
+                    }
+
+                    return createStrings(z + 1);
+
+                }
+
+                z = 0;
+
+
+            }
+            x++;
+        }
+
+
+    }
+
+    function findLongestLink() { //finds biggest sum of generations from linked and unlinked nodes for graph scaling
         var i = 0;
         var largestGen = 0;
         var pathSum = 0;
-       
-        for (var k = allNodes.length - 1; k >= 0; k--) {
-            
+
+        for (var k = allNodes.length - 1; k > 0; k--) {
+
             var temp = allNodes[k];
-                
 
-                if(temp.endNodes.length == 0 && temp.linkStartNode == null){//if node is not linked
-                    pathSum+=temp.genNum;
-                    
 
-                }else{
-
-                    while(temp != null){//if node is linked
-                        pathSum += temp.genNum;
-                        temp = temp.linkStartNode;//set to endNode of previous node
-
-                            
-                    }
-                
-                
+            if (temp.endNodes.length == 0 && temp.linkStartNode == null) { //if node is not linked
+                pathSum += temp.genNum;
+            } else if (temp.endNodes.length == 0) {
+                while (temp != null) {
+                    pathSum += temp.genNum
+                    temp = temp.linkStartNode;
                 }
+            }
 
-               if(pathSum > largestGen){
-                    largestGen = pathSum;
-                }
+            if (pathSum > largestGen) {
+                largestGen = pathSum;
+            }
 
-                pathSum = 0;
-                   
+            pathSum = 0;
+
         }
-            
-        
-        return largestGen;    
+
+
+        return largestGen;
     }
-       
-        
-    
+
+    function runsCheck() {
+        var invalids = [];
+        for (var i = 0; i < allNodes.length; i++) {
+
+            if (allNodes[i].endNodes.length != 0 && allNodes[i].linkStartNode == null) {
+                for (var j = 1; j < allNodes[i].linkString.length; j++) {
+                    if (allNodes[i].linkString[j].numRuns != allNodes[i].numRuns) {
+                        invalids.push(allNodes[i].linkString[j].NodeNum);
+                    }
+                };
+            }
+        };
+        return invalids;
+    }
+
+
+
 
     document.getElementById("restart").onclick = function resetVals() { //resets data
         if (confirm("Are you sure you want to restart the simulation?")) {
@@ -553,9 +561,9 @@ $(document).ready(function() {
     }
 
 
-    function plotPoints(array = genArray, gens = 100, endData = 0) {
+    function plotPoints(array = genArray) {
 
-        var pointSpace = (((gens / 400) * (lineGraph.width) / gens));
+        var pointSpace = ((((array.length-1) / findLongestLink()) * (lineGraph.width) / (array.length-1)));
 
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
@@ -570,14 +578,14 @@ $(document).ready(function() {
 
         }
 
-        if (gens != 400) {
+        if ((array.length-1) != findLongestLink()) {
             lineGraphCtx.beginPath();
             lineGraphCtx.strokeStyle = "#1A1717";
-            lineGraphCtx.moveTo((pointSpace * gens), lineGraph.height);
-            lineGraphCtx.lineTo((pointSpace * gens), 0);
+            lineGraphCtx.moveTo((pointSpace * (array.length-1)), lineGraph.height);
+            lineGraphCtx.lineTo((pointSpace * (array.length-1)), 0);
             lineGraphCtx.font = "30px Arial";
             lineGraphCtx.fillStyle = "black";
-            lineGraphCtx.fillText("" + gens, (pointSpace * gens), 200);
+            lineGraphCtx.fillText("" + (array.length-1), (pointSpace * (array.length-1)), 200);
             lineGraphCtx.stroke();
             lineGraphCtx.closePath();
         }
