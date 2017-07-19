@@ -4,7 +4,7 @@ var startX = 0;
 var notPrint = [];
 var pointSpace,addedSpace,startX;
 
-function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,isConfirm,linkStartNode,endNodes,linkString,stringSum){
+function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,isConfirm,linkStartNode,endNodes,linkString){
         this.isSelected = selected;
         this.CoordX = posX;
         this.CoordY = posY;
@@ -22,7 +22,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         this.linkStartNode = linkStartNode;
         this.endNodes = endNodes;
         this.linkString = linkString;
-        this.stringSum = stringSum;
+        
 
         
 
