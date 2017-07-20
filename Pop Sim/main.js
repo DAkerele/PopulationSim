@@ -5,7 +5,7 @@ $(document).ready(function() {
     var allNodes = [];
     var selectedNode;
     var currentSelectedNode = {};
-    var nodeColors = ["#c82124", "#82FA58", "#FE2E2E", "#61210B", "#FE2EF7", "#9A2EFE", "#58FAF4", "#F4FA58", "#FF8000", "#585858"]
+    var nodeColors = ["#c82124", "#82FA58", "#0032FF", "#FFBFC6", "#FE2EF7", "#9A2EFE", "#58FAF4", "#F4FA58", "#FF8000", "#585858"]
     var NodeCount = 0; // number of nodes allowed on canvas
     var canvas = document.getElementById("canvas");
     var lineGraph = document.getElementById("lineGraph");
@@ -30,6 +30,7 @@ $(document).ready(function() {
     var notLinked = [];
     var linkLen = 0;
     var x = 0;
+    
 
     context.fillStyle = "#FDFEFE";
     lineGraphCtx.fillStyle = "#FDFEFE";
@@ -128,59 +129,85 @@ $(document).ready(function() {
     document.getElementById("link").onclick = function linkNodes() {
         start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
         end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
-
-        if (allNodes[end].linkStartNode == null) {
-            allNodes[end].linkStartNode = allNodes[start];
-        } else if (allNodes[end].linkStartNode != null) {
+        var temp = allNodes[start].linkStartNode;
+                while (temp != null) {
+                     if(temp == allNodes[end]){
+                        return false;
+                     }
+                    temp = temp.linkStartNode;
+                }
+            
+           
+        if (allNodes[end].linkStartNode != null) {
             return false;
         }
-        allNodes[start].endNodes.push(allNodes[end]);
-
+         
+        else if (allNodes[end].linkStartNode == null) {
+            allNodes[end].linkStartNode = allNodes[start];
+            allNodes[start].endNodes.push(allNodes[end]);
+        } 
+        
         context.beginPath();
         context.lineWidth = 0.5;
+        context.strokeStyle = "#FF0000";
         context.moveTo(allNodes[start].CoordX, allNodes[start].CoordY);
         context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
         context.stroke();
         context.closePath();
 
+        context.beginPath();
+        context.fillStyle = allNodes[start].Color;
+        context.arc(allNodes[end].CoordX, allNodes[end].CoordY, 10, 0, 2 * Math.PI);
+        context.fill();
+        context.fillStyle = "black";
+        context.fillText(allNodes[end].NodeNum.toString(), allNodes[end].CoordX - 3, allNodes[end].CoordY + 3);
+        context.closePath();
 
 
 
         return false;
     }
 
-    document.getElementById("unlink").onclick = function unlinkNodes() {
-        running = false;
-        lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "#FFFFFF";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        intializeLineGraph();
-        barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
-        barGraphCtx.fillStyle = "#FDFEFE";
-        intializeBarGraph();
-        for (var i = 0; i < allNodes.length; i++) {
-            context.beginPath();
-            context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI, false);
-            context.closePath();
+    document.getElementById("unlink").onclick = function unlinkNodes() {//disassembles link groups into indiviual node
+      if(running){  
+            running = false;
+            lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = "#FFFFFF";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            intializeLineGraph();
+            barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+            barGraphCtx.fillStyle = "#FDFEFE";
+            intializeBarGraph();
+            for (var i = 0; i < allNodes.length; i++) {
+                context.beginPath();
+                context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI, false);
+                context.closePath();
 
-            context.fillStyle = allNodes[i].Color;
-            context.beginPath();
-            context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 20, 0, 2 * Math.PI, false);
-            context.closePath()
-            context.fill();
+                context.fillStyle = allNodes[i].Color;
+                context.beginPath();
+                context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 20, 0, 2 * Math.PI, false);
+                context.closePath()
+                context.fill();
 
-            context.fillStyle = "black";
-            context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].CoordX - 3, allNodes[i].CoordY + 2);
-            allNodes[i].linkStartNode = null;
-            for (var j = 0; j < allNodes[i].numRuns; j++) {
-                lineGraphCtx.strokeStyle = allNodes[i].Color;
-                plotPoints(allNodes[i].alleleData[j]);
-
+                context.fillStyle = "black";
+                context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].CoordX - 3, allNodes[i].CoordY + 2);
+                allNodes[i].linkStartNode = null;
+                allNodes[i].endNodes = [];
+                allNodes[i].linkString = [];
+               
             }
+
+            for (var k = 0; k < allNodes.length; k++) {
+             
+                for (var j = 0; j < allNodes[k].numRuns; j++) {
+                    lineGraphCtx.strokeStyle = allNodes[k].Color;
+                    plotPoints(allNodes[k].alleleData[j]);
+                }
+            }
+            document.getElementById("endGen").innerHTML = findLongestLink();
+            
         }
-
-
         return false;
     }
 
@@ -265,6 +292,7 @@ $(document).ready(function() {
 
     function createStrings(z = 0) { //creates node linkStrings
         var temp = 0;
+        
         while (x < allNodes.length) {
             if (allNodes[x].endNodes.length > 0) {
                 if (z == 0) {
@@ -326,7 +354,7 @@ $(document).ready(function() {
         return largestGen;
     }
 
-    function runsCheck() {
+    function runsCheck() {//checks if  # of runs within same link group are the same
         var invalids = [];
         for (var i = 0; i < allNodes.length; i++) {
 
@@ -356,6 +384,9 @@ $(document).ready(function() {
                 allNodes[i].minusminusS = 1.0;
                 allNodes[i].alleleData = [];
                 allNodes[i].isConfirm = false;
+                allNodes[i].linkStartNode = null;
+                allNodes[i].endNodes = [];
+                allNodes[i].linkString = [];
             }
 
             lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
@@ -448,16 +479,16 @@ $(document).ready(function() {
     }
 
     function setSelectedNodeInfo(node) { //Text fields value set to value for corresponding node
-        if (parseFloat($("#Starting").val()) > 1 || parseFloat($("#Starting").val()) < 0) {
-            alert("Please enter a valid starting percentage(0-1)");
+        if (parseFloat($("#Starting").val()) > 100 || parseFloat($("#Starting").val()) < 0) {
+            alert("Please enter a valid starting percentage(0-100)");
         } else if (parseInt($("#NumGenerations").val()) > 500 || parseInt($("#NumGenerations").val()) <= 0) {
             alert("Please enter a valid number of generations(1-500)");
-        } else if (parseFloat($("#PPSurvival").val()) > 1 || parseFloat($("#PPSurvival").val()) < 0) {
-            alert("Please enter a valid survival percentage(0-1)");
-        } else if (parseFloat($("#PMSurvival").val()) > 1 || parseFloat($("#PMSurvival").val()) < 0) {
-            alert("Please enter a valid survival percentage(0-1)");
-        } else if (parseFloat($("#MMSurvival").val()) > 1 || parseFloat($("#MMSurvival").val()) < 0) {
-            alert("Please enter a valid survival percentage(0-1)");
+        } else if (parseFloat($("#PPSurvival").val()) > 100 || parseFloat($("#PPSurvival").val()) < 0) {
+            alert("Please enter a valid survival percentage(0-100)");
+        } else if (parseFloat($("#PMSurvival").val()) > 100 || parseFloat($("#PMSurvival").val()) < 0) {
+            alert("Please enter a valid survival percentage(0-100)");
+        } else if (parseFloat($("#MMSurvival").val()) > 100 || parseFloat($("#MMSurvival").val()) < 0) {
+            alert("Please enter a valid survival percentage(0-100)");
         } else if (parseInt($("#NumRuns").val()) > 250 || parseInt($("#NumRuns").val()) <= 0) {
             alert("Please enter a valid number of runs(1-250)");
         } else if (parseInt($("#StartingPop").val()) < 0) {
@@ -466,12 +497,12 @@ $(document).ready(function() {
 
 
             node.numRuns = parseInt($("#NumRuns").val());
-            node.startPer = parseFloat($("#Starting").val());
+            node.startPer = (parseFloat($("#Starting").val())/100);
             node.genNum = parseInt($("#NumGenerations").val());
             node.startPop = parseInt($("#StartingPop").val());
-            node.plusplusS = parseFloat($("#PPSurvival").val());
-            node.plusminusS = parseFloat($("#PMSurvival").val());
-            node.minusminusS = parseFloat($("#MMSurvival").val());
+            node.plusplusS = (parseFloat($("#PPSurvival").val())/100);
+            node.plusminusS = (parseFloat($("#PMSurvival").val())/100);
+            node.minusminusS = (parseFloat($("#MMSurvival").val())/100);
             confirmVal = true;
 
         }
@@ -525,7 +556,7 @@ $(document).ready(function() {
         lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
         lineGraphCtx.strokeStyle = "#000000";
         var lineSpaceHor = lineGraph.height / 10;
-        var lineSpaceVer = lineGraph.width / 11;
+        var lineSpaceVer = lineGraph.width / 9;
         lineGraphCtx.beginPath();
         for (var i = 0; i < lineGraph.height; i += lineSpaceHor) {
             lineGraphCtx.moveTo(0, i);
@@ -566,7 +597,6 @@ $(document).ready(function() {
     function plotPoints(array = genArray) {
 
         var pointSpace = ((((array.length-1) / findLongestLink()) * (lineGraph.width) / (array.length-1)));
-
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
         lineGraphCtx.moveTo(0, (400 - (array[0][1] * 400))); //zeroY
