@@ -298,19 +298,21 @@ $(document).ready(function() {
         var largestGen = 0;
         var pathSum = 0;
 
-        for (var k = allNodes.length - 1; k > 0; k--) {
+        for (var k = allNodes.length - 1; k >= 0; k--) {
 
             var temp = allNodes[k];
 
 
             if (temp.endNodes.length == 0 && temp.linkStartNode == null) { //if node is not linked
                 pathSum += temp.genNum;
-            } else if (temp.endNodes.length == 0) {
+            } 
+            else if (temp.endNodes.length == 0) {
                 while (temp != null) {
                     pathSum += temp.genNum
                     temp = temp.linkStartNode;
                 }
             }
+           
 
             if (pathSum > largestGen) {
                 largestGen = pathSum;
