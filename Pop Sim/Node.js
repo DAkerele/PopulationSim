@@ -1,189 +1,106 @@
-var lineGraph = document.getElementById("lineGraph");
-var lineGraphCtx = lineGraph.getContext("2d");
-var startX = 0;
-var notPrint = [];
-var pointSpace,addedSpace,startX;
+<!doctype html>
+<header>
+	<title>Population Simulation</title>
+	<link rel="stylesheet" type="text/css" href="./styling.css">
+	
+</header>
 
-function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplusS,plusminusS,minusminusS,numRuns, alleleData,isConfirm,linkStartNode,endNodes,linkString){
-        this.isSelected = selected;
-        this.CoordX = posX;
-        this.CoordY = posY;
-        this.NodeNum = NodeNum;
-        this.Color = Color;
-        this.startPer = startPer;
-        this.genNum = genNum;
-        this.startPop = startPop;
-        this.plusplusS = plusplusS;
-        this.plusminusS = plusminusS;
-        this.minusminusS = minusminusS;
-        this.numRuns = numRuns;
-        this.alleleData = alleleData;
-        this.isConfirm = isConfirm;
-        this.linkStartNode = linkStartNode;
-        this.endNodes = endNodes;
-        this.linkString = linkString;
-        
+<html style = "height:100%; width:100%;">
+	<body style = "height:100%; width:100%; background-color:#566573; background-size:100% 100%;">
 
-        
+		<div id = "app" style = "height:100%; width:100%; top:0px; ">
+			<!-- numbering for y-axis linegraph -->
+			<p id = "yAxis"style = "position:absolute; top:192.5px; left:680px; ">%"+"Allele</p>
+			<p style = "position:absolute; top:1px; left:770px; ">100</p>
+			<p style = "position:absolute; top:35px; left:770px; ">90</p>
+			<p style = "position:absolute; top:78px; left:770px; ">80</p>
+			<p style = "position:absolute; top:120px; left:770px; ">70</p>
+			<p style = "position:absolute; top:157px; left:770px; ">60</p>
+			<p style = "position:absolute; top:195px; left:770px; ">50</p>
+			<p style = "position:absolute; top:235px; left:770px; ">40</p>
+			<p style = "position:absolute; top:276px; left:770px; ">30</p>
+			<p style = "position:absolute; top:315px; left:770px; ">20</p>
+			<p style = "position:absolute; top:355px; left:770px; ">10</p>
+			
 
 
-    }
+			<!-- numbering for x-axis linegraph-->
+			<p style = "position:absolute; top:420px; left:1390px;" id = "endGen"></p>
+
+			<!--numbering for bargraph x axis-->
+			<p style = "position:absolute; top:900px; left:800px; ">0.0</p>
+			<p style = "position:absolute; top:900px; left:850px; ">0.1</p>
+			<p style = "position:absolute; top:900px; left:900px; ">0.2</p>
+			<p style = "position:absolute; top:900px; left:950px; ">0.3</p>
+			<p style = "position:absolute; top:900px; left:1000px; ">0.4</p>
+			<p style = "position:absolute; top:900px; left:1050px; ">0.5</p>
+			<p style = "position:absolute; top:900px; left:1100px; ">0.6</p>
+			<p style = "position:absolute; top:900px; left:1150px; ">0.7</p>
+			<p style = "position:absolute; top:900px; left:1200px; ">0.8</p>
+			<p style = "position:absolute; top:900px; left:1250px; ">0.9</p>
+			<p style = "position:absolute; top:900px; left:1290px; ">1.0</p>
 
 
-  Node.prototype.runSim = function () {
-       
-        var genArray = [];
-
-        var nextPopArray = [];
-
-        genArray.splice(0, genArray.length);
-        for (var j = 0; j <= 1; j++) {
-            nextPopArray.push(this.startPer);
-        }
-        genArray.push(nextPopArray);
-        beginGen = 0;
-        endGen = this.genNum;
+			<!-- number of runs-->
+			<p id = "RunTotal" style = "position:absolute; top:481px; left:765px; "></p>
 
 
-        var currentPopSize = this.startPop * 2;
 
-        var pbar;
-        var p = 0.0;
-        var q;
-        var w;
-        var pp1;
-        var pp2;
+			<!--node canvas-->
+			<canvas style="border:1px solid #000000; position:absolute; left:20px; top:20px" id = "canvas" height= "400%" width = "500%" ></canvas>
+			<!--linegraph-->
+			<canvas style="border:1px solid #000000; position:absolute; top:20px; left:800px;" id = "lineGraph" height= "400%" width = "600%"></canvas>
+			<!--bargraph-->
+			<canvas style="border:1px solid #000000; position:absolute; left:800px; top:500px" id = "barGraph" height= "400%" width = "500%" ></canvas>
+		
 
-        var nx;
-        var ny;
+			<h4 style = "position:absolute; top:410px; left:20px"id = "NodeSelected">DATA FOR NODE #</h4>
 
-        for (var i = 0; i < this.genNum; i++) {
+			<form style= "position:absolute; top:450px; left:20px">
 
-            numFixedPops = 0;
-            numLostPops = 0;
-            pbar = 0.0;
-            nextPopArray = [];
+				<button style = "position:absolute; top:20px; left:225px;"id ="Run">Begin Run</button>
+				<button style = "position:absolute; top:20px; left:125px;" id = "enterVals">Confirm Values</button>
 
+				<button style = "position:absolute; top:50px; left:125px;" id = "restart">Restart</button>
+				<select id = "startLink" style = "position:absolute; top:50px; left:225px;"></select>
+				<p style = "position:absolute; top:33px; left:262px;">to</p>
+				<select id = "endLink" style = "position:absolute; top:50px; left:275px;"></select>
+				<button style = "position:absolute; top:80px; left:235px; width:75px; height:30px;" id = "link">link</button>
+				<button style = "position:absolute; top:130px; left:235px; width:75px; height:30px;" id = "unlink">unlink</button>
 
-            var popArray = genArray[i];
-            for (var j = 1; j <= 1; j++) {
-                var end = popArray[j];
-                pbar += end;
-                if (end <= 0.0) {
-                    numLostPops += 1;
-                }
-                if (end >= 1.0) {
-                    numFixedPops += 1;
-                }
-            }
+				
 
+					Number of Runs:<br>
+					<input value  = "1"  id = "NumRuns" type = "number"> </input>
+					<br>Starting Percent:<br>
+					<input min = "0.0" max = "100.0"step = "0.1" value  = "50.0"  id = "Starting" type = "number"></input>
+					<br>Number of Generation:<br>
+					<input max = "500" value  = "100"  id = "NumGenerations" type = "number"></input>
+					<br>Starting Population:<br>
+					<input value  = "100"  id = "StartingPop" type = "number"></input>
+					<br>++Survival Percent:<br>
+					<input  min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival" type = "number"></input>
+					<br>+-Survival Percent:<br>
+					<input min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival" type = "number"></input>
+					<br>--Survival Percent:<br>
+					<input  min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "MMSurvival" type = "number"></input>
 
-            pbar /= 1;
-            for (var j = 0; j <= 1; j++) {
-                p = popArray[j];
-                if (j > 0) {
-                    p = p * (1.0 - 0.0) + 0.0 * pbar;
-                }
-                p = (1 - 0) * p + 0 * (1 - p);
-
-                if ((p > 0.0) && (p < 1.0)) {
-                    q = 1 - p;
-                    w = (p * p * this.plusplusS) + (2.0 * p * q * this.plusminusS) + (q * q * this.minusminusS);
-                    pp1 = (p * p * this.plusplusS) / w;
-                    pp2 = (2.0 * p * q * this.plusminusS) / w;
-                    if (j > 0) {
-                        nx = binomial(this.startPop, pp1);
-
-                        if (pp1 < 1.0 && nx < this.startPop) {
-                            ny = binomial((this.startPop - nx), (pp2 / (1.0 - pp1)));
-                        } else {
-                            ny = 0;
-                        }
-
-                        nextPopArray.push(((nx * 2.0) + ny) / currentPopSize);
-                    } else {
-                        nextPopArray.push(pp1 + (pp2 / 2.0));
-                    }
-                } else {
-                    if (p <= 0.0) {
-                        p = 0.0;
-                    } else {
-                        p = 1.0;
-                    }
-                    nextPopArray.push(p);
-                }
-
-            }
-            genArray.push(nextPopArray);
-        }
-
-        this.alleleData.push(genArray);
-        
-
-        
-
-       
-        
-
-    }
+			</form>
+			
+			<select id = "nodeSelect" style= "position:absolute; left:675px; top:495px">
 
 
-    Node.prototype.link = function(scale=100) {
-       
-        var temp = 0;
-        pointSpace =((lineGraph.width)/scale);//point Spacing for start node
-            for (var l = 0; l < this.linkString.length; l++) {
-                startX = 0;
-                for(var m = 0; m < this.linkString[l].numRuns;m++){// # runs must be same to link
-                    startX = 0;
-                    if(l > 0){
-                        this.linkString[l].startPer = this.linkString[l].linkStartNode.alleleData[m][this.linkString[l].linkStartNode.alleleData[m].length-1][1];
-                    }
-                    
-                    this.linkString[l].runSim();
-                    temp = this.linkString[l].linkStartNode;
-                    while(temp != null){
-                        startX+= temp.genNum;
-                        temp = temp.linkStartNode;
-                    }
-                    lineGraphCtx.beginPath();
-                    lineGraphCtx.lineWidth = 0.5;
-                    lineGraphCtx.strokeStyle = this.linkString[l].Color;
-                    lineGraphCtx.moveTo((startX*pointSpace), (400 - (this.linkString[l].alleleData[m][0][1] * 400))); //zeroY
-                    for (var n = 0; n < this.linkString[l].alleleData[m].length; n++) {
-                        lineGraphCtx.lineTo((startX*pointSpace)+(pointSpace *(n+1)), 400 - (this.linkString[l].alleleData[m][n][1] * 400));
-                        lineGraphCtx.moveTo((startX*pointSpace)+(pointSpace *(n+1)), 400 - (this.linkString[l].alleleData[m][n][1] * 400));
-                        
+  				<option value="None">None</option>
+  				
 
-                        lineGraphCtx.stroke();
-                            
+			</select>
+			
 
-                    }
-                    
-                    
-                }
-                    lineGraphCtx.closePath();
-            }       
+		</div>
 
-        
+	</body>
+	<script src = "./jquery2.js"></script>
+	<script src= "./Node.js"></script>
+	<script src= "./main.js"></script>
 
-    };
-
-
-    
-
-      
-
-
-    function binomial(n, pp) {
-        var j;
-        var bnl;
-        bnl = 0;
-        for (j = 1; j <= n; j++) {
-            if (Math.random() < pp) {
-                bnl++;
-            }
-        }
-
-        return bnl;
-    }
+	
