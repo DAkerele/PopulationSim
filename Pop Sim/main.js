@@ -20,7 +20,6 @@ $(document).ready(function() {
     var startLinkSel = document.getElementById("startLink");
     var endLinkSel = document.getElementById("endLink");
     var rectX, rectY;
-    var confirmVal = false;
     var nodesListed = [10];
     var genCap = 0;
     var running;
@@ -30,6 +29,7 @@ $(document).ready(function() {
     var notLinked = [];
     var linkLen = 0;
     var x = 0;
+
     
 
     context.fillStyle = "#FDFEFE";
@@ -75,7 +75,7 @@ $(document).ready(function() {
                     context.fillStyle = "black";
                     context.fillText((NodeCount + 1).toString(), posX - 3, posY + 2);
 
-                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], false, null, [], []);
+                    var node = new Node(false, posX, posY, nodeColors[NodeCount], (NodeCount + 1), .5, 100, 100, 1.0, 1.0, 1.0, 1, [], true, null, [], []);
                     $("#startLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
                     $("#endLink").append("<option value=" + (NodeCount + 1) + ">" + (NodeCount + 1) + "</option>");
 
@@ -98,7 +98,6 @@ $(document).ready(function() {
             for (var i = 0; i < allNodes.length; i++) {
 
                 if (allNodes[i].NodeNum == isInCircle.NodeNum) { //creates red rings surrounding selected node
-
                     allNodes[i].isSelected = true;
                     currentSelectedNode = allNodes[i];
                     selectedNode = allNodes[i];
@@ -106,6 +105,14 @@ $(document).ready(function() {
                     context.beginPath();
                     context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI);
                     context.stroke();
+
+                    $("#NumRunsF").val(currentSelectedNode.numRuns);
+                    $("#StartingF").val(parseFloat((currentSelectedNode.startPer*100.0)));
+                    $("#NumGenerationsF").val(currentSelectedNode.genNum);
+                    $("#StartingPopF").val(currentSelectedNode.startPop);
+                    $("#PPSurvivalF").val(parseFloat((currentSelectedNode.plusplusS*100.0)));
+                    $("#PMSurvivalF").val(parseFloat((currentSelectedNode.plusminusS*100.0)));
+                    $("#MMSurvivalF").val(parseFloat((currentSelectedNode.minusminusS*100.0)));
 
 
                 } else if (allNodes[i].NodeNum != currentSelectedNode) { // overshadows red ring(selected ring) when another node is selected
@@ -217,58 +224,146 @@ $(document).ready(function() {
         //sets values for each node
         if (!running) {
             setSelectedNodeInfo(currentSelectedNode);
-            currentSelectedNode.isConfirm = true;
             allConfirmed++;
         }
-
         return false;
 
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data
-        createStrings();
-        start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
-        end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
-        notLinked = allNodes.filter(linkCheck);
-        if (runsCheck().length > 0) {
-            alert(" Please be sure nodes in the same link share an identical amount of runs");
-            alert("The following nodes' runs do not match the rest of link:" + runsCheck().toString());
-            return false;
-        }
+        if(!running){
 
-        for (var p = 0; p < allNodes.length; p++) {
-            if (!allNodes[p].isConfirm) {
-                alert("Please confirm values for node:" + allNodes[p].NodeNum + " before running simulation.");
-                p = 0;
+            createStrings();
+            start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+            end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+            notLinked = allNodes.filter(linkCheck);
+
+
+            if (runsCheck().length > 0) {
+                alert(" Please be sure nodes in the same link share an identical amount of runs");
+                alert("The following nodes' runs do not match the rest of link:" + runsCheck().toString());
                 return false;
             }
 
-        }
-        if (allConfirmed >= allNodes.length && runsCheck().length == 0) {
-            for (var j = 0; j < allNodes.length; j++) {
-                $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                for (var k = 0; k < allNodes[j].numRuns; k++) {
-                    if (allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null) { //plots unlinked nodes
+            for (var p = 0; p < allNodes.length; p++) {//allows user to not confirm vals if no change to fields have been made
+                arr = Object.values(allNodes[p]);
+                
+                for (var t = 5; t < 11; t++) {
+                   switch (t) {
 
-                        allNodes[j].runSim();
-                        lineGraphCtx.strokeStyle = allNodes[j].Color;
-                        plotPoints(allNodes[j].alleleData[k]);
-                    } else if (allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null) { //plots linked nodes
-                        allNodes[j].link(findLongestLink());
-
-                    }
+                        case 5:
+                            if(arr[t] != (parseFloat($("#Starting").val())/100)){allNodes[p].isConfirm = false;}
+                            break; 
+                        case 6:
+                            if(arr[t] != parseInt($("#NumGenerations").val())){allNodes[p].isConfirm = false;}
+                            break; 
+                        case 7:
+                            if(arr[t] != parseInt($("#StartingPop").val())){allNodes[p].isConfirm = false;}
+                            break; 
+                        case 8:
+                           if(arr[t] != (parseFloat($("#PPSurvival").val())/100)){allNodes[p].isConfirm = false;}
+                            break; 
+                        case 9:
+                            if(arr[t] != (parseFloat($("#PMSurvival").val())/100)){allNodes[p].isConfirm = false;}
+                            break;
+                        case 10:
+                           if(arr[t] != (parseFloat($("#MMSurvival").val())/100)){allNodes[p].isConfirm = false;}
+                            break;
+                        case 11:
+                            if(arr[t] != parseInt($("#NumRuns").val())){allNodes[p].isConfirm = false;}
+                            break;  
+                    }        
 
                 }
+                 
+                
+                if (!allNodes[p].isConfirm) {
+                    alert("Please confirm values for node:" + allNodes[p].NodeNum + " before running simulation.");
+                   
+                    p = 0;
+                    return false;
+                }else{
+                    allConfirmed++;
+                }
+                
+            }
+            if (allConfirmed >= allNodes.length && runsCheck().length == 0) {
+                document.getElementById("Run").innerHTML = "Restart";
+                for (var j = 0; j < allNodes.length; j++) {
+                    $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                    for (var k = 0; k < allNodes[j].numRuns; k++) {
+                        if (allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null) { //plots unlinked nodes
+
+                            allNodes[j].runSim();
+                            lineGraphCtx.strokeStyle = allNodes[j].Color;
+                            plotPoints(allNodes[j].alleleData[k]);
+                        } else if (allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null) { //plots linked nodes
+                            allNodes[j].link(findLongestLink());
+                            
+                        }
+
+                    }
+                }
+
+
             }
 
+            
 
+            running = true;
+            document.getElementById("endGen").innerHTML = findLongestLink();
         }
-        confirmVal = false;
-        running = true;
-        document.getElementById("endGen").innerHTML = findLongestLink();
-        return false;
+        else if(running){
+             if (confirm("Are you sure you want to restart the simulation?")) {
+
+                document.getElementById("Run").innerHTML = "Begin Run";
+                lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.fillStyle = "#FFFFFF";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                intializeLineGraph();
+                barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+                intializeBarGraph();
+
+                for (var i = 0; i < allNodes.length; i++) {
+                    
+                    allNodes[i].alleleData = [];
+                    allNodes[i].isConfirm = true;
+                    allNodes[i].linkStartNode = null;
+                    allNodes[i].endNodes = [];
+                    allNodes[i].linkString = [];
+
+                    context.beginPath();
+                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI, false);
+                    context.closePath();
+
+                    context.fillStyle = allNodes[i].Color;
+                    context.beginPath();
+                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 20, 0, 2 * Math.PI, false);
+                    context.closePath()
+                    context.fill();
+
+                    context.fillStyle = "black";
+                    context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].CoordX - 3, allNodes[i].CoordY + 2);
+                    allNodes[i].linkStartNode = null;
+                    allNodes[i].endNodes = [];
+                    allNodes[i].linkString = [];
+                   
+                
+                }
 
 
+                genCap = 0;
+                largestGen = 0;
+                allConfirmed = 0;
+                running = false;
+                x = 0;
+                $("#nodeSelect").empty();
+                $("#nodeSelect").append("<option value='None'>None</option>");
+                
+            }
+        }
+            return false;
     }
 
 
@@ -294,6 +389,7 @@ $(document).ready(function() {
         var temp = 0;
         
         while (x < allNodes.length) {
+            
             if (allNodes[x].endNodes.length > 0) {
                 if (z == 0) {
                     allNodes[x].linkString.push(allNodes[x]); //appends intial node to linkString
@@ -371,9 +467,8 @@ $(document).ready(function() {
 
 
 
-
-    document.getElementById("restart").onclick = function resetVals() { //resets data
-        if (confirm("Are you sure you want to restart the simulation?")) {
+    document.getElementById("reset").onclick = function reset() { //resets data
+        if (confirm("Are you sure you want to reset all nodes?")) {
             for (var i = 0; i < allNodes.length; i++) {
                 allNodes[i].numRuns = 1;
                 allNodes[i].startPer = .5;
@@ -389,15 +484,18 @@ $(document).ready(function() {
                 allNodes[i].linkString = [];
             }
 
-            lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
+           lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = "#FFFFFF";
+            context.fillRect(0, 0, canvas.width, canvas.height);
             intializeLineGraph();
             barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
-            barGraphCtx.fillStyle = "#FDFEFE";
             intializeBarGraph();
             genCap = 0;
             running = false;
             largestGen = 0;
             allConfirmed = 0;
+            NodeCount = 0;
             $("#nodeSelect").empty();
             $("#nodeSelect").append("<option value='None'>None</option>");
         }
@@ -495,7 +593,14 @@ $(document).ready(function() {
             alert("Please enter a valid starting population");
         } else {
 
-
+            $("#NumRuns").val($("#NumRunsF").val());
+            $("#Starting").val($("#StartingF").val());
+            $("#NumGenerations").val($("#NumGenerationsF").val());
+            $("#StartingPop").val( $("#StartingPopF").val());
+            $("#PPSurvival").val($("#PPSurvivalF").val());
+            $("#PMSurvival").val($("#PMSurvivalF").val());
+            $("#MMSurvival").val($("#MMSurvivalF").val());
+            debugger;
             node.numRuns = parseInt($("#NumRuns").val());
             node.startPer = (parseFloat($("#Starting").val())/100);
             node.genNum = parseInt($("#NumGenerations").val());
@@ -503,10 +608,16 @@ $(document).ready(function() {
             node.plusplusS = (parseFloat($("#PPSurvival").val())/100);
             node.plusminusS = (parseFloat($("#PMSurvival").val())/100);
             node.minusminusS = (parseFloat($("#MMSurvival").val())/100);
-            confirmVal = true;
+            
+            
 
         }
-    }
+
+        
+            
+
+    }                            
+        
 
 
 
