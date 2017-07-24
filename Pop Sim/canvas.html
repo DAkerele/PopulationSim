@@ -61,7 +61,7 @@
 				<button style = "position:absolute; top:20px; left:225px;"id ="Run">Begin Run</button>
 				<button style = "position:absolute; top:20px; left:125px;" id = "enterVals">Confirm Values</button>
 
-				<button style = "position:absolute; top:50px; left:125px;" id = "restart">Restart</button>
+				<button style = "position:absolute; top:50px; left:125px;" id = "reset">Reset</button>
 				<select id = "startLink" style = "position:absolute; top:50px; left:225px;"></select>
 				<p style = "position:absolute; top:33px; left:262px;">to</p>
 				<select id = "endLink" style = "position:absolute; top:50px; left:275px;"></select>
@@ -71,19 +71,27 @@
 				
 
 					Number of Runs:<br>
-					<input value  = "1"  id = "NumRuns" type = "number"> </input>
+					<input value  = "1"  id = "NumRunsF" type = "number"> </input>
 					<br>Starting Percent:<br>
-					<input min = "0.0" max = "1.0"step = "0.1" value  = ".5"  id = "Starting" type = "number"></input>
+					<input min = "0.0" max = "100.0"step = "0.1" value  = "50.0"  id = "StartingF" type = "number"></input>
 					<br>Number of Generation:<br>
-					<input value  = "100"  id = "NumGenerations" type = "number"></input>
+					<input max = "500" value  = "100"  id = "NumGenerationsF" type = "number"></input>
 					<br>Starting Population:<br>
-					<input value  = "100"  id = "StartingPop" type = "number"></input>
+					<input value  = "100"  id = "StartingPopF" type = "number"></input>
 					<br>++Survival Percent:<br>
-					<input  min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "PPSurvival" type = "number"></input>
+					<input  min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvivalF" type = "number"></input>
 					<br>+-Survival Percent:<br>
-					<input min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "PMSurvival" type = "number"></input>
+					<input min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvivalF" type = "number"></input>
 					<br>--Survival Percent:<br>
-					<input  min = "0.0" max = "1.0" step = "0.1" value  = "1.0" id = "MMSurvival" type = "number"></input>
+					<input  min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "MMSurvivalF" type = "number"></input>
+
+					<input value  = "1"  id = "NumRuns" type = "hidden"> </input>
+					<input min = "0.0" max = "100.0"step = "0.1" value  = "50.0"  id = "Starting" type = "hidden"></input>
+					<input max = "500" value  = "100"  id = "NumGenerations" type = "hidden"></input>
+					<input value  = "100"  id = "StartingPop" type = "hidden"></input>
+					<input  min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival" type = "hidden"></input>
+					<input min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival" type = "hidden"></input>
+					<input  min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "MMSurvival" type = "hidden"></input>
 
 			</form>
 			
