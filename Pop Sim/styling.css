@@ -1,30 +1,93 @@
-html, body, {
-    position:fixed;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
+.container-fluid{
+	height: 100%;
 }
 
+.topLeft{
+	height:100%;
+	width: 50%;
+	position:relative;
+}
 
+.topRight{
 
-h4{
+}
 
-	height:1px;
-	top: -20px
+.bottomLeft{
+	position:relative;
+}
+
+.bottomRight{
+
+}
+
+.row1{
+	height:50%;
+	width:100%;
+}
+
+.row2{
+	height:50%;
+ 	width:100%;
+}
+
+.data{
+	left:300px;
 }
 
 input{
-	width:100px;
-
-
-
-}
-
-form {
-
-	left:-400px;
-	width:300px;
+	position:absolute;
 	
+}
+
+form p{
+	width:100px;
+	height:20px;
+	position:absolute;
+	
+}
+.form-group.row{
 
 }
+
+.topLeft header{
+	height:5%;
+}
+
+.topLeft footer{
+	height:10%;
+}
+
+form{
+	height:85%;
+	width:90%;
+	position:absolute;
+	left:100px;
+	top:50px;
+}
+
+label{
+	font-size:13px;
+	white-space:nowrap;
+
+}
+
+#bottom{
+	position:absolute;
+	top:440px;
+	
+}
+ 
+#top{
+	position:absolute;
+	top:20px;
+}
+
+hr{
+	float:left; 
+	width:80%;
+}
+
+
+
+
+
