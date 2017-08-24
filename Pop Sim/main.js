@@ -106,8 +106,8 @@ $(document).ready(function() {
                     context.stroke();
 
                     var arr = document.getElementsByTagName("input");//hides all node fields 
-                    for (var i = 0; i < arr.length; i++) {
-                        arr[i].setAttribute('type','hidden');
+                    for (var t = 0; t < arr.length; t++) {
+                        arr[t].setAttribute('type','hidden');
                     }
 
                     //displays currentSelectedNode's fields
@@ -132,7 +132,7 @@ $(document).ready(function() {
                    
 
 
-                }  if (allNodes[i].NodeNum != currentSelectedNode) { // overshadows red ring(selected ring) when another node is selected
+                } else if (allNodes[i].NodeNum != currentSelectedNode.NodeNum) { // overshadows red ring(selected ring) when another node is selected
                     allNodes[i].isSelected = false;
                     for (var j = 0; j < 10; j++) {
                         context.strokeStyle = "#FFFFFF";
@@ -142,60 +142,58 @@ $(document).ready(function() {
                     }
 
                 }
-
-
-
-
             }
         }
     }  
 
     
     document.getElementById("link").onclick = function linkNodes() {//draws link line on canvas and etablishes start and end nodes
-        start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
-        end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
-        var temp = allNodes[start].linkStartNode;
-                while (temp != null) {
-                     if(temp == allNodes[end]){
-                        return false;
-                     }
-                    temp = temp.linkStartNode;
+       if(!running){ 
+            start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+            end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
+            if(allNodes[start] != allNodes[end]){
+                var temp = allNodes[start].linkStartNode;
+                        while (temp != null) {
+                             if(temp == allNodes[end]){
+                                return false;
+                             }
+                            temp = temp.linkStartNode;
+                        }
+                    
+                   
+                if (allNodes[end].linkStartNode != null) {
+                    return false;
                 }
-            
-           
-        if (allNodes[end].linkStartNode != null) {
-            return false;
-        }
-         
-        else if (allNodes[end].linkStartNode == null) {
-            allNodes[end].linkStartNode = allNodes[start];
-            allNodes[start].endNodes.push(allNodes[end]);
-        } 
-        
-        context.beginPath();
-        context.lineWidth = 0.5;
-        context.strokeStyle = "#FF0000";
-        context.moveTo(allNodes[start].CoordX, allNodes[start].CoordY);
-        context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
-        context.stroke();
-        context.closePath();
+                 
+                else if (allNodes[end].linkStartNode == null) {
+                    allNodes[end].linkStartNode = allNodes[start];
+                    allNodes[start].endNodes.push(allNodes[end]);
+                } 
+                
+                context.beginPath();
+                context.lineWidth = 0.5;
+                context.strokeStyle = "#FF0000";
+                context.moveTo(allNodes[start].CoordX, allNodes[start].CoordY);
+                context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
+                context.stroke();
+                context.closePath();
 
-        context.beginPath();
-        context.fillStyle = allNodes[start].Color;
-        context.arc(allNodes[end].CoordX, allNodes[end].CoordY, 10, 0, 2 * Math.PI);
-        context.fill();
-        context.fillStyle = "black";
-        context.fillText(allNodes[end].NodeNum.toString(), allNodes[end].CoordX - 3, allNodes[end].CoordY + 3);
-        context.closePath();
+                context.beginPath();
+                context.fillStyle = allNodes[start].Color;
+                context.arc(allNodes[end].CoordX, allNodes[end].CoordY, 10, 0, 2 * Math.PI);
+                context.fill();
+                context.fillStyle = "black";
+                context.fillText(allNodes[end].NodeNum.toString(), allNodes[end].CoordX - 3, allNodes[end].CoordY + 3);
+                context.closePath();
+            }
 
-
-
+        }   
         return false;
     }
 
     document.getElementById("unlink").onclick = function unlinkNodes() {//disassembles link groups into indiviual nodes and graphs disassembled nodes
       if(running){//if beginRun has started  
-            running = false;
+            
             lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.fillStyle = "#FFFFFF";
@@ -473,43 +471,14 @@ $(document).ready(function() {
 
     document.getElementById("reset").onclick = function reset() { //resets data
         if (confirm("Are you sure you want to reset all nodes?")) {
-            for (var i = 0; i < allNodes.length; i++) {
-                allNodes[i].numRuns = 1;
-                allNodes[i].startPer = .5;
-                allNodes[i].genNum = 100;
-                allNodes[i].startPop = 100;
-                allNodes[i].plusplusS = 1.0;
-                allNodes[i].plusminusS = 1.0;
-                allNodes[i].minusminusS = 1.0;
-                allNodes[i].alleleData = [];
-                allNodes[i].isConfirm = false;
-                allNodes[i].linkStartNode = null;
-                allNodes[i].endNodes = [];
-                allNodes[i].linkString = [];
-            }
-
-           lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.fillStyle = "#FFFFFF";
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            intializeLineGraph();
-            barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
-            intializeBarGraph();
-            genCap = 0;
-            running = false;
-            largestGen = 0;
-            allConfirmed = 0;
-            NodeCount = 0;
-            $("#nodeSelect").empty();
-            $("#nodeSelect").append("<option value='None'>None</option>");
+            location.reload();
+            return false;
         }
-
-        return false;
     }
 
 
     document.getElementById("nodeSelect").onchange = function changeBarGraph() {//changes barcanvas to display chosen node 
-        $("#RunTotal").html("" + currentSelectedNode.numRuns);
+        $("#RunTotal").html("RunTotal:" + currentSelectedNode.numRuns);
 
 
 
@@ -523,43 +492,43 @@ $(document).ready(function() {
 
             case "1":
                 plotBars(allNodes[0]);
-                $("#RunTotal").html("" + allNodes[0].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[0].numRuns);
                 break;
             case "2":
                 plotBars(allNodes[1]);
-                $("#RunTotal").html("" + allNodes[1].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[1].numRuns);
                 break;
             case "3":
                 plotBars(allNodes[2]);
-                $("#RunTotal").html("" + allNodes[2].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[2].numRuns);
                 break;
             case "4":
                 plotBars(allNodes[3]);
-                $("#RunTotal").html("" + allNodes[3].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[3].numRuns);
                 break;
             case "5":
                 plotBars(allNodes[4]);
-                $("#RunTotal").html("" + allNodes[4].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[4].numRuns);
                 break;
             case "6":
                 plotBars(allNodes[5]);
-                $("#RunTotal").html("" + allNodes[5].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[5].numRuns);
                 break;
             case "7":
                 plotBars(allNodes[6]);
-                $("#RunTotal").html("" + allNodes[6].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[6].numRuns);
                 break;
             case "8":
                 plotBars(allNodes[7]);
-                $("#RunTotal").html("" + allNodes[7].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[7].numRuns);
                 break;
             case "9":
                 plotBars(allNodes[8]);
-                $("#RunTotal").html("" + allNodes[8].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[8].numRuns);
                 break;
             case "10":
                 plotBars(allNodes[9]);
-                $("#RunTotal").html("" + allNodes[9].numRuns);
+                $("#RunTotal").html("RunTotal:" + allNodes[9].numRuns);
                 break;
         }
 
@@ -624,10 +593,19 @@ $(document).ready(function() {
 
     function getMousePos(canvas, evt) { //gets mouse position in canvas
 
-        var rect = canvas.getBoundingClientRect();
+        var bounds = canvas.getBoundingClientRect();
+        var mouseX = (evt.pageX-bounds.left)
+        var mouseY = (evt.pageY-bounds.top)
+
+        mouseX /= bounds.width;
+        mouseY /= bounds.height;
+
+        mouseX *= canvas.width;
+        mouseY *= canvas.height;
+
         return {
-            x: evt.pageX,
-            y: evt.pageY
+            x:mouseX ,
+            y:mouseY 
         };
 
 
@@ -736,7 +714,7 @@ $(document).ready(function() {
 
 
 
-    function plotBars(node) {//plots bars on barcanvas
+     function plotBars(node) {
 
         var rectHeight = 400;
         var barIncrease = barGraph.height / node.numRuns;
@@ -779,63 +757,62 @@ $(document).ready(function() {
 
         }
 
-        barGraphCtx.strokeRect(0, rectHeight - freq01, 50, barGraph.height + freq01);
-        barGraphCtx.fillRect(0, rectHeight - freq01, 50, barGraph.height + freq01);
+        barGraphCtx.strokeRect(0, rectHeight - freq01, 100, barGraph.height + freq01);
+        barGraphCtx.fillRect(0, rectHeight - freq01, 100, barGraph.height + freq01);
 
 
 
 
-        barGraphCtx.strokeRect(50, rectHeight - freq12, 50, barGraph.height + freq12);
-        barGraphCtx.fillRect(50, rectHeight - freq12, 50, barGraph.height + freq12);
+        barGraphCtx.strokeRect(100, rectHeight - freq12, 100, barGraph.height + freq12);
+        barGraphCtx.fillRect(100, rectHeight - freq12, 100, barGraph.height + freq12);
 
 
 
 
-        barGraphCtx.strokeRect(100, rectHeight - freq23, 50, barGraph.height + freq23);
-        barGraphCtx.fillRect(100, rectHeight - freq23, 50, barGraph.height + freq23);
+        barGraphCtx.strokeRect(200, rectHeight - freq23, 100, barGraph.height + freq23);
+        barGraphCtx.fillRect(200, rectHeight - freq23, 100, barGraph.height + freq23);
 
 
 
 
-        barGraphCtx.strokeRect(150, rectHeight - freq34, 50, barGraph.height + freq34);
-        barGraphCtx.fillRect(150, rectHeight - freq34, 50, barGraph.height + freq34);
+        barGraphCtx.strokeRect(300, rectHeight - freq34, 100, barGraph.height + freq34);
+        barGraphCtx.fillRect(300, rectHeight - freq34, 100, barGraph.height + freq34);
 
 
 
 
-        barGraphCtx.strokeRect(200, rectHeight - freq45, 50, barGraph.height + freq45);
-        barGraphCtx.fillRect(200, rectHeight - freq45, 50, barGraph.height + freq45);
+        barGraphCtx.strokeRect(400, rectHeight - freq45, 100, barGraph.height + freq45);
+        barGraphCtx.fillRect(400, rectHeight - freq45, 100, barGraph.height + freq45);
 
 
 
 
-        barGraphCtx.strokeRect(250, rectHeight - freq56, 50, barGraph.height + freq56);
-        barGraphCtx.fillRect(250, rectHeight - freq56, 50, barGraph.height + freq56);
+        barGraphCtx.strokeRect(500, rectHeight - freq56, 100, barGraph.height + freq56);
+        barGraphCtx.fillRect(500, rectHeight - freq56, 100, barGraph.height + freq56);
 
 
-        barGraphCtx.strokeRect(300, rectHeight - freq67, 50, barGraph.height + freq67);
-        barGraphCtx.fillRect(300, rectHeight - freq67, 50, barGraph.height + freq67);
-
-
-
-
-        barGraphCtx.strokeRect(350, rectHeight - freq78, 50, barGraph.height + freq78);
-        barGraphCtx.fillRect(350, rectHeight - freq78, 50, barGraph.height + freq78);
+        barGraphCtx.strokeRect(600, rectHeight - freq67, 100, barGraph.height + freq67);
+        barGraphCtx.fillRect(600, rectHeight - freq67, 100, barGraph.height + freq67);
 
 
 
 
-        barGraphCtx.strokeRect(400, rectHeight - freq89, 50, barGraph.height + freq89);
-        barGraphCtx.fillRect(400, rectHeight - freq89, 50, barGraph.height + freq89);
+        barGraphCtx.strokeRect(700, rectHeight - freq78, 100, barGraph.height + freq78);
+        barGraphCtx.fillRect(700, rectHeight - freq78, 100, barGraph.height + freq78);
 
 
 
-        barGraphCtx.strokeRect(450, rectHeight - freq91, 50, barGraph.height + freq91);
-        barGraphCtx.fillRect(450, rectHeight - freq91, 50, barGraph.height + freq91);
+
+        barGraphCtx.strokeRect(800, rectHeight - freq89, 100, barGraph.height + freq89);
+        barGraphCtx.fillRect(800, rectHeight - freq89, 100, barGraph.height + freq89);
+
+
+
+        barGraphCtx.strokeRect(900, rectHeight - freq91, 100, barGraph.height + freq91);
+        barGraphCtx.fillRect(900, rectHeight - freq91, 100, barGraph.height + freq91);
 
 
 
     }
-
 
 });
