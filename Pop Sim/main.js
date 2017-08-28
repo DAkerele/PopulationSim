@@ -27,6 +27,7 @@ $(document).ready(function() {
     var notLinked = [];
     var linkLen = 0;
     var x = 0;
+    
 
     
 
@@ -38,6 +39,40 @@ $(document).ready(function() {
     context.fillRect(0, 0, canvas.width, canvas.height);
     intializeLineGraph();
     intializeBarGraph();
+
+    window.addEventListener('resize', reAdjust, false);
+
+    function reAdjust() {
+            canvas.width = $("#topLeft").width();
+            canvas.height = ($("#topLeft").height()-135);
+            lineGraph.width = ($("#topRight").width()-175);
+            lineGraph.height = ($("#topRight").height()-100);
+            intializeLineGraph();
+            /*
+            GET CURRENT WIDTH AND HEIGHT AND ADD EMS OF BUTTONS TO IT TO GET ADJUSTED POSITION
+            var left = (($("#topLeft").width()*0.0625)+17);
+            var top = (($("#topLeft").height()*0.0625)+17);
+            var 
+            var location = $("#topLeft").offset();
+            var top = ((location.top*0.0625)+30);
+            var left = ((location.left*0.0625)+11);
+            alert(top);
+             $("#unlink").css({
+            'position': 'absolute',
+            'top': top + 'em',
+            'left': left + 'em'
+        });
+        */
+
+
+
+            
+
+            
+    }
+    
+
+
 
 
 
@@ -647,14 +682,6 @@ $(document).ready(function() {
         for (var i = 0; i < lineGraph.height; i += lineSpaceHor) {
             lineGraphCtx.moveTo(0, i);
             lineGraphCtx.lineTo(lineGraph.width, i);
-            lineGraphCtx.stroke();
-
-        }
-        lineGraphCtx.closePath();
-        lineGraphCtx.beginPath();
-        for (var j = 0; j < lineGraph.width; j += lineSpaceVer) {
-            lineGraphCtx.moveTo(j, lineGraph.height);
-            lineGraphCtx.lineTo(j, 390);
             lineGraphCtx.stroke();
 
         }
