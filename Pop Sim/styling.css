@@ -1,8 +1,12 @@
+body{
+	overflow:hidden;
+}
+
 .container-fluid{
-	height: 100%;
-	position:relative;
-	min-width:1670px;
-	min-height:1088px;
+	height:100%;
+	width:75vw;
+	
+	
 }
 
 .col{
@@ -10,6 +14,7 @@
 	height:100%;
 	width: 50%;
 	min-width:25%;
+
 
 	
 }
@@ -84,7 +89,7 @@ form{
 	height:85%;
 	width:90%;
 	position:absolute;
-	left:10em;
+	left:4em;
 	top:3em;
 }
 
@@ -150,9 +155,7 @@ label{
 
 }
 
-canvas{
-	position:relative;
-}
+
 
 
 
