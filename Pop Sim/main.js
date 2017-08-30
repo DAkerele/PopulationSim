@@ -27,6 +27,8 @@ $(document).ready(function() {
     var notLinked = [];
     var linkLen = 0;
     var x = 0;
+
+
     
 
     
@@ -47,33 +49,14 @@ $(document).ready(function() {
             canvas.height = ($("#topLeft").height()-135);
             lineGraph.width = ($("#topRight").width()-175);
             lineGraph.height = ($("#topRight").height()-100);
+            barGraph.width = ($("#topRight").width()-175);
+            barGraph.height = ($("#topRight").height()-100);
+            intializeBarGraph();
             intializeLineGraph();
-            /*
-            GET CURRENT WIDTH AND HEIGHT AND ADD EMS OF BUTTONS TO IT TO GET ADJUSTED POSITION
-            var left = (($("#topLeft").width()*0.0625)+17);
-            var top = (($("#topLeft").height()*0.0625)+17);
-            var 
-            var location = $("#topLeft").offset();
-            var top = ((location.top*0.0625)+30);
-            var left = ((location.left*0.0625)+11);
-            alert(top);
-             $("#unlink").css({
-            'position': 'absolute',
-            'top': top + 'em',
-            'left': left + 'em'
-        });
-        */
-
-
-
-            
-
-            
     }
     
-
-
-
+window.onbeforeunload = reAdjust();
+    
 
 
 
@@ -179,7 +162,23 @@ $(document).ready(function() {
                 }
             }
         }
-    }  
+    } 
+
+    document.getElementById("graphSwitch").onclick = function switchGraph(){
+        if($("#graphSwitch").html() == "BAR"){
+            $("#graphSwitch").html("LINE");
+            $(".line").css("visibility", "hidden");
+            $(".bar").css("visibility", "visible");
+        }
+        else if($("#graphSwitch").html() == "LINE"){
+            $("#graphSwitch").html("BAR");
+            $(".line").css("visibility", "visible");
+            $(".bar").css("visibility", "hidden");
+        }
+       
+        
+
+    }
 
     
     document.getElementById("link").onclick = function linkNodes() {//draws link line on canvas and etablishes start and end nodes
