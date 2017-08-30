@@ -1,5 +1,16 @@
 body{
 	overflow:hidden;
+	min-width:968px;
+	min-height:687px;  
+}
+
+
+@media(max-height:687px) and (max-width:968px){
+	body{
+		overflow:scroll;
+
+	 
+	}
 }
 
 .container-fluid{
@@ -21,31 +32,31 @@ body{
 
 #topLeft{
 	
-border-style:solid;
-border-color:#F5F5F5;
-border-width:.5em;
+outline-style:solid;
+outline-color:#F5F5F5;
+outline-width:.5vw;
 	
 }
 
 #topRight{
-border-style:solid;
-border-color:#F5F5F5;
-border-width:.5em;
+outline-style:solid;
+outline-color:#F5F5F5;
+outline-width:.5vw;
 	
 }
 
 #bottomLeft{
-border-style:solid;
-border-color:#F5F5F5;
-border-width:.5em;
+outline-style:solid;
+outline-color:#F5F5F5;
+outline-width:.5vw;
 
 	
 }
 
 #bottomRight{
-border-style:solid;
-border-color:#F5F5F5;
-border-width:.5em;
+outline-style:solid;
+outline-color:#F5F5F5;
+outline-width:.5vw;
 	
 }
 
@@ -74,6 +85,8 @@ form p{
 }
 .form-group.row{
 	height:7%;
+	width:95%;
+	margin:3.5%;
 
 }
 
@@ -89,8 +102,8 @@ form{
 	height:85%;
 	width:90%;
 	position:absolute;
-	left:4em;
-	top:3em;
+	left:22%;
+	top:12%;
 }
 
 label{
@@ -112,7 +125,7 @@ label{
 	float:center; 
 	width:95%;
 	position:absolute;
-	top:20px;
+	top:5%;
 
 }
 
@@ -120,7 +133,7 @@ label{
 	float:center;
 	width:95%;
 	position:absolute;
-	top:27em;
+	top:83%;
 }
 
 #topRight hr{
@@ -136,14 +149,14 @@ label{
 	float:right;
 	width:95%;
 	position:absolute;
-	top:1em;
+	top:4%;
 }
 
 #bottomLeft hr:last-of-type{
 	float:right;
 	width:95%;
 	position:absolute;
-	top:28em;
+	top:84%;
 }
 
 #bottomRight hr {
@@ -154,6 +167,29 @@ label{
 	left:2em;
 
 }
+
+.bar{
+	visibility:hidden;
+}
+
+#lineGraph{
+
+}
+
+.form-control{
+	width:80%;
+	height:100%;
+
+}
+
+button{
+	font-size: .80vw !important; 
+}
+
+label{
+	font-size: .70vw;
+}
+
 
 
 
