@@ -27,6 +27,10 @@ $(document).ready(function() {
     var notLinked = [];
     var linkLen = 0;
     var x = 0;
+    var originalDimesion = (canvas.height*canvas.width);
+    
+    var currentH,currentW;
+    var adjustedX,adjustedY;
 
 
     
@@ -45,6 +49,11 @@ $(document).ready(function() {
     window.addEventListener('resize', reAdjust, false);
 
     function reAdjust() {
+            var currentDimension = (canvas.height*canvas.width);
+            var frac = (currentDimension/originalDimesion);
+            
+
+            
             canvas.width = $("#topLeft").width();
             canvas.height = ($("#topLeft").height()-135);
             lineGraph.width = ($("#topRight").width()-175);
@@ -53,6 +62,35 @@ $(document).ready(function() {
             barGraph.height = ($("#topRight").height()-100);
             intializeBarGraph();
             intializeLineGraph();
+
+            
+
+            for(var i = 0; i < allNodes.length; i++){
+                adjustedX = (frac*allNodes[i].CoordX);
+                adjustedY = (frac*allNodes[i].CoordY);
+
+               
+                context.beginPath();
+                context.arc(adjustedX,adjustedY, (frac*30), 0, 2 * Math.PI, false);
+                context.closePath();
+
+                context.fillStyle = nodeColors[i];
+                context.beginPath();
+                context.arc(adjustedX,adjustedY, (frac*20), 0, 2 * Math.PI, false);
+                context.closePath()
+                context.fill();
+
+
+                context.fillStyle = "black";
+                context.fillText((allNodes[i].NodeNum).toString(), adjustedX - 3, adjustedY + 2);
+
+               
+
+            
+
+            }
+
+
     }
     
 window.onbeforeunload = reAdjust();
