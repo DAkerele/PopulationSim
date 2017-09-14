@@ -27,7 +27,13 @@ $(document).ready(function() {
     var notLinked = [];
     var linkLen = 0;
     var x = 0;
-    var originalDimesion = (canvas.height*canvas.width);
+    var originalDimesionN = (canvas.height*canvas.width);
+    var originalDimesionB = (barGraph.height*barGraph.width);
+    var originalDimesionL = (lineGraph.height*lineGraph.width);
+    var currentDimensionN = originalDimesionN;
+    var currentDimensionB = originalDimesionB;
+    var currentDimensionL = originalDimesionL;
+   
     
     var currentH,currentW;
     var adjustedX,adjustedY;
@@ -49,8 +55,11 @@ $(document).ready(function() {
     window.addEventListener('resize', reAdjust, false);
 
     function reAdjust() {
-            var currentDimension = (canvas.height*canvas.width);
-            var frac = (currentDimension/originalDimesion);
+             currentDimensionN = (canvas.height*canvas.width);
+             currentDimensionB = (barGraph.height*barGraph.width);
+             currentDimensionL = (lineGraph.height*lineGraph.width);
+             var frac = (currentDimensionN/originalDimesionN);
+
             
 
             
@@ -59,9 +68,13 @@ $(document).ready(function() {
             lineGraph.width = ($("#topRight").width()-175);
             lineGraph.height = ($("#topRight").height()-100);
             barGraph.width = ($("#topRight").width()-175);
-            barGraph.height = ($("#topRight").height()-100);
+            barGraph.height = ($("#topRight").height()-120);
             intializeBarGraph();
             intializeLineGraph();
+            if(running){
+                 plotBars(allNodes[sel.options[sel.selectedIndex].value-1]);
+            }
+           
 
             
 
@@ -779,9 +792,12 @@ window.onbeforeunload = reAdjust();
 
 
      function plotBars(node) {
+     
+     var frac = (currentDimensionB/originalDimesionB);
 
-        var rectHeight = 400;
-        var barIncrease = barGraph.height / node.numRuns;
+        var rectHeight = barGraph.height;
+        var rectWidth = frac*70;
+        var barIncrease = frac*barGraph.height / node.numRuns;
         var freqs = []
         var freq01 = 0,
             freq12 = 0,
@@ -821,59 +837,59 @@ window.onbeforeunload = reAdjust();
 
         }
 
-        barGraphCtx.strokeRect(0, rectHeight - freq01, 100, barGraph.height + freq01);
-        barGraphCtx.fillRect(0, rectHeight - freq01, 100, barGraph.height + freq01);
+        barGraphCtx.strokeRect(0, rectHeight - freq01, rectWidth, barGraph.height + freq01);
+        barGraphCtx.fillRect(0, rectHeight - freq01, rectWidth, frac*barGraph.height + freq01);
 
 
 
 
-        barGraphCtx.strokeRect(100, rectHeight - freq12, 100, barGraph.height + freq12);
-        barGraphCtx.fillRect(100, rectHeight - freq12, 100, barGraph.height + freq12);
+        barGraphCtx.strokeRect(frac*70, rectHeight - freq12, rectWidth, barGraph.height + freq12);
+        barGraphCtx.fillRect(frac*70, rectHeight - freq12, rectWidth, barGraph.height + freq12);
 
 
 
 
-        barGraphCtx.strokeRect(200, rectHeight - freq23, 100, barGraph.height + freq23);
-        barGraphCtx.fillRect(200, rectHeight - freq23, 100, barGraph.height + freq23);
+        barGraphCtx.strokeRect(frac*140, rectHeight - freq23, rectWidth, barGraph.height + freq23);
+        barGraphCtx.fillRect(frac*140, rectHeight - freq23, rectWidth, barGraph.height + freq23);
 
 
 
 
-        barGraphCtx.strokeRect(300, rectHeight - freq34, 100, barGraph.height + freq34);
-        barGraphCtx.fillRect(300, rectHeight - freq34, 100, barGraph.height + freq34);
+        barGraphCtx.strokeRect(frac*210, rectHeight - freq34, rectWidth,barGraph.height + freq34);
+        barGraphCtx.fillRect(frac*210, rectHeight - freq34, rectWidth, barGraph.height + freq34);
 
 
 
 
-        barGraphCtx.strokeRect(400, rectHeight - freq45, 100, barGraph.height + freq45);
-        barGraphCtx.fillRect(400, rectHeight - freq45, 100, barGraph.height + freq45);
+        barGraphCtx.strokeRect(frac*280, rectHeight - freq45, rectWidth, barGraph.height + freq45);
+        barGraphCtx.fillRect(frac*280, rectHeight - freq45, rectWidth, barGraph.height + freq45);
 
 
 
 
-        barGraphCtx.strokeRect(500, rectHeight - freq56, 100, barGraph.height + freq56);
-        barGraphCtx.fillRect(500, rectHeight - freq56, 100, barGraph.height + freq56);
+        barGraphCtx.strokeRect(frac*350, rectHeight - freq56, rectWidth, barGraph.height + freq56);
+        barGraphCtx.fillRect(frac*350, rectHeight - freq56, rectWidth, barGraph.height + freq56);
 
 
-        barGraphCtx.strokeRect(600, rectHeight - freq67, 100, barGraph.height + freq67);
-        barGraphCtx.fillRect(600, rectHeight - freq67, 100, barGraph.height + freq67);
-
-
-
-
-        barGraphCtx.strokeRect(700, rectHeight - freq78, 100, barGraph.height + freq78);
-        barGraphCtx.fillRect(700, rectHeight - freq78, 100, barGraph.height + freq78);
+        barGraphCtx.strokeRect(frac*420, rectHeight - freq67, rectWidth, barGraph.height + freq67);
+        barGraphCtx.fillRect(frac*420, rectHeight - freq67, rectWidth, barGraph.height + freq67);
 
 
 
 
-        barGraphCtx.strokeRect(800, rectHeight - freq89, 100, barGraph.height + freq89);
-        barGraphCtx.fillRect(800, rectHeight - freq89, 100, barGraph.height + freq89);
+        barGraphCtx.strokeRect(frac*490, rectHeight - freq78, rectWidth, barGraph.height + freq78);
+        barGraphCtx.fillRect(frac*490, rectHeight - freq78, rectWidth, barGraph.height + freq78);
 
 
 
-        barGraphCtx.strokeRect(900, rectHeight - freq91, 100, barGraph.height + freq91);
-        barGraphCtx.fillRect(900, rectHeight - freq91, 100, barGraph.height + freq91);
+
+        barGraphCtx.strokeRect(frac*560, rectHeight - freq89, rectWidth, barGraph.height + freq89);
+        barGraphCtx.fillRect(frac*560, rectHeight - freq89, rectWidth, barGraph.height + freq89);
+
+
+
+        barGraphCtx.strokeRect(frac*630, rectHeight - freq91, rectWidth, barGraph.height + freq91);
+        barGraphCtx.fillRect(frac*630, rectHeight - freq91, rectWidth, barGraph.height + freq91);
 
 
 
