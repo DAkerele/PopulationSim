@@ -13,6 +13,16 @@ body{
 	}
 }
 
+@media(max-width:1293px) and (max-height:836px){
+	#yAxi{
+		left:10vw !important;
+	}
+
+	#yAxisLabel{
+		left:2vw !important;
+	}
+}
+
 .container-fluid{
 	height:100%;
 	width:75vw;
@@ -189,6 +199,18 @@ button{
 label{
 	font-size: .70vw;
 }
+
+h5{
+	font-size: 2vh !important;
+
+}
+
+p{
+	font-size:1vw !important;
+}
+
+
+
 
 
 
