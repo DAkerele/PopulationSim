@@ -50,18 +50,18 @@
 
 						<!-- hiddening for y-axis linegraph -->
 						
-						<p id = "lineYAxis"style = "position:absolute; top:45%; left:2%;">%"+"Allele</p>
+						<p id = "yAxisLabel"style = "position:absolute;  top:45%; left:1vw;">%"+"Allele</p>
 						<p id = "lineXAxis"style = "position:absolute; top:94%; left:51%; ">Generations</p>
-						<p style = "position:absolute; top:10%; left:7em; ">100</p>
-						<p style = "position:absolute; top:18%; left:7em; ">90</p>
-						<p style = "position:absolute; top:26%; left:7em; ">80</p>
-						<p style = "position:absolute; top:34%; left:7em; ">70</p>
-						<p style = "position:absolute; top:42%; left:7em; ">60</p>
-						<p style = "position:absolute; top:50%; left:7em; ">50</p>
-						<p style = "position:absolute; top:58%; left:7em; ">40</p>
-						<p style = "position:absolute; top:66%; left:7em; ">30</p>
-						<p style = "position:absolute; top:74%; left:7em; ">20</p>
-						<p style = "position:absolute; top:82%; left:7em; ">10</p>
+						<p  id = "yAxi" style = "position:absolute; top:10%; left:7vw; ">100</p>
+						<p  id = "yAxi" style = "position:absolute; top:18%; left:7vw; ">90</p>
+						<p  id = "yAxi" style = "position:absolute; top:26%; left:7vw; ">80</p>
+						<p  id = "yAxi" style = "position:absolute; top:34%; left:7vw; ">70</p>
+						<p  id = "yAxi" style = "position:absolute; top:42%; left:7vw; ">60</p>
+						<p  id = "yAxi" style = "position:absolute; top:50%; left:7vw; ">50</p>
+						<p  id = "yAxi" style = "position:absolute; top:58%; left:7vw; ">40</p>
+						<p  id = "yAxi" style = "position:absolute; top:66%; left:7vw; ">30</p>
+						<p  id = "yAxi" style = "position:absolute; top:74%; left:7vw; ">20</p>
+						<p  id = "yAxi" style = "position:absolute; top:82%; left:7vw; ">10</p>
 					
 						<!-- hiddening for x-axis linegraph-->
 						<p style = "position:absolute; top:30em; left:74.25em;" id = "endGen"></p>
@@ -72,12 +72,24 @@
 								<h5 style = "position:absolute; top:3%; left:4%; font-size:100%;">% "+" Allele Frequencies</h5>
 						</header>
 						<hr>
-						<canvas style="border:1px solid #000000; position:absolute; left:10em; top:3.75em;" id = "barGraph" height= "435" width = "719" ></canvas>
+						<canvas style="border:1px solid #000000; position:absolute; left:10em; top:3.75em;" id = "barGraph" height= "400" width = "719" ></canvas>
 						<select class="form-control" id = "nodeSelect" style= "position:absolute; top:45%; left:4%; width:9%;">
 							<option value="None">None</option>
 						</select>
 						<p  id = "barXAxis"style = "position:absolute; top:94%; left:47%; ">Allele End Frequencies</p>
 						<p  id = "RunTotal" style = "position:absolute; top:10%; left:5%; ">Run Total: 0</p>
+
+						<p style = "position:absolute; top:90%; left:20%; ">0.0</p>
+						<p style = "position:absolute; top:90%; left:27.5%; ">0.1</p>
+						<p style = "position:absolute; top:90%; left:35%; ">0.2</p>
+						<p style = "position:absolute; top:90%; left:42.5%; ">0.3</p>
+						<p style = "position:absolute; top:90%; left:50%; ">0.4</p>
+						<p style = "position:absolute; top:90%; left:57.5%; ">0.5</p>
+						<p style = "position:absolute; top:90%; left:65%; ">0.6</p>
+						<p style = "position:absolute; top:90%; left:72.5%; ">0.7</p>
+						<p style = "position:absolute; top:90%; left:80%; ">0.8</p>
+						<p style = "position:absolute; top:90%; left:87.5%; ">0.9</p>
+						<p style = "position:absolute; top:90%; left:94%; ">1.0</p>
 					</div>
 
 				</div>
@@ -217,18 +229,7 @@
 				<!--bargraph-->
 				<div class = "col-md-8 col" id = "bottomRight" style = "position:relative;">
 					
-					<!--hiddening for bargraph x axis-->
-					<p style = "position:absolute; top:31em; left:12em; ">0.0</p>
-					<p style = "position:absolute; top:31em; left:18.25em; ">0.1</p>
-					<p style = "position:absolute; top:31em; left:24.5em; ">0.2</p>
-					<p style = "position:absolute; top:31em; left:30.75em; ">0.3</p>
-					<p style = "position:absolute; top:31em; left:37em; ">0.4</p>
-					<p style = "position:absolute; top:31em; left:43.25em; ">0.5</p>
-					<p style = "position:absolute; top:31em; left:49.5em; ">0.6</p>
-					<p style = "position:absolute; top:31em; left:55.75em; ">0.7</p>
-					<p style = "position:absolute; top:31em; left:62em; ">0.8</p>
-					<p style = "position:absolute; top:31em; left:68.25em; ">0.9</p>
-					<p style = "position:absolute; top:31em; left:74.5em; ">1.0</p>
+					
 					
 
 				</div>
