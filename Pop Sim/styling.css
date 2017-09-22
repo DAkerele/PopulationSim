@@ -13,15 +13,6 @@ body{
 	}
 }
 
-@media(max-width:1293px) and (max-height:836px){
-	#yAxi{
-		left:10vw !important;
-	}
-
-	#yAxisLabel{
-		left:2vw !important;
-	}
-}
 
 .container-fluid{
 	height:100%;
@@ -142,7 +133,7 @@ label{
 	float:right;
 	width:95%;
 	position:absolute;
-	top:20px;
+	top:5%;
 	left:2em;
 
 }
