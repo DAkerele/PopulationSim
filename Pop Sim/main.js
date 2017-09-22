@@ -27,12 +27,15 @@ $(document).ready(function() {
     var notLinked = [];
     var linkLen = 0;
     var x = 0;
-    var originalDimesionN = (canvas.height*canvas.width);
-    var originalDimesionB = (barGraph.height*barGraph.width);
-    var originalDimesionL = (lineGraph.height*lineGraph.width);
+    var originalDimesionN = (document.documentElement.clientWidth*document.documentElement.clientHeight);
+    var oG = (canvas.height*canvas.width);
+    var cD = oG;
     var currentDimensionN = originalDimesionN;
+    var originalDimesionB = (barGraph.height*barGraph.width);
     var currentDimensionB = originalDimesionB;
-    var currentDimensionL = originalDimesionL;
+    var fracN = 1;
+  
+   
    
     
     var currentH,currentW;
@@ -55,21 +58,40 @@ $(document).ready(function() {
     window.addEventListener('resize', reAdjust, false);
 
     function reAdjust() {
-             currentDimensionN = (canvas.height*canvas.width);
-             currentDimensionB = (barGraph.height*barGraph.width);
-             currentDimensionL = (lineGraph.height*lineGraph.width);
-             var frac = (currentDimensionN/originalDimesionN);
+             
              
 
             
 
             
             canvas.width = $("#topLeft").width();
-            canvas.height = ($("#topLeft").height()-135);
+            canvas.height = ($("#topLeft").height()-100);
             lineGraph.width = ($("#topRight").width()-175);
             lineGraph.height = ($("#topRight").height()-100);
             barGraph.width = ($("#topRight").width()-175);
             barGraph.height = ($("#topRight").height()-120);
+            
+
+            currentDimensionN = (document.documentElement.clientWidth*document.documentElement.clientHeight);
+            
+            cd = (canvas.height*canvas.width);
+           
+            if((currentDimensionN/originalDimesionN) <= 1.2 && (currentDimensionN/originalDimesionN) >= 0.7 ){
+                 fracN = (currentDimensionN/originalDimesionN);
+                
+            }else{
+                fracN = 1;
+            }
+           
+            var fracPos = (cD/oG)
+            
+        
+            
+
+            
+            
+            
+
             intializeBarGraph();
             intializeLineGraph();
             if(running && sel.options[sel.selectedIndex].value != "None" && $("#graphSwitch").html() == "LINE"){
@@ -80,34 +102,35 @@ $(document).ready(function() {
             
 
             for(var i = 0; i < allNodes.length; i++){
-                adjustedX = (frac*allNodes[i].CoordX);
-                adjustedY = (frac*allNodes[i].CoordY);
+                adjustedX = (fracPos*allNodes[i].CoordX);
+                adjustedY = (fracPos*allNodes[i].CoordY);
 
                
                 context.beginPath();
-                context.arc(adjustedX,adjustedY, (frac*30), 0, 2 * Math.PI, false);
+                context.arc(adjustedX,adjustedY, fracN*15, 0, 2 * Math.PI, false);
                 context.closePath();
+
 
                 context.fillStyle = nodeColors[i];
                 context.beginPath();
-                context.arc(adjustedX,adjustedY, (frac*20), 0, 2 * Math.PI, false);
+                context.arc(adjustedX,adjustedY, fracN*15, 0, 2 * Math.PI, false);
                 context.closePath()
                 context.fill();
                  for(var f = 0; f < allNodes[i].endNodes.length; f++){    
                     context.beginPath();
                     context.lineWidth = 0.5;
                     context.strokeStyle = "#FF0000";
-                    context.moveTo(frac*allNodes[i].CoordX, frac*allNodes[i].CoordY);
-                    context.lineTo(frac*allNodes[i].endNodes[f].CoordX, frac*allNodes[i].endNodes[f].CoordY);
+                    context.moveTo(fracPos*allNodes[i].CoordX, fracPos*allNodes[i].CoordY);
+                    context.lineTo(fracPos*allNodes[i].endNodes[f].CoordX, fracPos*allNodes[i].endNodes[f].CoordY);
                     context.stroke();
                     context.closePath();
 
                     context.beginPath();
                     context.fillStyle = allNodes[i].Color;
-                    context.arc(frac*allNodes[i].endNodes[f].CoordX, frac*allNodes[i].endNodes[f].CoordY, 10, 0, 2 * Math.PI);
+                    context.arc(fracPos*allNodes[i].endNodes[f].CoordX, fracPos*allNodes[i].endNodes[f].CoordY, 10, 0, 2 * Math.PI);
                     context.fill();
                     context.fillStyle = "black";
-                    context.fillText(allNodes[i].endNodes[f].NodeNum.toString(), frac*allNodes[i].endNodes[f].CoordX - 3, frac*allNodes[i].endNodes[f].CoordY + 3);
+                    context.fillText(allNodes[i].endNodes[f].NodeNum.toString(), fracPos*allNodes[i].endNodes[f].CoordX - 3, fracPos*allNodes[i].endNodes[f].CoordY + 3);
                     context.closePath();
                 }
 
@@ -143,6 +166,7 @@ window.onbeforeunload = reAdjust();
 
 
     function draw(e){
+        
         //creates nodes on click event
         if (!running) {
             var pos = getMousePos(canvas, e);
@@ -156,18 +180,18 @@ window.onbeforeunload = reAdjust();
 
 
                     context.beginPath();
-                    context.arc(posX, posY, 30, 0, 2 * Math.PI, false);
+                    context.arc(posX, posY, fracN*15, 0, 2 * Math.PI, false);
                     context.closePath();
 
                     context.fillStyle = nodeColors[NodeCount];
                     context.beginPath();
-                    context.arc(posX, posY, 20, 0, 2 * Math.PI, false);
+                    context.arc(posX, posY, fracN*15, 0, 2 * Math.PI, false);
                     context.closePath()
                     context.fill();
 
                     context.strokeStyle = "#f44242";
                     context.beginPath();
-                    context.arc(posX, posY, 30, 0, 2 * Math.PI);
+                    context.arc(posX, posY, fracN*20, 0, 2 * Math.PI);
                     context.stroke();
 
 
@@ -202,7 +226,7 @@ window.onbeforeunload = reAdjust();
                     selectedNode = allNodes[i];
                     context.strokeStyle = "#f44242";
                     context.beginPath();
-                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI);
+                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*20, 0, 2 * Math.PI);
                     context.stroke();
 
                     var arr = document.getElementsByTagName("input");//hides all node fields 
@@ -237,7 +261,7 @@ window.onbeforeunload = reAdjust();
                     for (var j = 0; j < 10; j++) {
                         context.strokeStyle = "#FFFFFF";
                         context.beginPath();
-                        context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI);
+                        context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*20, 0, 2 * Math.PI);
                         context.stroke();
                     }
 
@@ -438,12 +462,12 @@ window.onbeforeunload = reAdjust();
                     allNodes[i].linkString = [];
 
                     context.beginPath();
-                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI, false);
+                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*15, 0, 2 * Math.PI, false);
                     context.closePath();
 
                     context.fillStyle = allNodes[i].Color;
                     context.beginPath();
-                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 20, 0, 2 * Math.PI, false);
+                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*15, 0, 2 * Math.PI, false);
                     context.closePath()
                     context.fill();
 
@@ -760,11 +784,21 @@ window.onbeforeunload = reAdjust();
         var lineSpaceHor = lineGraph.height / 10;
         var lineSpaceVer = lineGraph.width / 9;
         lineGraphCtx.beginPath();
+        lineGraphCtx.moveTo(30,lineGraph.height)
+        lineGraphCtx.lineTo(30,0);
+        lineGraphCtx.moveTo(30,lineGraph.height)
+        lineGraphCtx.lineTo(lineGraph.width,lineGraph.height);
+         lineGraphCtx.fillStyle = "black";
+        lineGraphCtx.fillText("100", 0 , 0,20);
+        var j = 9;
+        lineGraphCtx.fillText("100", 0 , 7);
         for (var i = 0; i < lineGraph.height; i += lineSpaceHor) {
-            lineGraphCtx.moveTo(0, i);
+            lineGraphCtx.fillText(""+10*j, 0 , i+lineSpaceHor+1);
+            lineGraphCtx.moveTo(30, i);
             lineGraphCtx.lineTo(lineGraph.width, i);
             lineGraphCtx.stroke();
-
+           j--;
+            
         }
         lineGraphCtx.closePath();
 
@@ -777,26 +811,39 @@ window.onbeforeunload = reAdjust();
         barGraphCtx.fillRect(0, 0, barGraph.width, barGraph.height);
         var ylineSpace = barGraph.height / 4;
         var xValueSpace = barGraph.width / 10;
-
+        var p = 0;
+        for (var i = 0; i < barGraph.width; i+= xValueSpace) {
+            barGraphCtx.fillStyle = "black";
+            barGraphCtx.fillText((0+p).toPrecision(1)+"",i,barGraph.height);
+            
+            p+=0.1;      
+        }
         barGraphCtx.beginPath();
+        barGraphCtx.moveTo(0,barGraph.height-10)
+        barGraphCtx.lineTo(barGraph.width,barGraph.height-10);
+        barGraphCtx.moveTo(0,barGraph.height-10)
+        barGraphCtx.lineTo(0,0);
+        barGraphCtx.moveTo(barGraph.width,barGraph.height-10)
+        barGraphCtx.lineTo(barGraph.width,0);
         for (var i = 0; i < barGraph.height; i += ylineSpace) {
             barGraphCtx.moveTo(0, i);
             barGraphCtx.lineTo(barGraph.width, i);
             barGraphCtx.stroke();
         }
 
+        barGraphCtx.fillText("1.0",barGraph.width-15,barGraph.height);
     }
 
 
     function plotPoints(array = genArray) {//plots points for unlinked nodes
 
-        var pointSpace = ((((array.length-1) / findLongestLink()) * (lineGraph.width) / (array.length-1)));
+        var pointSpace = ((((array.length-1) / findLongestLink()) * (lineGraph.width-30) / (array.length-1)));
         lineGraphCtx.beginPath();
         lineGraphCtx.lineWidth = 0.5;
-        lineGraphCtx.moveTo(0, (lineGraph.height - (array[0][1] * lineGraph.height))); //zeroY
+        lineGraphCtx.moveTo(30, (lineGraph.height - (array[0][1] * lineGraph.height))); //zeroY
         for (var r = 0; r < array.length; r++) {
-            lineGraphCtx.lineTo(pointSpace * (r + 1), lineGraph.height - (array[r][1] * lineGraph.height));
-            lineGraphCtx.moveTo(pointSpace * (r + 1), lineGraph.height - (array[r][1] * lineGraph.height));
+            lineGraphCtx.lineTo(30+pointSpace * (r + 1), lineGraph.height - (array[r][1] * lineGraph.height));
+            lineGraphCtx.moveTo(30+pointSpace * (r + 1), lineGraph.height - (array[r][1] * lineGraph.height));
 
             lineGraphCtx.stroke();
             console.log(array[r][1]);
@@ -826,9 +873,9 @@ window.onbeforeunload = reAdjust();
      
      var frac = (currentDimensionB/originalDimesionB);
 
-        var rectHeight = barGraph.height;
-        var rectWidth = barGraph.width/10;
-        var barIncrease = frac*barGraph.height / node.numRuns;
+        var rectHeight = barGraph.height-10;
+        var rectWidth = (barGraph.width+5)/10;
+        var barIncrease = (barGraph.height-10) / node.numRuns;
         var freqs = []
         var freq01 = 0,
             freq12 = 0,
@@ -867,61 +914,62 @@ window.onbeforeunload = reAdjust();
             }
 
         }
-
-        barGraphCtx.strokeRect(0, rectHeight - freq01, rectWidth, barGraph.height + freq01);
-        barGraphCtx.fillRect(0, rectHeight - freq01, rectWidth, barGraph.height + freq01);
-
-
-
-
-        barGraphCtx.strokeRect(rectWidth, rectHeight - freq12, rectWidth, barGraph.height + freq12);
-        barGraphCtx.fillRect(rectWidth, rectHeight - freq12, rectWidth, barGraph.height + freq12);
+        
+        
+        barGraphCtx.strokeRect(0, rectHeight - freq01, rectWidth,  freq01);
+        barGraphCtx.fillRect(0, rectHeight - freq01, rectWidth,  freq01);
 
 
 
 
-        barGraphCtx.strokeRect(rectWidth*2, rectHeight - freq23, rectWidth, barGraph.height + freq23);
-        barGraphCtx.fillRect(rectWidth*2, rectHeight - freq23, rectWidth, barGraph.height + freq23);
+        barGraphCtx.strokeRect(rectWidth, rectHeight - freq12, rectWidth,  freq12);
+        barGraphCtx.fillRect(rectWidth, rectHeight - freq12, rectWidth, freq12);
 
 
 
 
-        barGraphCtx.strokeRect(rectWidth*3, rectHeight - freq34, rectWidth,barGraph.height + freq34);
-        barGraphCtx.fillRect(rectWidth*3, rectHeight - freq34, rectWidth, barGraph.height + freq34);
+        barGraphCtx.strokeRect(rectWidth*2, rectHeight - freq23, rectWidth,  freq23);
+        barGraphCtx.fillRect(rectWidth*2, rectHeight - freq23, rectWidth, freq23);
 
 
 
 
-        barGraphCtx.strokeRect(rectWidth*4, rectHeight - freq45, rectWidth, barGraph.height + freq45);
-        barGraphCtx.fillRect(rectWidth*4, rectHeight - freq45, rectWidth, barGraph.height + freq45);
+        barGraphCtx.strokeRect(rectWidth*3, rectHeight - freq34, rectWidth, freq34);
+        barGraphCtx.fillRect(rectWidth*3, rectHeight - freq34, rectWidth,  freq34);
 
 
 
 
-        barGraphCtx.strokeRect(rectWidth*5, rectHeight - freq56, rectWidth, barGraph.height + freq56);
-        barGraphCtx.fillRect(rectWidth*5, rectHeight - freq56, rectWidth, barGraph.height + freq56);
-
-
-        barGraphCtx.strokeRect(rectWidth*6, rectHeight - freq67, rectWidth, barGraph.height + freq67);
-        barGraphCtx.fillRect(rectWidth*6, rectHeight - freq67, rectWidth, barGraph.height + freq67);
+        barGraphCtx.strokeRect(rectWidth*4, rectHeight - freq45, rectWidth, freq45);
+        barGraphCtx.fillRect(rectWidth*4, rectHeight - freq45, rectWidth,  freq45);
 
 
 
 
-        barGraphCtx.strokeRect(rectWidth*7, rectHeight - freq78, rectWidth, barGraph.height + freq78);
-        barGraphCtx.fillRect(rectWidth*7, rectHeight - freq78, rectWidth, barGraph.height + freq78);
+        barGraphCtx.strokeRect(rectWidth*5, rectHeight - freq56, rectWidth,  freq56);
+        barGraphCtx.fillRect(rectWidth*5, rectHeight - freq56, rectWidth,  freq56);
+
+
+        barGraphCtx.strokeRect(rectWidth*6, rectHeight - freq67, rectWidth, freq67);
+        barGraphCtx.fillRect(rectWidth*6, rectHeight - freq67, rectWidth,  freq67);
 
 
 
 
-        barGraphCtx.strokeRect(rectWidth*8, rectHeight - freq89, rectWidth, barGraph.height + freq89);
-        barGraphCtx.fillRect(rectWidth*8, rectHeight - freq89, rectWidth, barGraph.height + freq89);
+        barGraphCtx.strokeRect(rectWidth*7, rectHeight - freq78, rectWidth,  freq78);
+        barGraphCtx.fillRect(rectWidth*7, rectHeight - freq78, rectWidth,  freq78);
 
 
 
-        barGraphCtx.strokeRect(rectWidth*9, rectHeight - freq91, rectWidth, barGraph.height + freq91);
-        barGraphCtx.fillRect(rectWidth*9, rectHeight - freq91, rectWidth, barGraph.height + freq91);
 
+        barGraphCtx.strokeRect(rectWidth*8, rectHeight - freq89, rectWidth, freq89);
+        barGraphCtx.fillRect(rectWidth*8, rectHeight - freq89, rectWidth,  freq89);
+
+
+
+        barGraphCtx.strokeRect(rectWidth*9, rectHeight - freq91, rectWidth, freq91);
+        barGraphCtx.fillRect(rectWidth*9, rectHeight - freq91, rectWidth,  freq91);
+        
 
 
     }
