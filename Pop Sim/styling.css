@@ -113,7 +113,7 @@ form{
 	width:90%;
 	position:absolute;
 	left:22%;
-	top:12%;
+	top:9%;
 }
 
 label{
@@ -122,14 +122,6 @@ label{
 
 }
 
-#bottom{
-	position:absolute;
-	top:440px;
-	
-}
-
-
- 
 
 #topLeft hr:first-of-type{
 	float:center; 
@@ -166,7 +158,7 @@ label{
 	float:right;
 	width:95%;
 	position:absolute;
-	top:84%;
+	top:79%;
 }
 
 #bottomRight hr {
@@ -208,12 +200,3 @@ h5{
 p{
 	font-size:1vw !important;
 }
-
-
-
-
-
-
-
-
-
