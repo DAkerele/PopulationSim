@@ -19,9 +19,21 @@ body{
 	}
 }
 
-@media(max-width:1650px){
+@media(max-width:1450px){
 	.form-control{
 		font-size:.5rem !important;
+	}
+}
+
+@media(max-width:1250px){
+	.form-control{
+		font-size:.25rem !important;
+	}
+}
+
+@media(max-width:1050px){
+	.form-control{
+		font-size:.1rem !important;
 	}
 }
 
