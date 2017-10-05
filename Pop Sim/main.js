@@ -66,7 +66,7 @@ $(document).ready(function() {
             
             canvas.width = $("#topLeft").width();
             canvas.height = ($("#topLeft").height()-100);
-            lineGraph.width = ($("#topRight").width()-175);
+            lineGraph.width = ($("#topRight").width()-100);
             lineGraph.height = ($("#topRight").height()-100);
             barGraph.width = ($("#topRight").width()-175);
             barGraph.height = ($("#topRight").height()-120);
