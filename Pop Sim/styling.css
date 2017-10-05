@@ -13,29 +13,20 @@ body{
 	}
 }
 
-@media(max-width:1650px){
+@media(max-width:1049px){
 	.form-control{
-		font-size:.75rem !important;
+		width:130% !important;
+	}
+
+	#startLink{
+		width:10% !important;	
+	}
+	#endLink{
+		width:10% !important;
 	}
 }
 
-@media(max-width:1450px){
-	.form-control{
-		font-size:.5rem !important;
-	}
-}
 
-@media(max-width:1250px){
-	.form-control{
-		font-size:.25rem !important;
-	}
-}
-
-@media(max-width:1050px){
-	.form-control{
-		font-size:.1rem !important;
-	}
-}
 
 
 
@@ -122,16 +113,17 @@ form p{
 }
 
 form{
-	height:85%;
-	width:90%;
+	height:400px;
+	width:275px;
 	position:absolute ;
-	left:22%;
+	left:10%;
 	top:9%;
+
 }
 
 label{
 
-	
+	position:absolute;
 	font-size:75% !important;
 	white-space:nowrap;
 	width:50% !important;
@@ -196,11 +188,11 @@ label{
 }
 
 .form-control{
-	width:50%;
+	width:150%;
 	height:100%;
-	position:relative;
-	left:15%;
-	font-size:1rem;
+	position:absolute;
+	left:120%;
+	font-size:100%;
 
 }
 
@@ -218,3 +210,4 @@ h5{
 p{
 	font-size:1vw !important;
 }
+
