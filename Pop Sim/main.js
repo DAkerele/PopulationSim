@@ -61,20 +61,20 @@ $(document).ready(function() {
              
              
 
-            
+           
 
             
             canvas.width = $("#topLeft").width();
             canvas.height = ($("#topLeft").height()-100);
-            lineGraph.width = ($("#topRight").width()-100);
+            lineGraph.width = ($("#topRight").width()-175);
             lineGraph.height = ($("#topRight").height()-100);
             barGraph.width = ($("#topRight").width()-175);
             barGraph.height = ($("#topRight").height()-120);
-            
+            cD = (canvas.height*canvas.width);
 
             currentDimensionN = (document.documentElement.clientWidth*document.documentElement.clientHeight);
             
-            cd = (canvas.height*canvas.width);
+            
            
             if((currentDimensionN/originalDimesionN) <= 1.2 && (currentDimensionN/originalDimesionN) >= 0.7 ){
                  fracN = (currentDimensionN/originalDimesionN);
@@ -84,7 +84,7 @@ $(document).ready(function() {
             }
            
             var fracPos = (cD/oG)
-            
+            alert(fracPos);
         
             
 
