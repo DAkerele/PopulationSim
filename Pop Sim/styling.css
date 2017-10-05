@@ -13,18 +13,30 @@ body{
 	}
 }
 
-@media(max-width:1049px){
+
+@media(max-width:1300px){
+	.container-fluid{
+		width:768px !important;
+		height:807px !important;
+	}
+
 	.form-control{
-		width:130% !important;
+		width:50px;
+		left:100px !important;
 	}
 
 	#startLink{
-		width:10% !important;	
+		width:10% !important;
+		left:5% !important;
 	}
 	#endLink{
 		width:10% !important;
+		left:25% !important;
 	}
+
+	
 }
+
 
 
 
@@ -113,8 +125,8 @@ form p{
 }
 
 form{
-	height:400px;
-	width:275px;
+	height:85%;
+ 	width:90%;
 	position:absolute ;
 	left:10%;
 	top:9%;
@@ -124,10 +136,10 @@ form{
 label{
 
 	position:absolute;
-	font-size:75% !important;
 	white-space:nowrap;
-	width:50% !important;
+	width:80% !important;
 	text-align:right;
+	left:-15%;
 
 }
 
@@ -188,10 +200,10 @@ label{
 }
 
 .form-control{
-	width:150%;
+	width:100%;
 	height:100%;
 	position:absolute;
-	left:120%;
+	left:110%;
 	font-size:100%;
 
 }
@@ -211,3 +223,11 @@ p{
 	font-size:1vw !important;
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
