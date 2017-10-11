@@ -28,12 +28,13 @@ $(document).ready(function() {
     var linkLen = 0;
     var x = 0;
     var originalDimesionN = (document.documentElement.clientWidth*document.documentElement.clientHeight);
-    var oG = (canvas.height*canvas.width);
+    var oG = (($("#topLeft").height()-100)*($("#topLeft").width()));
     var cD = oG;
     var currentDimensionN = originalDimesionN;
     var originalDimesionB = (barGraph.height*barGraph.width);
     var currentDimensionB = originalDimesionB;
     var fracN = 1;
+    var fracPos = 1;
   
    
    
@@ -70,7 +71,8 @@ $(document).ready(function() {
             lineGraph.height = ($("#topRight").height()-100);
             barGraph.width = ($("#topRight").width()-175);
             barGraph.height = ($("#topRight").height()-120);
-            cD = (canvas.height*canvas.width);
+            cD = (($("#topLeft").height()-100)*($("#topLeft").width()));
+           
 
             currentDimensionN = (document.documentElement.clientWidth*document.documentElement.clientHeight);
             
@@ -82,9 +84,16 @@ $(document).ready(function() {
             }else{
                 fracN = 1;
             }
+
            
-            var fracPos = (cD/oG)
-            alert(fracPos);
+                fracPos = (cD/oG)
+            
+            
+                fracPos = 1;
+            
+           
+            
+          
         
             
 
@@ -104,7 +113,26 @@ $(document).ready(function() {
             for(var i = 0; i < allNodes.length; i++){
                 adjustedX = (fracPos*allNodes[i].CoordX);
                 adjustedY = (fracPos*allNodes[i].CoordY);
+                
+                 /*if((fracPos*allNodes[i].CoordX) =< 1){
+                    adjustedX = 10;
+                    
+                }
+                else if((fracPos*allNodes[i].CoordX) >= (canvas.width-1)){
+                    adjustedX = (canvas.width-10);
+                    
 
+                }
+                else if (fracPos*allNodes[i].CoordY) =< 1){
+                    
+                    adjustedY = 10;
+
+                } 
+                else if((fracPos*allNodes[i].CoordY) >= (canvas.height-1)){
+                    
+                    adjustedY = (canvas.height-10);
+                    
+                }*/
                
                 context.beginPath();
                 context.arc(adjustedX,adjustedY, fracN*15, 0, 2 * Math.PI, false);
@@ -127,7 +155,7 @@ $(document).ready(function() {
 
                     context.beginPath();
                     context.fillStyle = allNodes[i].Color;
-                    context.arc(fracPos*allNodes[i].endNodes[f].CoordX, fracPos*allNodes[i].endNodes[f].CoordY, 10, 0, 2 * Math.PI);
+                    context.arc(fracPos*allNodes[i].endNodes[f].CoordX, fracPos*allNodes[i].endNodes[f].CoordY, fracN*10, 0, 2 * Math.PI);
                     context.fill();
                     context.fillStyle = "black";
                     context.fillText(allNodes[i].endNodes[f].NodeNum.toString(), fracPos*allNodes[i].endNodes[f].CoordX - 3, fracPos*allNodes[i].endNodes[f].CoordY + 3);
@@ -313,17 +341,17 @@ window.onbeforeunload = reAdjust();
                 context.beginPath();
                 context.lineWidth = 0.5;
                 context.strokeStyle = "#FF0000";
-                context.moveTo(allNodes[start].CoordX, allNodes[start].CoordY);
-                context.lineTo(allNodes[end].CoordX, allNodes[end].CoordY);
+                context.moveTo(fracPos*allNodes[start].CoordX, fracPos*allNodes[start].CoordY);
+                context.lineTo(fracPos*allNodes[end].CoordX, fracPos*allNodes[end].CoordY);
                 context.stroke();
                 context.closePath();
 
                 context.beginPath();
                 context.fillStyle = allNodes[start].Color;
-                context.arc(allNodes[end].CoordX, allNodes[end].CoordY, 10, 0, 2 * Math.PI);
+                context.arc(fracPos*allNodes[end].CoordX, fracPos*allNodes[end].CoordY, 10, 0, 2 * Math.PI);
                 context.fill();
                 context.fillStyle = "black";
-                context.fillText(allNodes[end].NodeNum.toString(), allNodes[end].CoordX - 3, allNodes[end].CoordY + 3);
+                context.fillText(allNodes[end].NodeNum.toString(), (fracPos*allNodes[end].CoordX) - 3, (fracPos*allNodes[end].CoordY) + 3);
                 context.closePath();
             }
 
@@ -332,6 +360,8 @@ window.onbeforeunload = reAdjust();
     }
 
     document.getElementById("unlink").onclick = function unlinkNodes() {//disassembles link groups into indiviual nodes and graphs disassembled nodes
+        start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
+        end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
       if(running){//if beginRun has started  
             
             lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
@@ -370,6 +400,29 @@ window.onbeforeunload = reAdjust();
             }
             document.getElementById("endGen").innerHTML = findLongestLink();
             
+        }
+        else{
+            context.clearRect(0,0, lineGraph.width, lineGraph.height);
+            for (var i = 0; i < allNodes.length; i++) {
+                context.beginPath();
+                context.arc(fracPos*allNodes[i].CoordX, fracPos*allNodes[i].CoordY,fracN*15, 0, 2 * Math.PI, false);
+                context.closePath();
+
+                context.fillStyle = allNodes[i].Color;
+                context.beginPath();
+                context.arc(fracPos*allNodes[i].CoordX, fracPos*allNodes[i].CoordY,fracN*15, 0, 2 * Math.PI, false);
+                context.closePath()
+                context.fill();
+
+                context.fillStyle = "black";
+                context.fillText(allNodes[i].NodeNum.toString(), (fracPos*allNodes[i].CoordX) - 3, (fracPos*allNodes[i].CoordY) + 2);
+                allNodes[i].linkStartNode = null;
+                allNodes[i].endNodes = [];
+                allNodes[i].linkString = [];
+               
+            }
+
+
         }
         return false;
     }
@@ -612,8 +665,9 @@ window.onbeforeunload = reAdjust();
     document.getElementById("reset").onclick = function reset() { //resets data
         if (confirm("Are you sure you want to reset all nodes?")) {
             location.reload();
-            return false;
+            
         }
+        return false;
     }
 
 
