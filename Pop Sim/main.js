@@ -84,12 +84,16 @@ $(document).ready(function() {
             }else{
                 fracN = 1;
             }
-
-           
-                fracPos = (cD/oG)
+                if((cD/oG) < 1){
+                    fracPos = (cD/oG);
+                }
+                else{
+                    fracPos = 1;
+                }
+                    
+             
             
-            
-                fracPos = 1;
+                
             
            
             
@@ -114,25 +118,7 @@ $(document).ready(function() {
                 adjustedX = (fracPos*allNodes[i].CoordX);
                 adjustedY = (fracPos*allNodes[i].CoordY);
                 
-                 /*if((fracPos*allNodes[i].CoordX) =< 1){
-                    adjustedX = 10;
-                    
-                }
-                else if((fracPos*allNodes[i].CoordX) >= (canvas.width-1)){
-                    adjustedX = (canvas.width-10);
-                    
-
-                }
-                else if (fracPos*allNodes[i].CoordY) =< 1){
-                    
-                    adjustedY = 10;
-
-                } 
-                else if((fracPos*allNodes[i].CoordY) >= (canvas.height-1)){
-                    
-                    adjustedY = (canvas.height-10);
-                    
-                }*/
+                 
                
                 context.beginPath();
                 context.arc(adjustedX,adjustedY, fracN*15, 0, 2 * Math.PI, false);
