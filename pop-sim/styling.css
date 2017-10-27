@@ -1,17 +1,46 @@
 body{
 	overflow:hidden;
 	min-width:968px;
-	min-height:687px;  
+	min-height:807px;  
 }
 
 
-@media(max-height:687px) and (max-width:968px){
+@media(max-height:807px){
 	body{
 		overflow:scroll;
 
 	 
 	}
 }
+
+
+@media(max-width:1300px){
+	.container-fluid{
+		width:768px !important;
+		height:807px !important;
+	}
+
+	.form-control{
+		width:50px;
+		left:100px !important;
+	}
+
+	#startLink{
+		width:10% !important;
+		left:5% !important;
+	}
+	#endLink{
+		width:10% !important;
+		left:25% !important;
+	}
+
+	
+}
+
+
+
+
+
 
 
 .container-fluid{
@@ -72,11 +101,7 @@ outline-width:.5vw;
 	left:300px;
 }
 
-input{
-	position:absolute;
-	left:5em;
-	
-}
+
 
 form p{
 	width:100px;
@@ -101,15 +126,20 @@ form p{
 
 form{
 	height:85%;
-	width:90%;
-	position:absolute;
-	left:22%;
+ 	width:90%;
+	position:absolute ;
+	left:10%;
 	top:9%;
+
 }
 
 label{
-	font-size:13px;
+
+	position:absolute;
 	white-space:nowrap;
+	width:80% !important;
+	text-align:right;
+	left:-15%;
 
 }
 
@@ -170,8 +200,11 @@ label{
 }
 
 .form-control{
-	width:80%;
+	width:100%;
 	height:100%;
+	position:absolute;
+	left:110%;
+	font-size:100%;
 
 }
 
@@ -179,9 +212,7 @@ button{
 	font-size: .80vw !important; 
 }
 
-label{
-	font-size: .70vw;
-}
+
 
 h5{
 	font-size: 2vh !important;
@@ -190,4 +221,13 @@ h5{
 
 p{
 	font-size:1vw !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
