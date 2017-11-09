@@ -54,132 +54,15 @@ $(document).ready(function() {
     lineGraphCtx.fillRect(0, 0, lineGraph.width, lineGraph.height);
     context.fillRect(0, 0, canvas.width, canvas.height);
     intializeLineGraph();
-    intializeBarGraph();
-
-    window.addEventListener('resize', reAdjust, false);
-
-    function reAdjust() {
-             
-             
-
-           
-
-            
-            canvas.width = $("#topLeft").width();
-            canvas.height = ($("#topLeft").height()-100);
-            lineGraph.width = ($("#topRight").width()-175);
-            lineGraph.height = ($("#topRight").height()-100);
-            barGraph.width = ($("#topRight").width()-175);
-            barGraph.height = ($("#topRight").height()-120);
-            cD = (($("#topLeft").height()-100)*($("#topLeft").width()));
-           
-
-            currentDimensionN = (document.documentElement.clientWidth*document.documentElement.clientHeight);
-            
-            
-           
-            if((currentDimensionN/originalDimesionN) <= 1.2 && (currentDimensionN/originalDimesionN) >= 0.7 ){
-                 fracN = (currentDimensionN/originalDimesionN);
-                
-            }else{
-                fracN = 1;
-            }
-                if((cD/oG) < 1){
-                    fracPos = (cD/oG);
-                }
-                else{
-                    fracPos = 1;
-                }
-                    
-             
-            
-                
-            
-           
-            
-          
-        
-            
-
-            
-            
-            
-
-            intializeBarGraph();
-            intializeLineGraph();
-            if(running && sel.options[sel.selectedIndex].value != "None" && $("#graphSwitch").html() == "LINE"){
-                 plotBars(allNodes[sel.options[sel.selectedIndex].value-1]);
-            }
-           
-
-            
-
-            for(var i = 0; i < allNodes.length; i++){
-                adjustedX = (fracPos*allNodes[i].CoordX);
-                adjustedY = (fracPos*allNodes[i].CoordY);
-                
-                 
-               
-                context.beginPath();
-                context.arc(adjustedX,adjustedY, fracN*15, 0, 2 * Math.PI, false);
-                context.closePath();
-
-
-                context.fillStyle = nodeColors[i];
-                context.beginPath();
-                context.arc(adjustedX,adjustedY, fracN*15, 0, 2 * Math.PI, false);
-                context.closePath()
-                context.fill();
-                 for(var f = 0; f < allNodes[i].endNodes.length; f++){    
-                    context.beginPath();
-                    context.lineWidth = 0.5;
-                    context.strokeStyle = "#FF0000";
-                    context.moveTo(fracPos*allNodes[i].CoordX, fracPos*allNodes[i].CoordY);
-                    context.lineTo(fracPos*allNodes[i].endNodes[f].CoordX, fracPos*allNodes[i].endNodes[f].CoordY);
-                    context.stroke();
-                    context.closePath();
-
-                    context.beginPath();
-                    context.fillStyle = allNodes[i].Color;
-                    context.arc(fracPos*allNodes[i].endNodes[f].CoordX, fracPos*allNodes[i].endNodes[f].CoordY, fracN*10, 0, 2 * Math.PI);
-                    context.fill();
-                    context.fillStyle = "black";
-                    context.fillText(allNodes[i].endNodes[f].NodeNum.toString(), fracPos*allNodes[i].endNodes[f].CoordX - 3, fracPos*allNodes[i].endNodes[f].CoordY + 3);
-                    context.closePath();
-                }
-
-
-                context.fillStyle = "black";
-                context.fillText((allNodes[i].NodeNum).toString(), adjustedX - 3, adjustedY + 2);
-
-                if(running && $("#graphSwitch").html() == "BAR"){
-                        for (var k = 0; k < allNodes[i].numRuns; k++) {
-                            if (allNodes[i].linkString.length == 0 && allNodes[i].linkStartNode == null) { //plots unlinked nodes
-
-                                allNodes[i].runSim();
-                                lineGraphCtx.strokeStyle = allNodes[i].Color;
-                                plotPoints(allNodes[i].alleleData[k]);
-                            } else if (allNodes[i].linkString.length > 1 && allNodes[i].linkStartNode == null) { //plots linked nodes
-                                allNodes[i].link(findLongestLink());
-                                
-                            }
-
-                        }
-                }         
-            }
-
-
-
-
-
-    }
+    intializeBarGraph()
     
-window.onbeforeunload = reAdjust();
+
     
 
 
 
     function draw(e){
+        $('#Run').prop('disabled', false);
         
         //creates nodes on click event
         if (!running) {
@@ -194,18 +77,18 @@ window.onbeforeunload = reAdjust();
 
 
                     context.beginPath();
-                    context.arc(posX, posY, fracN*15, 0, 2 * Math.PI, false);
+                    context.arc(posX, posY, 15, 0, 2 * Math.PI, false);
                     context.closePath();
 
                     context.fillStyle = nodeColors[NodeCount];
                     context.beginPath();
-                    context.arc(posX, posY, fracN*15, 0, 2 * Math.PI, false);
+                    context.arc(posX, posY, 15, 0, 2 * Math.PI, false);
                     context.closePath()
                     context.fill();
 
                     context.strokeStyle = "#f44242";
                     context.beginPath();
-                    context.arc(posX, posY, fracN*20, 0, 2 * Math.PI);
+                    context.arc(posX, posY, 20, 0, 2 * Math.PI);
                     context.stroke();
 
 
@@ -236,11 +119,12 @@ window.onbeforeunload = reAdjust();
 
                 if (allNodes[i].NodeNum == isInCircle.NodeNum) { //creates red rings surrounding selected node
                     allNodes[i].isSelected = true;
+                    $("#NodeSelected").css("color", allNodes[i].Color);
                     currentSelectedNode = allNodes[i];
                     selectedNode = allNodes[i];
                     context.strokeStyle = "#f44242";
                     context.beginPath();
-                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*20, 0, 2 * Math.PI);
+                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 20, 0, 2 * Math.PI);
                     context.stroke();
 
                     var arr = document.getElementsByTagName("input");//hides all node fields 
@@ -360,12 +244,12 @@ window.onbeforeunload = reAdjust();
             intializeBarGraph();
             for (var i = 0; i < allNodes.length; i++) {
                 context.beginPath();
-                context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 30, 0, 2 * Math.PI, false);
+                context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 15, 0, 2 * Math.PI, false);
                 context.closePath();
 
                 context.fillStyle = allNodes[i].Color;
                 context.beginPath();
-                context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 20, 0, 2 * Math.PI, false);
+                context.arc(allNodes[i].CoordX, allNodes[i].CoordY, 15, 0, 2 * Math.PI, false);
                 context.closePath()
                 context.fill();
 
@@ -427,6 +311,8 @@ window.onbeforeunload = reAdjust();
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data and graphs linked and nonLinked nodes
+        $("#Run").css("visibility", "hidden");
+        $(".line").css("visibility", "visible");
         if(!running){
 
             createStrings();
@@ -455,7 +341,7 @@ window.onbeforeunload = reAdjust();
                 
             }
             if (allConfirmed >= allNodes.length && runsCheck().length == 0) {
-                document.getElementById("Run").innerHTML = "Restart";
+                
                 for (var j = 0; j < allNodes.length; j++) {
                     $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
                     for (var k = 0; k < allNodes[j].numRuns; k++) {
@@ -480,58 +366,65 @@ window.onbeforeunload = reAdjust();
             running = true;
             document.getElementById("endGen").innerHTML = findLongestLink();
         }
-        else if(running){
-             if (confirm("Are you sure you want to restart the simulation?")) {
 
-                document.getElementById("Run").innerHTML = "Begin Run";
-                lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.fillStyle = "#FFFFFF";
-                context.fillRect(0, 0, canvas.width, canvas.height);
-                intializeLineGraph();
-                barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
-                intializeBarGraph();
-
-                for (var i = 0; i < allNodes.length; i++) {
-                    
-                    allNodes[i].alleleData = [];
-                    allNodes[i].isConfirm = true;
-                    allNodes[i].linkStartNode = null;
-                    allNodes[i].endNodes = [];
-                    allNodes[i].linkString = [];
-
-                    context.beginPath();
-                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*15, 0, 2 * Math.PI, false);
-                    context.closePath();
-
-                    context.fillStyle = allNodes[i].Color;
-                    context.beginPath();
-                    context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*15, 0, 2 * Math.PI, false);
-                    context.closePath()
-                    context.fill();
-
-                    context.fillStyle = "black";
-                    context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].CoordX - 3, allNodes[i].CoordY + 2);
-                    allNodes[i].linkStartNode = null;
-                    allNodes[i].endNodes = [];
-                    allNodes[i].linkString = [];
-                   
-                
-                }
-
-
-                genCap = 0;
-                largestGen = 0;
-                allConfirmed = 0;
-                running = false;
-                x = 0;
-                $("#nodeSelect").empty();
-                $("#nodeSelect").append("<option value='None'>None</option>");
-                
-            }
-        }
             return false;
     }
+
+        document.getElementById("restart").onclick = function(){ 
+             if(running){
+                 if (confirm("Are you sure you want to restart the simulation?")) {
+                    $("#Run").css("visibility", "visible");
+                    $(".line").css("visibility", "hidden");
+                    
+        
+
+                    lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.fillStyle = "#FFFFFF";
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                    intializeLineGraph();
+                    barGraphCtx.clearRect(0, 0, barGraph.width, barGraph.height);
+                    intializeBarGraph();
+
+                    for (var i = 0; i < allNodes.length; i++) {
+                        
+                        allNodes[i].alleleData = [];
+                        allNodes[i].isConfirm = true;
+                        allNodes[i].linkStartNode = null;
+                        allNodes[i].endNodes = [];
+                        allNodes[i].linkString = [];
+
+                        context.beginPath();
+                        context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*15, 0, 2 * Math.PI, false);
+                        context.closePath();
+
+                        context.fillStyle = allNodes[i].Color;
+                        context.beginPath();
+                        context.arc(allNodes[i].CoordX, allNodes[i].CoordY, fracN*15, 0, 2 * Math.PI, false);
+                        context.closePath()
+                        context.fill();
+
+                        context.fillStyle = "black";
+                        context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].CoordX - 3, allNodes[i].CoordY + 2);
+                        allNodes[i].linkStartNode = null;
+                        allNodes[i].endNodes = [];
+                        allNodes[i].linkString = [];
+                       
+                    
+                    }
+
+
+                    genCap = 0;
+                    largestGen = 0;
+                    allConfirmed = 0;
+                    running = false;
+                    x = 0;
+                    $("#nodeSelect").empty();
+                    $("#nodeSelect").append("<option value='None'>None</option>");
+                    
+                }
+            }
+        }
 
 
     function linkCheck(node) { //filters notLinked nodes from allNodes array
