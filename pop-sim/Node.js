@@ -134,9 +134,9 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         var temp = 0;
         pointSpace =((lineGraph.width-30)/scale);//point Spacing for start node
             for (var l = 0; l < this.linkString.length; l++) {
-                startX = 15;
+                startX = 0;
                 for(var m = 0; m < this.linkString[l].numRuns;m++){// # runs must be same to link
-                    startX = 15;
+                    startX = 0;
                     if(l > 0){
                         this.linkString[l].startPer = this.linkString[l].linkStartNode.alleleData[m][this.linkString[l].linkStartNode.alleleData[m].length-1][1];
                     }
@@ -150,10 +150,10 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
                     lineGraphCtx.beginPath();
                     lineGraphCtx.lineWidth = 0.5;
                     lineGraphCtx.strokeStyle = this.linkString[l].Color;
-                    lineGraphCtx.moveTo((startX*pointSpace), (lineGraph.height - (this.linkString[l].alleleData[m][0][1] * lineGraph.height))); //zeroY
+                    lineGraphCtx.moveTo((startX*pointSpace)+30, (lineGraph.height - (this.linkString[l].alleleData[m][0][1] * lineGraph.height))); //zeroY
                     for (var n = 0; n < this.linkString[l].alleleData[m].length; n++) {
-                        lineGraphCtx.lineTo((startX*pointSpace)+(pointSpace *(n+1)), lineGraph.height - (this.linkString[l].alleleData[m][n][1] * lineGraph.height));
-                        lineGraphCtx.moveTo((startX*pointSpace)+(pointSpace *(n+1)), lineGraph.height - (this.linkString[l].alleleData[m][n][1] * lineGraph.height));
+                        lineGraphCtx.lineTo((startX*pointSpace)+(pointSpace *(n+1)+30), lineGraph.height - (this.linkString[l].alleleData[m][n][1] * lineGraph.height));
+                        lineGraphCtx.moveTo((startX*pointSpace)+(pointSpace *(n+1)+30), lineGraph.height - (this.linkString[l].alleleData[m][n][1] * lineGraph.height));
                         
 
                         lineGraphCtx.stroke();

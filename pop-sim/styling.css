@@ -1,13 +1,13 @@
 body{
-	overflow:hidden;
+	overflow:auto;
 	min-width:968px;
 	min-height:807px;  
 }
 
 
 .container{
-	height:100%;
-	width:75vw;
+	height:1024px;
+	width:903px;
 	
 	
 }
@@ -15,11 +15,14 @@ body{
 .col{
 	
 	height:100%;
-	width: 50%;
-	min-width:25%;
+	
 
 
 	
+}
+
+div.form-group.row{
+	height:10%;
 }
 
 #topLeft{
@@ -27,6 +30,9 @@ body{
 outline-style:solid;
 outline-color:#F5F5F5;
 outline-width:.5vw;
+height:512px !important; 
+width:290px !important;
+float:left;
 	
 }
 
@@ -34,12 +40,16 @@ outline-width:.5vw;
 outline-style:solid;
 outline-color:#F5F5F5;
 outline-width:.5vw;
+height:512px !important; 
+width:581px !important;
+float:right;
 	
 }
 
-#bottomLeft{
+#bottom{
 outline-style:solid;
 outline-color:#F5F5F5;
+width:100%;
 outline-width:.5vw;
 
 	
@@ -91,7 +101,7 @@ form{
  	width:90%;
 	position:absolute ;
 	left:10%;
-	top:9%;
+	top:12%;
 
 }
 
@@ -101,57 +111,50 @@ label{
 	white-space:nowrap;
 	width:20% !important;
 	text-align:right;
-	left:15%;
+	left:.004%;
 
 }
 
 
 #topLeft hr:first-of-type{
 	float:center; 
-	width:300px;
+	width:95%;
 	position:absolute;
-	top:5%;
+	top:6%;
 
 }
 
-#topLeft hr:last-of-type{
-	float:center;
+
+
+
+#topRight hr:first-of-type{
+	float:right;
+	width:95%;
+	position:absolute;
+	top:6%;
+}
+
+#topRight hr:last-of-type{
+	float:right;
 	width:95%;
 	position:absolute;
 	top:83%;
-}
-
-#topRight hr{
-	float:right;
-	width:95%;
-	position:absolute;
-	top:5%;
 	left:2em;
 
 }
 
-#bottomLeft hr:first-of-type{
+#bottom hr{
 	float:right;
 	width:95%;
 	position:absolute;
-	top:4%;
-}
-
-#bottomLeft hr:last-of-type{
-	float:right;
-	width:95%;
-	position:absolute;
-	top:79%;
-}
-
-#bottomRight hr {
-	float:right;
-	width:95%;
-	position:absolute;
-	top:1em;
-	left:2em;
+	top:6%;
+	left:2%;
 
 }
+
+
+
+
 
 .bar{
 	visibility:hidden;
@@ -163,26 +166,30 @@ label{
 
 .form-control{
 	width:20%;
-	height:5%;
+	height:7%;
 	position:absolute;
-	left:50%;
+	left:55%;
 	font-size:100%;
 
 }
 
+#enterVals:focus{
+	color:#07CA07;
+}
+
 button{
-	font-size: .80vw !important; 
+	font-size: 11px !important; 
 }
 
 
 
 h5{
-	font-size: 2vh !important;
+	font-size: 20px !important;
 
 }
 
 p{
-	font-size:1vw !important;
+	font-size: 16px !important;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
