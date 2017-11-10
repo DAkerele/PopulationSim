@@ -14,11 +14,11 @@
 		<div class = "container">
 			<div class = "row" id = "row1">
 				<!--input form-->
-				<div class = "col-md-4 col" id = "topLeft" style = "position:relative;">
+				<div class = "col-md-4 col" id = "topLeft" style = "position:relative; ">
 					<header>
 						<h5 style = "position:absolute; top:3%; left:4%; font-size:100%; "id = "NodeSelected">Data for Node #</h5>
 					</header>
-					<button class="btn btn-primary" style = "position:absolute; top:3%; left:73%; height:7%; width:24%;" id = "enterVals">Set Values</button>
+					<button class="btn btn-primary" style = "position:absolute; top:3%; left:72%; height:7%; width:26%;" id = "enterVals">Set Values</button>
 					<hr>
 
 					<form style= "position:absolute;">
@@ -158,11 +158,11 @@
 					
 					<button style = "position:absolute; top:89.75%; left:55%; width:15%; height:7%;" class="btn btn-success" id = "link">Link</button>
 					
-					<button class="btn btn-danger" style = "position:absolute; top:3%; left:82%; height:7%; width:17%;" id = "reset">Reset All Nodes</button>
+					<button class="btn btn-danger" style = "position:absolute; top:3%; left:82%; height:7%; width:18%;" id = "reset">Clear All Nodes</button>
 					<button class="btn btn-warning" style = "position:absolute; top:3%; left:62%; height:7%; width:19%;" id = "restart">Restart Simulation</button>
 					
 					<header>
-						<h5 style = "position:absolute; top:4%; left:4%; font-size:100%;">Nodes</h5>
+						<h5 style = "position:absolute; top:4%; left:2%; font-size:100%;">Nodes</h5>
 					</header>
 
 					<canvas  style=" position:absolute; left:3%; top:11%" id = "canvas" height= "380" width = "550" ></canvas>
@@ -187,8 +187,8 @@
 				<div class = "col-md-12 col" id = "bottom" style = "position:relative;">
 					<!--linegraph/bargraph-->
 					<header>
-						<h5 class = "line" style = "position:absolute; top:3%; left:4%; font-size:100%;">% "+" Allele vs. Generations</h5>
-						<button style = "position:absolute; top:4%; left:92%; height:9% font-size:100%;" id = "graphSwitch" class = "btn btn-info">BAR</button>
+						<h5 class = "line" style = "position:absolute; top:3%; left:2%; font-size:100%;">% "+" Allele vs. Generations</h5>
+						<button style = "position:absolute; top:4%; left:92%; height:9% font-size:100%;" id = "graphSwitch" class = "btn btn-info" disabled>BAR</button>
 					</header>
 					<hr>
 					<div class = "line" style = "visibility:hidden">
@@ -203,19 +203,19 @@
 						<p id = "lineXAxis"style = " position:absolute; top:92%; left:51%; ">Generations</p>
 						
 						<!-- hiddening for x-axis linegraph-->
-						<p style = "position:absolute; top:30em; left:74.25em;" id = "endGen"></p>
+						<p style = "position:absolute; top:90%; left:91%;" id = "endGen"></p>
 					</div>
 					<!--barGraph-->
 					<div class = "bar">
 						<header>
-								<h5 style = "position:absolute; top:3%; left:4%; font-size:100%;">% "+" Allele Frequencies</h5>
+								<h5 style = "position:absolute; top:3%; left:3%; font-size:100%;">% "+" Allele Frequencies</h5>
 						</header>
 						<hr>
 						<canvas class = "border-bottom-0 " style=" position:absolute; left:15%; top:15%;" id = "barGraph" height= "400" width = "700" ></canvas>
 						<select class="form-control" id = "nodeSelect" style= "position:absolute; top:45%; left:4%; width:9%;">
 							<option value="None">None</option>
 						</select>
-						<p  id = "barXAxis" style = "position:absolute; top:93%; left:48%; ">Allele End Frequencies</p>
+						<p  id = "barXAxis" style = "position:absolute; top:93%; left:46.5%; ">Allele End Frequencies</p>
 						<p  id = "RunTotal" style = "position:absolute; top:10%; left:5%; ">Run Total: 0</p>
 
 
