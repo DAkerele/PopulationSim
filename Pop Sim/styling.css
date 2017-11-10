@@ -30,6 +30,9 @@ div.form-group.row{
 outline-style:solid;
 outline-color:#F5F5F5;
 outline-width:.5vw;
+height:512px !important; 
+width:290px !important;
+float:left;
 	
 }
 
@@ -37,6 +40,9 @@ outline-width:.5vw;
 outline-style:solid;
 outline-color:#F5F5F5;
 outline-width:.5vw;
+height:512px !important; 
+width:581px !important;
+float:right;
 	
 }
 
@@ -162,24 +168,28 @@ label{
 	width:20%;
 	height:7%;
 	position:absolute;
-	left:50%;
+	left:55%;
 	font-size:100%;
 
 }
 
+#enterVals:focus{
+	color:#07CA07;
+}
+
 button{
-	font-size: .80vw !important; 
+	font-size: 11px !important; 
 }
 
 
 
 h5{
-	font-size: 2vh !important;
+	font-size: 20px !important;
 
 }
 
 p{
-	font-size:1.2vw !important;
+	font-size: 16px !important;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
