@@ -21,9 +21,9 @@ body{
 	
 }
 
-div.form-group.row{
+/*div.form-group.row{
 	height:10%;
-}
+}*/
 
 #topLeft{
 	
@@ -181,8 +181,6 @@ button{
 	font-size: 11px !important; 
 }
 
-
-
 h5{
 	font-size: 20px !important;
 
@@ -199,4 +197,5 @@ input[type=number]::-webkit-outer-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+  padding: 6px 4px;
 }

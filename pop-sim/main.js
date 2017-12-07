@@ -7,6 +7,8 @@ $(document).ready(function() {
     var NodeCount = 0; // number of nodes allowed on canvas
     var canvas = document.getElementById("canvas");
     var lineGraph = document.getElementById("lineGraph");
+    lineGraph.width = 740;
+    lineGraph.height = 380;
     var barGraph = document.getElementById("barGraph");
     var context = canvas.getContext("2d");
     var lineGraphCtx = lineGraph.getContext("2d");
@@ -28,12 +30,8 @@ $(document).ready(function() {
     var linkLen = 0;
     var x = 0;
    
+    $("#restart").hide();
 
-
-    
-
-    
-    
     context.fillStyle = "#FDFEFE";
     lineGraphCtx.fillStyle = "#FDFEFE";
     barGraphCtx.fillStyle = "#FDFEFE";
@@ -42,13 +40,9 @@ $(document).ready(function() {
     context.fillRect(0, 0, canvas.width, canvas.height);
     intializeLineGraph();
     intializeBarGraph()
-    
-
-    
 
 
-
-    function draw(e){
+    function draw(e) {
         $('#Run').prop('disabled', false);
         
         //creates nodes on click event
@@ -104,7 +98,7 @@ $(document).ready(function() {
 
             for (var i = 0; i < allNodes.length; i++) {
 
-                if (allNodes[i].NodeNum == isInCircle.NodeNum) { //creates red rings surrounding selected node
+                if (allNodes[i].NodeNum === isInCircle.NodeNum) { //creates red rings surrounding selected node
                     allNodes[i].isSelected = true;
                     $("#NodeSelected").css("color", allNodes[i].Color);
                     currentSelectedNode = allNodes[i];
@@ -120,26 +114,35 @@ $(document).ready(function() {
                     }
 
                     //displays currentSelectedNode's fields
-                    $("#NumRuns"+currentSelectedNode.NodeNum).attr('type','number');
-                    $("#Starting"+currentSelectedNode.NodeNum).attr('type','number');
-                    $("#NumGenerations"+currentSelectedNode.NodeNum).attr('type','number');
+                    $("#NumRuns"+currentSelectedNode.NodeNum)
+                        .attr('type','number')
+                        .val(currentSelectedNode.numRuns);
+
+                    var iStartingPercent = $("#Starting"+currentSelectedNode.NodeNum);
+                        iStartingPercent.attr('type','number')
+                    if (currentSelectedNode.linkStartNode) {
+                        iStartingPercent.val('');
+                        iStartingPercent.prop('disabled', true);
+                    }
+                    else {
+                        iStartingPercent.val(parseFloat((currentSelectedNode.startPer*100)));
+                        iStartingPercent.prop('disabled', false);
+                    }
+
+                    $("#NumGenerations"+currentSelectedNode.NodeNum)
+                        .attr('type','number')
+                        .val(currentSelectedNode.genNum);
+
                     $("#StartingPop"+currentSelectedNode.NodeNum).attr('type','number');
                     $("#PPSurvival"+currentSelectedNode.NodeNum).attr('type','number');
                     $("#PMSurvival"+currentSelectedNode.NodeNum).attr('type','number');
                     $("#MMSurvival"+currentSelectedNode.NodeNum).attr('type','number');
 
                     //sets currentSelectedNode's fields to currentSelectedNode's values
-                    $("#NumRuns"+currentSelectedNode.NodeNum).val(currentSelectedNode.numRuns);
-                    $("#Starting"+currentSelectedNode.NodeNum).val(parseFloat((currentSelectedNode.startPer*100)));
-                    $("#NumGenerations"+currentSelectedNode.NodeNum).val(currentSelectedNode.genNum);
                     $("#StartingPop"+currentSelectedNode.NodeNum).val(currentSelectedNode.startPop);
                     $("#PPSurvival"+currentSelectedNode.NodeNum).val(parseFloat((currentSelectedNode.plusplusS*100)));
                     $("#PMSurvival"+currentSelectedNode.NodeNum).val(parseFloat((currentSelectedNode.plusminusS*100)));
                     $("#MMSurvival"+currentSelectedNode.NodeNum).val(parseFloat((currentSelectedNode.minusminusS*100)));
-
-                        
-                   
-
 
                 } else if (allNodes[i].NodeNum != currentSelectedNode.NodeNum) { // overshadows red ring(selected ring) when another node is selected
                     allNodes[i].isSelected = false;
@@ -196,6 +199,24 @@ $(document).ready(function() {
                 else if (allNodes[end].linkStartNode == null) {
                     allNodes[end].linkStartNode = allNodes[start];
                     allNodes[start].endNodes.push(allNodes[end]);
+                    
+                    allNodes[end].numRuns = allNodes[start].numRuns;
+                    $('#NumRuns' + (end + 1)).val(allNodes[end].numRuns);
+                    $('#Starting' + (end + 1)).val('').prop('disabled', true);
+
+                    console.log( 'end: ' + end );
+                    console.log( 'start: ' + start );
+                    console.log( $('#NumRuns' + (end + 1)) );
+                    //if ( allNodes[end] === currentSelectedNode ) {
+                    //    NumRuns2
+                    //}
+
+                    /*if (!allNodes[start].linkEndNode) ) { // this is root node
+                        var linkedNodes = allNodes[start].endNodes;
+                        for (var i=0; i < linked.length; i++) {
+                            console.log(allNodes[start].endNodes[i])
+                        };
+                    }*/
                 } 
                 
                 context.beginPath();
@@ -303,7 +324,7 @@ $(document).ready(function() {
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data and graphs linked and nonLinked nodes
 
-        if(!running){
+        if(!running) {
             $('#graphSwitch').prop('disabled', false);
             $("#NodeSelected").css("color", "black");
             $("#NodeSelected").html("Data for Node #");
@@ -313,11 +334,11 @@ $(document).ready(function() {
             notLinked = allNodes.filter(linkCheck);
 
 
-            if (runsCheck().length > 0) {
+            /*if (runsCheck().length > 0) {
                 alert(" Please be sure nodes in the same link share an identical amount of runs");
                 alert("The following nodes' runs do not match the rest of link:" + runsCheck().toString());
                 return false;
-            }
+            }*/
 
             for (var p = 0; p < allNodes.length; p++) {
                  fieldCheck(allNodes[p]);
@@ -335,7 +356,10 @@ $(document).ready(function() {
                 
             }
             if (allConfirmed >= allNodes.length && runsCheck().length == 0) {
-                $("#Run").css("visibility", "hidden");
+                $("#Run").hide();
+                $("#link").hide();
+                $("#restart").show();
+
                 $(".line").css("visibility", "visible");
                 for (var j = 0; j < allNodes.length; j++) {
                     $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
@@ -368,9 +392,11 @@ $(document).ready(function() {
         document.getElementById("restart").onclick = function(){ 
              if(running){
                  if (confirm("Are you sure you want to restart the simulation?")) {
-                    $("#Run").css("visibility", "visible");
+                    $("#Run").show();
+                    $("#restart").hide();
+                    $("#link").show();
                     $(".line").css("visibility", "hidden");
-                    
+                    $('input').prop('disabled', false);
         
 
                     lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
@@ -401,11 +427,6 @@ $(document).ready(function() {
 
                         context.fillStyle = "black";
                         context.fillText(allNodes[i].NodeNum.toString(), allNodes[i].CoordX - 3, allNodes[i].CoordY + 2);
-                        allNodes[i].linkStartNode = null;
-                        allNodes[i].endNodes = [];
-                        allNodes[i].linkString = [];
-                       
-                    
                     }
 
 
@@ -522,7 +543,9 @@ $(document).ready(function() {
 
     function fieldCheck(node){//allows user to not begin run without confirming values if no change to fields have been made
 
-            if(node.startPer != parseFloat($("#Starting"+node.NodeNum).val()/100)){node.isConfirm = false;}
+            if(!node.linkStartNode && node.startPer != parseFloat($("#Starting"+node.NodeNum).val()/100)) {
+                node.isConfirm = false;
+            }
             else if(node.genNum != parseInt($("#NumGenerations"+node.NodeNum).val())){node.isConfirm = false;}
             else if(node.startPop !=  parseInt($("#StartingPop"+node.NodeNum).val())){node.isConfirm = false;}
             else if(node.plusplusS !=  parseFloat($("#PPSurvival"+node.NodeNum).val()/100)){node.isConfirm = false;}
@@ -634,26 +657,21 @@ $(document).ready(function() {
             alert("Please enter a valid starting population");
         } else {
 
-            node.numRuns = parseInt($("#NumRuns"+node.NodeNum).val());
-            node.startPer = (parseFloat($("#Starting"+node.NodeNum).val())/100);
+            if (node.linkStartNode) { // it is the child node
+                node.numRuns = node.linkStartNode.numRuns;
+                //node.startPer = 50;
+            }
+            else {
+                node.numRuns = parseInt($("#NumRuns"+node.NodeNum).val());
+                node.startPer = (parseFloat($("#Starting"+node.NodeNum).val())/100);
+            }
             node.genNum = parseInt($("#NumGenerations"+node.NodeNum).val());
             node.startPop = parseInt($("#StartingPop"+node.NodeNum).val());
             node.plusplusS = (parseFloat($("#PPSurvival"+node.NodeNum).val())/100);
             node.plusminusS = (parseFloat($("#PMSurvival"+node.NodeNum).val())/100);
             node.minusminusS = (parseFloat($("#MMSurvival"+node.NodeNum).val())/100);
-           
-            
-            
-
         }
-
-        
-            
-
     }                            
-        
-
-
 
 
     canvas.addEventListener("click", draw);
