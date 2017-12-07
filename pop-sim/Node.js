@@ -37,7 +37,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
 
         var nextPopArray = [];
 
-        genArray.splice(0, genArray.length);
+        //genArray.splice(0, genArray.length);
         for (var j = 0; j <= 1; j++) {
             nextPopArray.push(this.startPer);
         }
