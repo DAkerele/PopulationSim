@@ -311,7 +311,7 @@ $(document).ready(function() {
 
 
     document.getElementById("enterVals").onclick = function enterValues() {
-
+   
         //confirms values for each node
         if (!running) {
             setSelectedNodeInfo(currentSelectedNode);
@@ -323,8 +323,9 @@ $(document).ready(function() {
     }
 
     document.getElementById("Run").onclick = function beginRun() { //calculates points data and graphs linked and nonLinked nodes
-
+        
         if(!running) {
+
             $('#graphSwitch').prop('disabled', false);
             $("#NodeSelected").css("color", "black");
             $("#NodeSelected").html("Data for Node #");
@@ -360,16 +361,16 @@ $(document).ready(function() {
                 $("#link").hide();
                 $("#restart").show();
 
-                $(".line").css("visibility", "visible");
+                
                 for (var j = 0; j < allNodes.length; j++) {
                     $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                    for (var k = 0; k < allNodes[j].numRuns; k++) {
-                        if (allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null) { //plots unlinked nodes
+                    if (allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null) { //plots unlinked nodes
+                            loading(0,allNodes[j]);
+                            
+                    }
 
-                            allNodes[j].runSim();
-                            lineGraphCtx.strokeStyle = allNodes[j].Color;
-                            plotPoints(allNodes[j].alleleData[k]);
-                        } else if (allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null) { //plots linked nodes
+                    for (var k = 0; k < allNodes[j].numRuns; k++) {
+                         if (allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null) { //plots linked nodes
                             allNodes[j].link(findLongestLink());
                             
                         }
@@ -380,14 +381,39 @@ $(document).ready(function() {
 
             }
 
-            
-
             running = true;
             document.getElementById("endGen").innerHTML = findLongestLink();
         }
 
             return false;
     }
+
+        function loading(index = 0, node){
+            $("#loader").show();
+            if (node.numRuns > index) {
+                for (var x=0; x < 10 && node.numRuns > (index+x); x++) {
+                    node.runSim();
+                    lineGraphCtx.strokeStyle = node.Color;
+                    plotPoints(node.alleleData[index+x]);
+                               
+                       
+                    }
+                }
+                index += x; // Lastly update i with however many iterations were processed
+
+                    
+                setTimeout(function() {
+                loading(index,node)
+                }, 10);
+
+                if(index == node.numRuns){$(".line").css("visibility", "visible");}
+        }        
+
+
+
+
+
+
 
         document.getElementById("restart").onclick = function(){ 
              if(running){
@@ -797,20 +823,25 @@ $(document).ready(function() {
 
         }
 
-        if ((array.length-1) != findLongestLink()) {
-            lineGraphCtx.beginPath();
-            lineGraphCtx.strokeStyle = "#1A1717";
-            lineGraphCtx.moveTo((pointSpace * (array.length-1))+30, lineGraph.height);
-            lineGraphCtx.lineTo((pointSpace * (array.length-1))+30, 0);
-            lineGraphCtx.font = "30px Arial";
-            lineGraphCtx.fillStyle = "black";
-            lineGraphCtx.fillText("" + (array.length-1), (pointSpace * (array.length-1)),canvas.height-10,50);
-            lineGraphCtx.stroke();
+            if ((array.length-1) != findLongestLink()) {
+                lineGraphCtx.beginPath();
+                lineGraphCtx.strokeStyle = "#1A1717";
+                lineGraphCtx.moveTo((pointSpace * (array.length-1))+30, lineGraph.height);
+                lineGraphCtx.lineTo((pointSpace * (array.length-1))+30, 0);
+                lineGraphCtx.font = "30px Arial";
+                lineGraphCtx.fillStyle = "black";
+                lineGraphCtx.fillText("" + (array.length-1), (pointSpace * (array.length-1)),canvas.height-10,50);
+                lineGraphCtx.stroke();
+                lineGraphCtx.closePath();
+            }
+            array = [];
             lineGraphCtx.closePath();
-        }
-        array = [];
-        lineGraphCtx.closePath();
+    
+           
     }
+        
+
+        
 
     function dePixelateLine(){}
 
