@@ -32,14 +32,18 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
 
 
   Node.prototype.runSim = function () {
+    
+
+
        
         var genArray = [];
 
         var nextPopArray = [];
 
-        //genArray.splice(0, genArray.length);
+        
         for (var j = 0; j <= 1; j++) {
             nextPopArray.push(this.startPer);
+
         }
         genArray.push(nextPopArray);
         beginGen = 0;
@@ -57,8 +61,14 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
 
         var nx;
         var ny;
+        var gen = this.genNum;
+        var startPop = this.startPop;
+        var pp = this.plusplusS;
+        var pm = this.plusminusS;
+        var mm = this.minusminusS;
 
-        for (var i = 0; i < this.genNum; i++) {
+        var i;
+        for (i = 0; i < gen; i++) {
 
             numFixedPops = 0;
             numLostPops = 0;
@@ -89,14 +99,14 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
 
                 if ((p > 0.0) && (p < 1.0)) {
                     q = 1 - p;
-                    w = (p * p * this.plusplusS) + (2.0 * p * q * this.plusminusS) + (q * q * this.minusminusS);
-                    pp1 = (p * p * this.plusplusS) / w;
-                    pp2 = (2.0 * p * q * this.plusminusS) / w;
+                    w = (p * p * this.plusplusS) + (2.0 * p * q * pm) + (q * q * mm);
+                    pp1 = (p * p * pp) / w;
+                    pp2 = (2.0 * p * q * pm) / w;
                     if (j > 0) {
-                        nx = binomial(this.startPop, pp1);
+                        nx = binomial(startPop, pp1);
 
-                        if (pp1 < 1.0 && nx < this.startPop) {
-                            ny = binomial((this.startPop - nx), (pp2 / (1.0 - pp1)));
+                        if (pp1 < 1.0 && nx < startPop) {
+                            ny = binomial((startPop - nx), (pp2 / (1.0 - pp1)));
                         } else {
                             ny = 0;
                         }
@@ -121,7 +131,9 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         this.alleleData.push(genArray);
         
 
-        
+            
+
+   
 
        
         
@@ -129,46 +141,57 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
     }
 
 
-    Node.prototype.link = function(scale=100) {
-       
-        var temp = 0;
-        pointSpace =((lineGraph.width-30)/scale);//point Spacing for start node
-            for (var l = 0; l < this.linkString.length; l++) {
-                startX = 0;
-                for(var m = 0; m < this.linkString[l].numRuns;m++){// # runs must be same to link
-                    startX = 0;
-                    if(l > 0){
-                        this.linkString[l].startPer = this.linkString[l].linkStartNode.alleleData[m][this.linkString[l].linkStartNode.alleleData[m].length-1][1];
+    Node.prototype.link = function(scale=100) {        
+            var temp = 0;
+            pointSpace =((lineGraph.width-30)/scale);//point Spacing for start node
+                for (var l = 0; l < this.linkString.length; l++) {
+                    for(var m = 0; m < this.linkString[l].numRuns;m++){
+                        this.timeout(l,m);
                     }
-                    
-                    this.linkString[l].runSim();
-                    temp = this.linkString[l].linkStartNode;
-                    while(temp != null){
-                        startX+= temp.genNum;
-                        temp = temp.linkStartNode;
-                    }
-                    lineGraphCtx.beginPath();
-                    lineGraphCtx.lineWidth = 0.5;
-                    lineGraphCtx.strokeStyle = this.linkString[l].Color;
-                    lineGraphCtx.moveTo((startX*pointSpace)+30, (lineGraph.height - (this.linkString[l].alleleData[m][0][1] * lineGraph.height))); //zeroY
-                    for (var n = 0; n < this.linkString[l].alleleData[m].length; n++) {
-                        lineGraphCtx.lineTo((startX*pointSpace)+(pointSpace *(n+1)+30), lineGraph.height - (this.linkString[l].alleleData[m][n][1] * lineGraph.height));
-                        lineGraphCtx.moveTo((startX*pointSpace)+(pointSpace *(n+1)+30), lineGraph.height - (this.linkString[l].alleleData[m][n][1] * lineGraph.height));
-                        
-
-                        lineGraphCtx.stroke();
-                            
-
-                    }
-                    
-                    
                 }
-                    lineGraphCtx.closePath();
-            }       
 
-        
-
+        return true;
     };
+
+    Node.prototype.timeout = function(l,m){//processes and draws linked nodes with 10 ms timeout to prevent UI unresponsiveness
+        $("loader").show();
+        var that = this;
+        
+        
+        // # runs must be same to link
+            setTimeout(function(){
+                lineGraphCtx.strokeStyle = that.linkString[l].Color;
+                startX = 0;
+                if(l > 0){
+                    that.linkString[l].startPer = that.linkString[l].linkStartNode.alleleData[m][that.linkString[l].linkStartNode.alleleData[m].length-1][1];
+                }
+                                
+                that.linkString[l].runSim();
+                temp = that.linkString[l].linkStartNode;
+                while(temp != null){
+                    startX+= temp.genNum;
+                    temp = temp.linkStartNode;
+                }
+
+                lineGraphCtx.beginPath();
+                                
+                                
+                lineGraphCtx.moveTo((startX*pointSpace)+30, (lineGraph.height - (that.linkString[l].alleleData[m][0][1] * lineGraph.height))); //zeroY
+                for (var n = 0; n < that.linkString[l].alleleData[m].length; n++) {
+                    lineGraphCtx.lineTo((startX*pointSpace)+(pointSpace *(n+1)+30), lineGraph.height - (that.linkString[l].alleleData[m][n][1] * lineGraph.height));
+                    lineGraphCtx.moveTo((startX*pointSpace)+(pointSpace *(n+1)+30), lineGraph.height - (that.linkString[l].alleleData[m][n][1] * lineGraph.height));
+                                    
+                    lineGraphCtx.stroke();
+                                        
+
+                }
+                              
+            },10);                   
+       
+
+        lineGraphCtx.closePath();
+       
+    }
 
 
     
