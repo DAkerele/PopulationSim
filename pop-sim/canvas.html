@@ -1,207 +1,207 @@
 <!doctype html>
 <header>
-	<title>Population Simulation</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <title>Population Simulation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-	<link rel="stylesheet" type="text/css" href="./styling.css">
-	
+  <link rel="stylesheet" type="text/css" href="./styling.css">
+  
 </header>
 
 <html style = "height:100vh; width:100vw;">
-	<body class="bg-faded" style = "height:100vh; width:100vw;">
+  <body class="bg-faded" style = "height:100vh; width:100vw;">
 
-		<div class = "container">
-			<div class = "row" id = "row1">
-				<!--input form-->
-				<div class = "col-md-4 col" id = "topLeft" style = "position:relative; ">
-					<header>
-						<h5 style = "position:absolute; top:3%; left:4%; font-size:100%; "id = "NodeSelected">Data for Node #</h5>
-					</header>
-					<button class="btn btn-primary" style="position:absolute; top:3%; left:72%; height:7%; width:26%;" id="enterVals">Set Values</button>
-					<hr>
+    <div class = "container">
+      <div class = "row" id = "row1">
+        <!--input form-->
+        <div class = "col-md-4 col" id = "topLeft" style = "position:relative; ">
+          <header>
+            <h5 style = "position:absolute; top:3%; left:4%; font-size:100%; "id = "NodeSelected">Data for Node #</h5>
+          </header>
+          <button class="btn btn-primary" style="position:absolute; top:3%; left:72%; height:7%; width:26%;" id="enterVals">Set Values</button>
+          <hr>
 
-					<form style= "position:absolute;">
+          <form style= "position:absolute;">
 
-						<div class="form-group row">
-  							<label for="Number of Runs" class="col-2 col-form-label">Number of Runs: </label>
-  							<div class="col-3">
-    							<input class="form-control" value="1"  id="NumRuns1" type="number">
-    							<input class="form-control" value="1"  id="NumRuns2" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns3" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns4" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns5" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns6" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns7" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns8" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns9" type="hidden">
-    							<input class="form-control" value="1"  id="NumRuns10" type="hidden">
-  							</div>
-						</div>
-						<div class="form-group row" id="start_pct_panel">
-  							<label for="Starting Percent" class="col-2 col-form-label" >Starting Percent: </label>
-  							<div class="col-3">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50"  id = "Starting1" type = "number">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting2" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting3" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting4" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting5" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting6" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting7" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting8" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting9" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting10" type = "hidden">
-  							</div>
-						</div>
-						<div class="form-group row">
-  							<label for="Number of Generation" class="col-2 col-form-label"># of Generations: </label>
-  							<div class="col-3">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations1" type = "number">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations2" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations3" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations4" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations5" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations6" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations7" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations8" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations9" type = "hidden">
-    							<input class="form-control" max = "500" value  = "100"  id = "NumGenerations10" type = "hidden">
-    							
-    						
-  							</div>
-						</div>
-						<div class="form-group row">
-  							<label for="Starting Population" class="col-2 col-form-label">Starting Population: </label>
-  							<div class="col-3">
-    							<input class="form-control" value  = "100"  id = "StartingPop1" type = "number">
-    							<input class="form-control" value  = "100"  id = "StartingPop2" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop3" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop4" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop5" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop6" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop7" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop8" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop9" type = "hidden">
-    							<input class="form-control" value  = "100"  id = "StartingPop10" type = "hidden">
-  							</div>
-						</div>
-						<div class="form-group row">
-  							<label for="++Survival Percent" class="col-2 col-form-label">++Survival Percent: </label>
-  							<div class="col-3">
-    							<input class="form-control" min = "0.0" max = "100" step = "0.1" value  = "100" id = "PPSurvival1" type = "number">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival2" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival3" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival4" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival5" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival6" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival7" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival8" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival9" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival10" type = "hidden">
-  							</div>
-						</div>
-						<div class="form-group row">
-  							<label for="+-Survival Percent" class="col-2 col-form-label">+-Survival Percent: </label>
-  							<div class="col-3">
-    							<input class="form-control" min = "0.0" max = "100" step = "0.1" value  = "100" id = "PMSurvival1" type = "number">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival2" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival3" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival4" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival5" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival6" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival7" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival8" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival9" type = "hidden">
-    							<input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival10" type = "hidden">
-  							</div>
-						</div>
-						<div class="form-group row">
-  							<label for="--Survival Percent" class="col-2 col-form-label">--Survival Percent: </label>
-  							<div class="col-3">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival1" type="number">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival2" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival3" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival4" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival5" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival6" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival7" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival8" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival9" type="hidden">
-    							<input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival10" type="hidden">
-  							</div>
-						</div>
-						</form>
+            <div class="form-group row">
+                <label for="Number of Runs" class="col-2 col-form-label">Number of Runs: </label>
+                <div class="col-3">
+                  <input class="form-control" value="1"  id="NumRuns1" type="number">
+                  <input class="form-control" value="1"  id="NumRuns2" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns3" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns4" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns5" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns6" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns7" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns8" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns9" type="hidden">
+                  <input class="form-control" value="1"  id="NumRuns10" type="hidden">
+                </div>
+            </div>
+            <div class="form-group row" id="start_pct_panel">
+                <label for="Starting Percent" class="col-2 col-form-label" >Starting Percent: </label>
+                <div class="col-3">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50"  id = "Starting1" type = "number">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting2" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting3" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting4" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting5" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting6" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting7" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting8" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting9" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "50.0"  id = "Starting10" type = "hidden">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Number of Generation" class="col-2 col-form-label"># of Generations: </label>
+                <div class="col-3">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations1" type = "number">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations2" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations3" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations4" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations5" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations6" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations7" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations8" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations9" type = "hidden">
+                  <input class="form-control" max = "500" value  = "100"  id = "NumGenerations10" type = "hidden">
+                  
+                
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Starting Population" class="col-2 col-form-label">Starting Population: </label>
+                <div class="col-3">
+                  <input class="form-control" value  = "100"  id = "StartingPop1" type = "number">
+                  <input class="form-control" value  = "100"  id = "StartingPop2" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop3" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop4" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop5" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop6" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop7" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop8" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop9" type = "hidden">
+                  <input class="form-control" value  = "100"  id = "StartingPop10" type = "hidden">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="++Survival Percent" class="col-2 col-form-label">++Survival Percent: </label>
+                <div class="col-3">
+                  <input class="form-control" min = "0.0" max = "100" step = "0.1" value  = "100" id = "PPSurvival1" type = "number">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival2" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival3" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival4" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival5" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival6" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival7" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival8" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival9" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PPSurvival10" type = "hidden">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="+-Survival Percent" class="col-2 col-form-label">+-Survival Percent: </label>
+                <div class="col-3">
+                  <input class="form-control" min = "0.0" max = "100" step = "0.1" value  = "100" id = "PMSurvival1" type = "number">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival2" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival3" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival4" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival5" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival6" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival7" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival8" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival9" type = "hidden">
+                  <input class="form-control" min = "0.0" max = "100.0" step = "0.1" value  = "100.0" id = "PMSurvival10" type = "hidden">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="--Survival Percent" class="col-2 col-form-label">--Survival Percent: </label>
+                <div class="col-3">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival1" type="number">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival2" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival3" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival4" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival5" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival6" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival7" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival8" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival9" type="hidden">
+                  <input class="form-control" min="0.0" max="100" step="0.1" value="100.0" id="MMSurvival10" type="hidden">
+                </div>
+            </div>
+            </form>
 
-				</div>
+        </div>
 
-				<!--Node Canvas-->
-				<div class = "col-md-8 col" id = "topRight" style = "position:relative;">
-					
-					<button style = "position:absolute; top:89.75%; left:55%; width:15%; height:7%;" class="btn btn-success" id = "link">Link</button>
-					
-					<button class="btn btn-danger" style="position:absolute; top:3%; left:82%; width:18%;" id="reset">Clear All Nodes</button>
-					<button class="btn btn-warning" style="position:absolute; top:3%; left:62%; width:19%;" id="restart">Restart Simulation</button>
-					<button class="btn btn-success" style="position:absolute; top:3%; left:62%; width:16%" id="Run" disabled>Run Simulation</button>
-					
-					<header>
-						<h5 style = "position:absolute; top:4%; left:2%; font-size:100%;">Nodes</h5>
-					</header>
+        <!--Node Canvas-->
+        <div class = "col-md-8 col" id = "topRight" style = "position:relative;">
+          
+          <button style = "position:absolute; top:89.75%; left:55%; width:15%; height:7%;" class="btn btn-success" id = "link">Link</button>
+          
+          <button class="btn btn-danger" style="position:absolute; top:3%; left:82%; width:18%;" id="reset">Clear All Nodes</button>
+          <button class="btn btn-warning" style="position:absolute; top:3%; left:62%; width:19%;" id="restart">Restart Simulation</button>
+          <button class="btn btn-success" style="position:absolute; top:3%; left:62%; width:16%" id="Run" disabled>Run Simulation</button>
+          
+          <header>
+            <h5 style = "position:absolute; top:4%; left:2%; font-size:100%;">Nodes</h5>
+          </header>
 
-					<canvas  style=" position:absolute; left:3%; top:11%" id = "canvas" height= "380" width = "550" ></canvas>
-					<hr>
-					<hr>
-						<p style = "position:absolute; top:91%; left:4%; font-size:100%;">Link node</p>
-						<select class="form-control"  id = "startLink" style = "position:absolute; top:89.75%; left:17%; height:7%; width:10%;"></select>
-						<p style = "position:absolute; top:91%; left:28%; font-size:100%;">to node</p>
-						<select class="form-control"  id = "endLink" style = "position:absolute; top:89.75%; left:38%; height:7%; width:10%"></select>
-					</div>
+          <canvas  style=" position:absolute; left:3%; top:11%" id = "canvas" height= "380" width = "550" ></canvas>
+          <hr>
+          <hr>
+            <p style = "position:absolute; top:91%; left:4%; font-size:100%;">Link node</p>
+            <select class="form-control"  id = "startLink" style = "position:absolute; top:89.75%; left:17%; height:7%; width:10%;"></select>
+            <p style = "position:absolute; top:91%; left:28%; font-size:100%;">to node</p>
+            <select class="form-control"  id = "endLink" style = "position:absolute; top:89.75%; left:38%; height:7%; width:10%"></select>
+          </div>
 
-				</div>
+        </div>
 
-				<div class = "row" id = "row2">
-				
-				
-				<div class = "col-md-12 col" id = "bottom" style = "position:relative;">
-					<!--linegraph/bargraph-->
-					<header>
+        <div class = "row" id = "row2">
+        
+        
+        <div class = "col-md-12 col" id = "bottom" style = "position:relative;">
+          <!--linegraph/bargraph-->
+          <header>
             <img id = "loader" src = "http://bestanimations.com/Science/Gears/loadinggears/loading-gears-animation-13-3.gif" style = " display:none; position:absolute; top:40%; left:35%"></img>
-						<h5 class = "line" style = "position:absolute; top:3%; left:2%; font-size:100%;">% "+" Allele vs. Generations</h5>
-						<button style = "position:absolute; top:4%; left:92%; height:9% font-size:100%;" id = "graphSwitch" class = "btn btn-info" disabled>BAR</button>
-					</header>
-					<hr>
-					<div class = "line" style = "visibility:hidden">
-						<canvas class="border-bottom-0 border-left-0 border-right-0 border-top-0" style="position:absolute; top:15%; left:13%;" id="lineGraph"></canvas>
-						<button style = "position:absolute; top:55%; left:1%; width:10%; height:7%;" class="btn btn-info" id = "unlink">Plot Unlinked</button>
+            <h5 class = "line" style = "position:absolute; top:3%; left:2%; font-size:100%;">% "+" Allele vs. Generations</h5>
+            <button style = "position:absolute; top:4%; left:92%; height:9% font-size:100%;" id = "graphSwitch" class = "btn btn-info" disabled>BAR</button>
+          </header>
+          <hr>
+          <div class = "line" style = "visibility:hidden">
+            <canvas class="border-bottom-0 border-left-0 border-right-0 border-top-0" style="position:absolute; top:15%; left:13%;" id="lineGraph"></canvas>
+            <button style = "position:absolute; top:55%; left:1%; width:10%; height:7%;" class="btn btn-info" id = "unlink">Plot Unlinked</button>
 
 
-						<!-- hiddening for y-axis linegraph -->
-						
-						<p id = "yAxisLabel" style = " position:absolute; top:45%; left:1.5%;">%"+"Allele</p>
-						<p id = "lineXAxis"style = " position:absolute; top:92%; left:51%; ">Generations</p>
-						
-						<!-- hiddening for x-axis linegraph-->
-						<p style = "position:absolute; top:90%; left:91%;" id = "endGen"></p>
-					</div>
-					<!--barGraph-->
-					<div class = "bar">
-						<header>
-								<h5 style = "position:absolute; top:3%; left:3%; font-size:100%;">% "+" Allele Frequencies</h5>
-						</header>
-						<hr>
-						<canvas class = "border-bottom-0 " style=" position:absolute; left:15%; top:15%;" id = "barGraph" height= "400" width = "700" ></canvas>
-						<select class="form-control" id = "nodeSelect" style= "position:absolute; top:45%; left:4%; width:9%;">
-							<option value="None">None</option>
-						</select>
-						<p  id = "barXAxis" style = "position:absolute; top:93%; left:46.5%; ">Allele End Frequencies</p>
-						<p  id = "RunTotal" style = "position:absolute; top:10%; left:5%; ">Run Total: 0</p>
+            <!-- hiddening for y-axis linegraph -->
+            
+            <p id = "yAxisLabel" style = " position:absolute; top:45%; left:1.5%;">%"+"Allele</p>
+            <p id = "lineXAxis"style = " position:absolute; top:92%; left:51%; ">Generations</p>
+            
+            <!-- hiddening for x-axis linegraph-->
+            <p style = "position:absolute; top:90%; left:91%;" id = "endGen"></p>
+          </div>
+          <!--barGraph-->
+          <div class = "bar">
+            <header>
+                <h5 style = "position:absolute; top:3%; left:3%; font-size:100%;">% "+" Allele Frequencies</h5>
+            </header>
+            <hr>
+            <canvas class = "border-bottom-0 " style=" position:absolute; left:15%; top:15%;" id = "barGraph" height= "400" width = "700" ></canvas>
+            <select class="form-control" id = "nodeSelect" style= "position:absolute; top:45%; left:4%; width:9%;">
+              <option value="None">None</option>
+            </select>
+            <p  id = "barXAxis" style = "position:absolute; top:93%; left:46.5%; ">Allele End Frequencies</p>
+            <p  id = "RunTotal" style = "position:absolute; top:10%; left:5%; ">Run Total: 0</p>
 
-				</div>
-				</div>
-			</div>
-		</div>
+        </div>
+        </div>
+      </div>
+    </div>
 
-	<script src="./jquery-3.2.1.slim.min.js"></script>
+  <script src="./jquery-3.2.1.slim.min.js"></script>
   <script src="./bootstrap.min.js"></script>
-	<script src= "./Node.js"></script>
-	<script src= "./main.js"></script>
+  <script src= "./Node.js"></script>
+  <script src= "./main.js"></script>
 </body>
