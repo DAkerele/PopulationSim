@@ -211,7 +211,7 @@ $(document).ready(function() {
                     //    NumRuns2
                     //}
 
-                    /*if (!allNodes[start].linkEndNode) ) { // this is root node
+                    /*if (!allNodes[start].linkEndNode) ) { // that is root node
                         var linkedNodes = allNodes[start].endNodes;
                         for (var i=0; i < linked.length; i++) {
                             console.log(allNodes[start].endNodes[i])
@@ -325,7 +325,7 @@ $(document).ready(function() {
     document.getElementById("Run").onclick = function beginRun() { //calculates points data and graphs linked and nonLinked nodes
         
         if(!running) {
-
+            
             $('#graphSwitch').prop('disabled', false);
             $("#NodeSelected").css("color", "black");
             $("#NodeSelected").html("Data for Node #");
@@ -357,6 +357,7 @@ $(document).ready(function() {
                 
             }
             if (allConfirmed >= allNodes.length && runsCheck().length == 0) {
+                $("#loader").show();
                 $("#Run").hide();
                 $("#link").hide();
                 $("#restart").show();
@@ -364,33 +365,32 @@ $(document).ready(function() {
                 
                 for (var j = 0; j < allNodes.length; j++) {
                     $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
-                    if (allNodes[j].linkString.length == 0 && allNodes[j].linkStartNode == null) { //plots unlinked nodes
-                            loading(0,allNodes[j]);
-                            
-                    }
-
-                    for (var k = 0; k < allNodes[j].numRuns; k++) {
-                         if (allNodes[j].linkString.length > 1 && allNodes[j].linkStartNode == null) { //plots linked nodes
-                            allNodes[j].link(findLongestLink());
-                            
-                        }
-
-                    }
+                    $("#loader").show();
+                    loading(allNodes[j],0);
                 }
 
-
+                
             }
 
             running = true;
             document.getElementById("endGen").innerHTML = findLongestLink();
+
         }
 
             return false;
     }
 
-        function loading(index = 0, node){
-            $("#loader").show();
-            if (node.numRuns > index) {
+
+
+        function loading(node,index = 0){
+            var unlinked = 0;
+            for (var j = 0; j < allNodes.length; j++) {
+                if(node.linkString.length == 0 && node.linkStartNode == null){
+                    unlinked++;
+                }
+            }
+            if(node.linkString.length == 0 && node.linkStartNode == null){//performs unlinked node drawing in 10 runs at a time to prevent UI unresponsiveness
+                if (node.numRuns > index) {
                 for (var x=0; x < 10 && node.numRuns > (index+x); x++) {
                     node.runSim();
                     lineGraphCtx.strokeStyle = node.Color;
@@ -399,15 +399,33 @@ $(document).ready(function() {
                        
                     }
                 }
-                index += x; // Lastly update i with however many iterations were processed
+
+                index += x; 
 
                     
                 setTimeout(function() {
-                loading(index,node)
+                loading(node,index);
+                
                 }, 10);
 
-                if(index == node.numRuns){$(".line").css("visibility", "visible");}
-        }        
+                if(node.numRuns == index){$(".line").css("visibility", "visible");} 
+            }
+            else if(unlinked == 0){
+                node.link(findLongestLink());
+                $(".line").css("visibility", "visible");
+            }
+
+            else if(node.linkString.length > 1 && node.linkStartNode == null){node.link(findLongestLink());}
+
+            
+                
+                
+        }
+                
+            
+            
+                
+          
 
 
 
@@ -416,15 +434,16 @@ $(document).ready(function() {
 
 
         document.getElementById("restart").onclick = function(){ 
+             
              if(running){
                  if (confirm("Are you sure you want to restart the simulation?")) {
+                    $("#loader").hide();
                     $("#Run").show();
                     $("#restart").hide();
                     $("#link").show();
                     $(".line").css("visibility", "hidden");
                     $('input').prop('disabled', false);
-        
-
+                   
                     lineGraphCtx.clearRect(0, 0, lineGraph.width, lineGraph.height);
                     context.clearRect(0, 0, canvas.width, canvas.height);
                     context.fillStyle = "#FFFFFF";
