@@ -141,11 +141,14 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
     }
 
 
-    Node.prototype.link = function(scale=100) {        
+    Node.prototype.link = function(scale) {
+    if(scale == undefined){scale =100;}        
             var temp = 0;
             pointSpace =((lineGraph.width-30)/scale);//point Spacing for start node
                 for (var l = 0; l < this.linkString.length; l++) {
+
                     for(var m = 0; m < this.linkString[l].numRuns;m++){
+
                         this.timeout(l,m);
                     }
                 }
@@ -160,7 +163,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
         
         // # runs must be same to link
             setTimeout(function(){
-                lineGraphCtx.strokeStyle = that.linkString[l].Color;
+
                 startX = 0;
                 if(l > 0){
                     that.linkString[l].startPer = that.linkString[l].linkStartNode.alleleData[m][that.linkString[l].linkStartNode.alleleData[m].length-1][1];
@@ -175,7 +178,7 @@ function Node(selected,posX,posY,Color,NodeNum,startPer,genNum,startPop,plusplus
 
                 lineGraphCtx.beginPath();
                                 
-                                
+                lineGraphCtx.strokeStyle = that.linkString[l].Color;               
                 lineGraphCtx.moveTo((startX*pointSpace)+30, (lineGraph.height - (that.linkString[l].alleleData[m][0][1] * lineGraph.height))); //zeroY
                 for (var n = 0; n < that.linkString[l].alleleData[m].length; n++) {
                     lineGraphCtx.lineTo((startX*pointSpace)+(pointSpace *(n+1)+30), lineGraph.height - (that.linkString[l].alleleData[m][n][1] * lineGraph.height));
