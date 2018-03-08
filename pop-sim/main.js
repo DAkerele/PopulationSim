@@ -327,6 +327,8 @@ $(document).ready(function() {
             $('#graphSwitch').prop('disabled', false);
             $("#NodeSelected").css("color", "black");
             $("#NodeSelected").html("Data for Node #");
+            $("#default").val(currentSelectedNode.NodeNum);
+            $("#default").html("Node "+currentSelectedNode.NodeNum);
             createStrings();
             start = (startLinkSel.options[startLinkSel.selectedIndex].value - 1);
             end = (endLinkSel.options[endLinkSel.selectedIndex].value - 1);
@@ -362,9 +364,12 @@ $(document).ready(function() {
 
                 
                 for (var j = 0; j < allNodes.length; j++) {
+                    if(allNodes[j] != currentSelectedNode){
                     $("#nodeSelect").append("<option value=" + allNodes[j].NodeNum + ">Node" + allNodes[j].NodeNum + "</option>");
+                    }
                     $("#loader").show();
                     loading(allNodes[j],0);
+
                 }
 
                 
